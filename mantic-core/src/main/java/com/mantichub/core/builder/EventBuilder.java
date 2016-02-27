@@ -1,9 +1,10 @@
 package com.mantichub.core.builder;
 
 import static com.mantichub.core.util.DateUtils.getString;
+import static com.mantichub.core.util.StringUtils.isNotBlank;
+import static com.mantichub.core.util.StringUtils.md5;
 import static com.mantichub.core.vocabulary.SCHEMA.dateFormat;
 import static com.mantichub.core.vocabulary.SCHEMA.datetimeFormat;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 import java.util.Date;
 
@@ -17,24 +18,26 @@ import com.mantichub.core.vocabulary.SCHEMA;
 public class EventBuilder {
 
 	private final Model model;
+	private final String projectNS;
 	private String addressRegion;
 	private Resource type;
 	private Resource resource;
 	private String addressLocality;
 	private String endDate;
 	private String endTime;
-	private double latitude;
-	private double longitude;
+	private Double latitude;
+	private Double longitude;
 	private String overview;
-	private double price;
+	private Double price;
 	private String serviceUrl;
 	private String startDate;
 	private String startTime;
 	private String streetAddress;
 	private String title;
 
-	public EventBuilder(final Model model) {
+	public EventBuilder(final Model model, final String projectNS) {
 		this.model = model;
+		this.projectNS = projectNS;
 	}
 
 	private void addProperty(final Property property, final Object value) {
@@ -44,7 +47,7 @@ public class EventBuilder {
 		if (value instanceof Resource) {
 			resource.addProperty(property, (Resource) value);
 		}
-		if (value instanceof String && isNotEmpty((String) value)) {
+		if (value instanceof String && isNotBlank((String) value)) {
 			resource.addProperty(property, (String) value);
 		}
 		if (value instanceof Double) {
@@ -52,7 +55,10 @@ public class EventBuilder {
 		}
 	}
 
-	public Resource create() {
+	public Resource create() throws Exception {
+		if (resource == null) {
+			resource(isNotBlank(title) ? title.replace(" ", "") : md5(serviceUrl));
+		}
 		addProperty(RDF.type, type);
 		addProperty(SCHEMA.addressRegion, addressRegion);
 		addProperty(SCHEMA.addressLocality, addressLocality);
@@ -70,8 +76,12 @@ public class EventBuilder {
 		return resource;
 	}
 
+	public EventBuilder projectNS(final String projectNS) {
+		return this;
+	}
+
 	public EventBuilder resource(final String resourceName) {
-		resource = model.createResource(resourceName);
+		resource = model.createResource(projectNS + resourceName);
 		return this;
 	}
 

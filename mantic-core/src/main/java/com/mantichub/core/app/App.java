@@ -17,10 +17,10 @@ import com.mantichub.core.vocabulary.SCHEMA;
 public class App {
 	private final static String projectNS = "http://www.wemantic.com/events#";
 
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws Exception {
 		final RDFFormat rdfFormat = RDFFormat.RDFXML;
 		final Model model = getFastWriter(rdfFormat, getNsPrefixMap("schema", SCHEMA.NS));
-		new EventBuilder(model)
+		new EventBuilder(model, projectNS)
 		.resource(projectNS + "MACRecebeexposicaoACasa")
 		.type(SCHEMA.ExhibitionEvent)
 		.addressRegion("SP")

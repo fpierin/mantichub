@@ -1,5 +1,7 @@
 package com.mantichub.core.util;
 
+import static org.apache.jena.riot.RDFFormat.RDFXML;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +10,13 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.RDFWriter;
 import org.apache.jena.riot.RDFFormat;
 
+import com.mantichub.core.vocabulary.SCHEMA;
+
 public class ModelUtils {
+
+	public static Model getRDFXMLFastWriter() {
+		return getFastWriter(RDFXML, getNsPrefixMap("schema", SCHEMA.NS));
+	}
 
 	public static Model getFastWriter(final RDFFormat rdfFormat) {
 		final Model model = ModelFactory.createDefaultModel();
