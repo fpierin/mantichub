@@ -4,6 +4,6 @@ import org.apache.jena.rdf.model.Model;
 
 public interface Agent {
 
-	Model retrieve();
+	Model retrieve() throws Exception;
 
 }

@@ -3,6 +3,7 @@ package com.mantichub.core.builder;
 import static com.mantichub.core.util.DateUtils.getString;
 import static com.mantichub.core.util.StringUtils.isNotBlank;
 import static com.mantichub.core.util.StringUtils.md5;
+import static com.mantichub.core.util.StringUtils.normalize;
 import static com.mantichub.core.vocabulary.SCHEMA.dateFormat;
 import static com.mantichub.core.vocabulary.SCHEMA.datetimeFormat;
 
@@ -81,7 +82,7 @@ public class EventBuilder {
 	}
 
 	public EventBuilder resource(final String resourceName) {
-		resource = model.createResource(projectNS + resourceName);
+		resource = model.createResource(projectNS + normalize(resourceName));
 		return this;
 	}
 
@@ -125,7 +126,7 @@ public class EventBuilder {
 		return this;
 	}
 
-	public EventBuilder price(final double price) {
+	public EventBuilder price(final Double price) {
 		this.price = price;
 		return this;
 	}

@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.Normalizer;
 import java.util.Scanner;
 
 public class StringUtils {
@@ -31,6 +32,10 @@ public class StringUtils {
 			md5Hash = "0" + md5Hash;
 		}
 		return md5Hash;
+	}
+
+	public static String normalize(final String word) {
+		return Normalizer.normalize(word, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 	}
 
 }

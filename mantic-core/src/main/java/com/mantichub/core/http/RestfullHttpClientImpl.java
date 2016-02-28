@@ -30,7 +30,6 @@ public class RestfullHttpClientImpl implements RestfullHttpClient {
 	}
 
 	private HttpResponse httpRequest(final String requestMethod, final String endpoint, final String body) {
-		// log.debug("RestfullHttpClientImpl.httpRequest() - start");
 		try {
 			final URL url = new URL(endpoint);
 			final HttpURLConnection connection = (HttpURLConnection) url.openConnection();

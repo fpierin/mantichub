@@ -10,7 +10,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
+		
+		<junit.version>4.12</junit.version>
 		<mantichub.version>1.0-SNAPSHOT</mantichub.version>
 	</properties>
 

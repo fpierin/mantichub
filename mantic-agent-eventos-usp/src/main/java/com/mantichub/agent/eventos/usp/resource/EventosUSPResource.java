@@ -29,12 +29,16 @@ public class EventosUSPResource extends HttpServlet {
 
 	@Override
 	public void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("application/rdf+xml; charset=UTF-8");
-		final PrintWriter printout = response.getWriter();
-		final Model model = agent.retrieve();
-		final PrintWriter printWriter = response.getWriter();
-		model.write(printWriter, RDF_Format.getLang().getName());
-		printout.flush();
+		try {
+			response.setContentType("application/rdf+xml; charset=UTF-8");
+			final PrintWriter printout = response.getWriter();
+			final Model model = agent.retrieve();
+			final PrintWriter printWriter = response.getWriter();
+			model.write(printWriter, RDF_Format.getLang().getName());
+			printout.flush();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
