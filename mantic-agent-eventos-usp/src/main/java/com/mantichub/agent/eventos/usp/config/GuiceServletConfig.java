@@ -1,5 +1,7 @@
 package com.mantichub.agent.eventos.usp.config;
 
+import org.apache.http.client.HttpClient;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -11,8 +13,7 @@ import com.mantichub.agent.eventos.usp.http.EventosUspHttpClient;
 import com.mantichub.agent.eventos.usp.http.EventosUspHttpClientImpl;
 import com.mantichub.agent.eventos.usp.resource.EventosUSPResource;
 import com.mantichub.core.agent.Agent;
-import com.mantichub.core.http.RestfullHttpClient;
-import com.mantichub.core.http.RestfullHttpClientImpl;
+import com.mantichub.core.http.HttpClientFactory;
 
 public class GuiceServletConfig extends GuiceServletContextListener {
 
@@ -34,7 +35,8 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 		return new AbstractModule() {
 			@Override
 			protected void configure() {
-				bind(RestfullHttpClient.class).to(RestfullHttpClientImpl.class).asEagerSingleton();
+				final HttpClient httpClient = HttpClientFactory.get(10, 5, 3);
+				bind(HttpClient.class).toInstance(httpClient);
 				bind(EventosUspHttpClient.class).to(EventosUspHttpClientImpl.class).asEagerSingleton();
 				bind(Agent.class).to(UspEventAgent.class).asEagerSingleton();
 			}

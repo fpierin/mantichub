@@ -4,21 +4,21 @@ import static org.apache.commons.lang3.StringEscapeUtils.unescapeHtml3;
 
 import javax.inject.Inject;
 
-import com.mantichub.core.http.HttpResponse;
-import com.mantichub.core.http.RestfullHttpClient;
+import org.apache.http.client.HttpClient;
 
-public class EventosUspHttpClientImpl implements EventosUspHttpClient {
+import com.mantichub.core.http.RestSupport;
+import com.mantichub.core.http.ServerResponse;
 
-	private final RestfullHttpClient restfullHttpClient;
+public class EventosUspHttpClientImpl extends RestSupport implements EventosUspHttpClient {
 
 	@Inject
-	public EventosUspHttpClientImpl(final RestfullHttpClient restfullHttpClient) {
-		this.restfullHttpClient = restfullHttpClient;
+	public EventosUspHttpClientImpl(final HttpClient httpClient) {
+		super(httpClient);
 	}
 
 	public String htmlFromURL(final String url) {
-		final HttpResponse httpResponse = restfullHttpClient.get(url);
-		final String message = httpResponse.getMessage();
+		final ServerResponse httpResponse = read(url);
+		final String message = httpResponse.getContent();
 		return message;
 	}
 

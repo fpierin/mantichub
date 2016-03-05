@@ -12,6 +12,6 @@ public class Configuration {
 	public static final String EVENT_URL_PATTERN = "href=\"(http://www.eventos.usp.br/\\?events=(.*?))\"";
 	public static final String STREET_ADDRESS_PATTERN = "var endereco = \\'(.*?)\\s*CEP";
 	public static final String TITLE_PATTERN = "class=\"evento-titulo\".*\\\">(.*)<\\/div>";
-	public static final long REQUEST_TIMEOUT = 10000;
+	public static final long REQUEST_TIMEOUT = 100000;
 
 }

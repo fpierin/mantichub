@@ -9,8 +9,24 @@
 	<name>mantichub</name>
 
 	<properties>
+		<!-- Project configuration -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.compatibility.version>1.7</java.compatibility.version>
+		<javaee.version>7</javaee.version>
+		<jetty.port>8080</jetty.port>
 		
+		<!-- Project dependencies -->
+		<httpclient.version>4.5.2</httpclient.version>
+		<commons-httpclient.version>3.1</commons-httpclient.version>
+		
+
+		<!-- Maven plugin dependencies -->
+		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+		<maven.jetty.plugin.version>9.0.7.v20131107</maven.jetty.plugin.version>
+		<maven-surefire-plugin.version>2.11</maven-surefire-plugin.version>
+		<rpm-maven-plugin.version>2.1.4</rpm-maven-plugin.version>
+
+		<!-- Test dependencies -->
 		<junit.version>4.12</junit.version>
 		<mantichub.version>1.0-SNAPSHOT</mantichub.version>
 	</properties>
@@ -23,6 +39,16 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>${httpclient.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-httpclient</groupId>
+				<artifactId>commons-httpclient</artifactId>
+				<version>${commons-httpclient.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.mantichub</groupId>
 				<artifactId>mantic-core</artifactId>
 				<version>${mantichub.version}</version>
@@ -30,13 +56,34 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<compilerVersion>${java.compatibility.version}</compilerVersion>
+					<debug>true</debug>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<source>${java.compatibility.version}</source>
+					<target>${java.compatibility.version}</target>
+					<verbose>true</verbose>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<developers>
 		<developer>
 			<id>fpierin</id>
-			<name>Felipe Pierin</name>
 			<email>felipe.pierin@yahoo.com.br</email>
-			<organization>IME/USP</organization>
+			<name>Felipe Pierin</name>
+			<organization>São Paulo University</organization>
+			<organizationUrl>http://www.ime.usp.br/</organizationUrl>
 			<timezone>-3</timezone>
+			<properties>
+				<skype>felipe.pierin</skype>
+			</properties>
 		</developer>
 	</developers>
 

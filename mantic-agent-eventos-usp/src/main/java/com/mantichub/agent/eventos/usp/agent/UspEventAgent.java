@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.jena.ext.com.google.common.util.concurrent.Futures;
 import org.apache.jena.ext.com.google.common.util.concurrent.ListenableFuture;
@@ -26,7 +25,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 
 import com.google.inject.Inject;
-import com.mantichub.agent.eventos.usp.config.Configuration;
 import com.mantichub.agent.eventos.usp.http.EventosUspHttpClient;
 import com.mantichub.core.agent.Agent;
 import com.mantichub.core.agent.EventCrawler;
@@ -50,7 +48,8 @@ public class UspEventAgent implements Agent {
 		System.out.println(MessageFormat.format("Foram encontrados {0} eventos", urls.size()));
 		final List<ListenableFuture<Resource>> resources = createCallables(model, urls);
 		final ListenableFuture<List<Resource>> successfulResources = Futures.successfulAsList(resources);
-		successfulResources.get(REQUEST_TIMEOUT, MILLISECONDS);
+		final List<Resource> list = successfulResources.get(REQUEST_TIMEOUT, MILLISECONDS);
+		System.out.println(list.size());
 		return model;
 	}
 
@@ -59,8 +58,7 @@ public class UspEventAgent implements Agent {
 		final ListeningExecutorService service = MoreExecutors.listeningDecorator(executorService);
 		final Iterator<String> iterator = urls.iterator();
 		final List<ListenableFuture<Resource>> resources = new ArrayList<ListenableFuture<Resource>>();
-		final int i = 0;
-		while (i < 100 & iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			service.submit(new Callable<Resource>() {
 				public Resource call() throws Exception {
 					return resourceFromURI(iterator.next(), model);
@@ -74,20 +72,9 @@ public class UspEventAgent implements Agent {
 		final String html = eventosUspHttpClient.unescapeHtmlFromURL(url);
 		final EventCrawler event = new EventoUSPEventCrawler(html);
 		try {
-			return new EventBuilder(model, projectNS)
-					.price(event.getPrice())
-					.endDate(event.getEndDate())
-					.endTime(event.getEndTime())
-					.latitude(event.getLatitude())
-					.longitude(event.getLongitude())
-					.overview(event.getOverview())
-					.serviceUrl(url)
-					.startDate(event.getStartDate())
-					.startTime(event.getStartTime())
-					.streetAddress(event.getStreetAddress())
-					.type(event.getType())
-					.title(event.getTitle())
-					.create();
+			return new EventBuilder(model, projectNS).price(event.getPrice()).endDate(event.getEndDate()).endTime(event.getEndTime()).latitude(event.getLatitude())
+					.longitude(event.getLongitude()).overview(event.getOverview()).serviceUrl(url).startDate(event.getStartDate()).startTime(event.getStartTime())
+					.streetAddress(event.getStreetAddress()).type(event.getType()).title(event.getTitle()).create();
 		} catch (final Exception e) {
 			e.printStackTrace();
 			return null;

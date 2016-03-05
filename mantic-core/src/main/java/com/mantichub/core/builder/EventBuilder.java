@@ -12,6 +12,7 @@ import java.util.Date;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.shared.Lock;
 import org.apache.jena.vocabulary.RDF;
 
 import com.mantichub.core.vocabulary.SCHEMA;
@@ -48,7 +49,7 @@ public class EventBuilder {
 		if (value instanceof Resource) {
 			resource.addProperty(property, (Resource) value);
 		}
-		if (value instanceof String && isNotBlank((String) value)) {
+		if ((value instanceof String) && isNotBlank((String) value)) {
 			resource.addProperty(property, (String) value);
 		}
 		if (value instanceof Double) {
@@ -82,7 +83,13 @@ public class EventBuilder {
 	}
 
 	public EventBuilder resource(final String resourceName) {
-		resource = model.createResource(projectNS + normalize(resourceName));
+		try {
+			model.enterCriticalSection(Lock.WRITE);
+			resource = model.createResource(projectNS + normalize(resourceName));
+		} finally {
+			model.leaveCriticalSection();
+
+		}
 		return this;
 	}
 
