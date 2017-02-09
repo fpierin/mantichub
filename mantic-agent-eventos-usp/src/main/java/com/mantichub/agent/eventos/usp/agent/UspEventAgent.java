@@ -46,24 +46,28 @@ public class UspEventAgent implements Agent {
 		final String htmlFromURL = eventosUspHttpClient.htmlFromURL(PORTAL_URL);
 		final Set<String> urls = setByPattern(htmlFromURL, EVENT_URL_PATTERN);
 		System.out.println(MessageFormat.format("Foram encontrados {0} eventos", urls.size()));
-		final List<ListenableFuture<Resource>> resources = createCallables(model, urls);
+		final int limit = 5;
+		final List<ListenableFuture<Resource>> resources = createCallables(model, urls, limit);
 		final ListenableFuture<List<Resource>> successfulResources = Futures.successfulAsList(resources);
 		final List<Resource> list = successfulResources.get(REQUEST_TIMEOUT, MILLISECONDS);
 		System.out.println(list.size());
 		return model;
 	}
 
-	private List<ListenableFuture<Resource>> createCallables(final Model model, final Set<String> urls) {
+	private List<ListenableFuture<Resource>> createCallables(final Model model, final Set<String> urls, final int limit) {
+		int amount = 0;
 		final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_AMOUNT);
 		final ListeningExecutorService service = MoreExecutors.listeningDecorator(executorService);
 		final Iterator<String> iterator = urls.iterator();
 		final List<ListenableFuture<Resource>> resources = new ArrayList<ListenableFuture<Resource>>();
-		while (iterator.hasNext()) {
-			service.submit(new Callable<Resource>() {
+		while (iterator.hasNext() && (limit == 0 || amount < limit) ) {
+			amount++;
+			ListenableFuture<Resource> lf = service.submit(new Callable<Resource>() {
 				public Resource call() throws Exception {
 					return resourceFromURI(iterator.next(), model);
 				}
 			});
+			resources.add(lf);
 		}
 		return resources;
 	}
@@ -72,9 +76,19 @@ public class UspEventAgent implements Agent {
 		final String html = eventosUspHttpClient.unescapeHtmlFromURL(url);
 		final EventCrawler event = new EventoUSPEventCrawler(html);
 		try {
-			return new EventBuilder(model, projectNS).price(event.getPrice()).endDate(event.getEndDate()).endTime(event.getEndTime()).latitude(event.getLatitude())
-					.longitude(event.getLongitude()).overview(event.getOverview()).serviceUrl(url).startDate(event.getStartDate()).startTime(event.getStartTime())
-					.streetAddress(event.getStreetAddress()).type(event.getType()).title(event.getTitle()).create();
+			return new EventBuilder(model, projectNS)
+					.price(event.getPrice())
+					.endDate(event.getEndDate())
+					.endTime(event.getEndTime())
+					.latitude(event.getLatitude())
+					.longitude(event.getLongitude())
+					.overview(event.getOverview())
+					.serviceUrl(url)
+					.startDate(event.getStartDate())
+					.startTime(event.getStartTime())
+					.streetAddress(event.getStreetAddress())
+					.type(event.getType())
+					.title(event.getTitle()).create();
 		} catch (final Exception e) {
 			e.printStackTrace();
 			return null;
