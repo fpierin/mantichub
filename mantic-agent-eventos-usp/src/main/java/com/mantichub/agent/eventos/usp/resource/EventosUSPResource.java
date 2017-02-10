@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.jena.rdf.model.Model;
+import org.mantic.datastore.TdbRepository;
+import org.mantic.datastore.TdbRepositoryImpl;
 
 import com.mantichub.core.agent.Agent;
 
@@ -33,6 +35,8 @@ public class EventosUSPResource extends HttpServlet {
 			response.setContentType("application/rdf+xml; charset=UTF-8");
 			final PrintWriter printout = response.getWriter();
 			final Model model = agent.retrieve();
+			final TdbRepository tdbRepository = new TdbRepositoryImpl("/opt/apps/mantichub/datastore");
+			tdbRepository.create(model);
 			final PrintWriter printWriter = response.getWriter();
 			model.write(printWriter, RDF_Format.getLang().getName());
 			printout.flush();
