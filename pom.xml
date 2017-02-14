@@ -15,9 +15,9 @@
 		<jetty.port>8080</jetty.port>
 		
 		<!-- Project dependencies -->
-		<httpclient.version>4.5.2</httpclient.version>
 		<commons-httpclient.version>3.1</commons-httpclient.version>
-		
+		<httpclient.version>4.5.2</httpclient.version>
+		<jena.version>3.0.0</jena.version>
 
 		<!-- Maven plugin dependencies -->
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>

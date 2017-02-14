@@ -118,12 +118,12 @@ public class EventBuilder {
 		return this;
 	}
 
-	public EventBuilder latitude(final double latitude) {
+	public EventBuilder latitude(final Double latitude) {
 		this.latitude = latitude;
 		return this;
 	}
 
-	public EventBuilder longitude(final double longitude) {
+	public EventBuilder longitude(final Double longitude) {
 		this.longitude = longitude;
 		return this;
 	}

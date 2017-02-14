@@ -1,18 +1,22 @@
 package org.mantic.datastore;
 
-import java.util.Iterator;
-
 import org.apache.jena.query.Dataset;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.ReadWrite;
+import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.sparql.core.Quad;
 import org.apache.jena.tdb.TDBFactory;
 
 public class TdbRepositoryImpl implements TdbRepository {
 
 	private final Dataset dataset;
+	private String modelName;
 
-	public TdbRepositoryImpl(final String path) {
+	public TdbRepositoryImpl(final String path, String modelName) {
+		this.modelName = modelName;
 		dataset = TDBFactory.createDataset(path);
 	}
 
@@ -20,7 +24,7 @@ public class TdbRepositoryImpl implements TdbRepository {
 	public void create(final Model model) {
 		dataset.begin(ReadWrite.WRITE);
 		try {
-			dataset.setDefaultModel(model);
+			dataset.addNamedModel(modelName, model);
 			dataset.commit();
 		} finally {
 			dataset.end();
@@ -29,11 +33,6 @@ public class TdbRepositoryImpl implements TdbRepository {
 
 	@Override
 	public void read() {
-        Iterator<Quad> iter = dataset.asDatasetGraph().find();
-        while ( iter.hasNext() ) {
-            Quad quad = iter.next();
-            System.out.println(quad);
-        }
 	}
 
 	@Override
@@ -44,9 +43,15 @@ public class TdbRepositoryImpl implements TdbRepository {
 	public void delete() {
 	}
 
-	public static void main(String[] args) {
-		final TdbRepository tdbRepository = new TdbRepositoryImpl("/opt/apps/mantichub/datastore");
-		tdbRepository.read();
+	@Override
+	public ResultSet query(final String queryString) {
+		dataset.begin(ReadWrite.READ);
+		Query query = QueryFactory.create(queryString);
+		QueryExecution qexec = QueryExecutionFactory.create(query, dataset.getNamedModel(modelName));
+		ResultSet execSelect = qexec.execSelect();
+		dataset.close();
+		return execSelect;
+
 	}
 
 }

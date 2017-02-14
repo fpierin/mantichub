@@ -42,17 +42,20 @@ public class UspEventAgent implements Agent {
 	}
 
 	public Model retrieve() throws Exception {
+		return retrieve(0);
+	}
+	
+	public Model retrieve(final int ammount) throws Exception {
 		final Model model = getRDFXMLFastWriter();
 		final String htmlFromURL = eventosUspHttpClient.htmlFromURL(PORTAL_URL);
 		final Set<String> urls = setByPattern(htmlFromURL, EVENT_URL_PATTERN);
 		System.out.println(MessageFormat.format("Foram encontrados {0} eventos", urls.size()));
-		final int limit = 5;
-		final List<ListenableFuture<Resource>> resources = createCallables(model, urls, limit);
+		final List<ListenableFuture<Resource>> resources = createCallables(model, urls, ammount);
 		final ListenableFuture<List<Resource>> successfulResources = Futures.successfulAsList(resources);
 		final List<Resource> list = successfulResources.get(REQUEST_TIMEOUT, MILLISECONDS);
-		System.out.println(list.size());
+		System.out.println("Foram recuperados " + list.size() + " objetos");
 		return model;
-	}
+	}	
 
 	private List<ListenableFuture<Resource>> createCallables(final Model model, final Set<String> urls, final int limit) {
 		int amount = 0;
@@ -73,6 +76,7 @@ public class UspEventAgent implements Agent {
 	}
 
 	private Resource resourceFromURI(final String url, final Model model) {
+		System.out.println("Buscando recursos da URI " + url);
 		final String html = eventosUspHttpClient.unescapeHtmlFromURL(url);
 		final EventCrawler event = new EventoUSPEventCrawler(html);
 		try {
@@ -94,5 +98,5 @@ public class UspEventAgent implements Agent {
 			return null;
 		}
 	}
-
+	
 }
