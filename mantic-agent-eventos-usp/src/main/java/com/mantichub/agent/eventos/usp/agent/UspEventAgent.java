@@ -72,9 +72,20 @@ public class UspEventAgent implements Agent {
 		final String html = eventosUspHttpClient.unescapeHtmlFromURL(url);
 		final EventCrawler event = new EventoUSPEventCrawler(html);
 		try {
-			return new EventBuilder(model, projectNS).price(event.getPrice()).endDate(event.getEndDate()).endTime(event.getEndTime()).latitude(event.getLatitude())
-					.longitude(event.getLongitude()).overview(event.getOverview()).serviceUrl(url).startDate(event.getStartDate()).startTime(event.getStartTime())
-					.streetAddress(event.getStreetAddress()).type(event.getType()).title(event.getTitle()).create();
+			return new EventBuilder(model, projectNS)
+					.price(event.getPrice())
+					.endDate(event.getEndDate())
+					.endTime(event.getEndTime())
+					.latitude(event.getLatitude())
+					.longitude(event.getLongitude())
+					.overview(event.getOverview())
+					.serviceUrl(url)
+					.startDate(event.getStartDate())
+					.startTime(event.getStartTime())
+					.streetAddress(event.getStreetAddress())
+					.type(event.getType())
+					.title(event.getTitle())
+					.create();
 		} catch (final Exception e) {
 			e.printStackTrace();
 			return null;
