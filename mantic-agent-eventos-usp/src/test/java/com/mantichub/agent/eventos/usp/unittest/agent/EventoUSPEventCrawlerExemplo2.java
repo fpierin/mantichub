@@ -1,6 +1,6 @@
 package com.mantichub.agent.eventos.usp.unittest.agent;
 
-import static com.mantichub.agent.eventos.usp.unittest.infra.TestUtils.fromFile;
+import static com.mantichub.agent.eventos.usp.infra.TestUtils.fromFile;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 

@@ -1,4 +1,4 @@
-package com.mantichub.agent.eventos.usp.unittest.infra;
+package com.mantichub.agent.eventos.usp.infra;
 
 import java.io.File;
 import java.util.Scanner;

@@ -23,6 +23,8 @@ import org.apache.jena.ext.com.google.common.util.concurrent.ListeningExecutorSe
 import org.apache.jena.ext.com.google.common.util.concurrent.MoreExecutors;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
+import org.mantic.datastore.client.api.DatastoreApi;
+import org.mantichub.commons.constant.MantichubConstants;
 
 import com.google.inject.Inject;
 import com.mantichub.agent.eventos.usp.http.EventosUspHttpClient;
@@ -31,20 +33,23 @@ import com.mantichub.core.agent.EventCrawler;
 import com.mantichub.core.builder.EventBuilder;
 
 public class UspEventAgent implements Agent {
-
+	
 	private final EventosUspHttpClient eventosUspHttpClient;
-
-	private final static String projectNS = "http://www.wemantic.com/events#";
-
+	
+	private final DatastoreApi datastoreApi;
+	
 	@Inject
-	public UspEventAgent(final EventosUspHttpClient eventosUspHttpClient) {
+	public UspEventAgent(final EventosUspHttpClient eventosUspHttpClient, final DatastoreApi datastoreApi) {
 		this.eventosUspHttpClient = eventosUspHttpClient;
+		this.datastoreApi = datastoreApi;
 	}
-
+	
+	@Override
 	public Model retrieve() throws Exception {
 		return retrieve(0);
 	}
-	
+
+	@Override
 	public Model retrieve(final int ammount) throws Exception {
 		final Model model = getRDFXMLFastWriter();
 		final String htmlFromURL = eventosUspHttpClient.htmlFromURL(PORTAL_URL);
@@ -55,32 +60,40 @@ public class UspEventAgent implements Agent {
 		final List<Resource> list = successfulResources.get(REQUEST_TIMEOUT, MILLISECONDS);
 		System.out.println("Foram recuperados " + list.size() + " objetos");
 		return model;
-	}	
-
+	}
+	
 	private List<ListenableFuture<Resource>> createCallables(final Model model, final Set<String> urls, final int limit) {
 		int amount = 0;
 		final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_AMOUNT);
 		final ListeningExecutorService service = MoreExecutors.listeningDecorator(executorService);
 		final Iterator<String> iterator = urls.iterator();
-		final List<ListenableFuture<Resource>> resources = new ArrayList<ListenableFuture<Resource>>();
-		while (iterator.hasNext() && (limit == 0 || amount < limit) ) {
+		final List<ListenableFuture<Resource>> resources = new ArrayList<>();
+		while (iterator.hasNext() && ((limit == 0) || (amount < limit)) ) {
 			amount++;
-			ListenableFuture<Resource> lf = service.submit(new Callable<Resource>() {
+			final ListenableFuture<Resource> lf = service.submit(new Callable<Resource>() {
+				@Override
 				public Resource call() throws Exception {
-					return resourceFromURI(iterator.next(), model);
+					final Resource resource = resourceFromURI(iterator.next(), model);
+					datastoreApi.create(resource);
+					return resource;
 				}
 			});
 			resources.add(lf);
 		}
 		return resources;
 	}
-
+	
 	private Resource resourceFromURI(final String url, final Model model) {
 		System.out.println("Buscando recursos da URI " + url);
 		final String html = eventosUspHttpClient.unescapeHtmlFromURL(url);
+		return resourceFromHtml(url, model, html);
+	}
+
+	@Override
+	public Resource resourceFromHtml(final String url, final Model model, final String html) {
 		final EventCrawler event = new EventoUSPEventCrawler(html);
 		try {
-			return new EventBuilder(model, projectNS)
+			return new EventBuilder(model, MantichubConstants.NAMESPACE)
 					.price(event.getPrice())
 					.endDate(event.getEndDate())
 					.endTime(event.getEndTime())
@@ -99,5 +112,5 @@ public class UspEventAgent implements Agent {
 			return null;
 		}
 	}
-	
+
 }

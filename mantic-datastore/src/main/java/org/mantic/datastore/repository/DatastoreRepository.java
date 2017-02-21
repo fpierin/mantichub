@@ -1,19 +1,16 @@
-package org.mantic.datastore;
+package org.mantic.datastore.repository;
 
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 
-public interface TdbRepository {
+public interface DatastoreRepository {
 	
 	void create(Model model);
-	
-	void read();
-	
-	void update();
-	
-	void delete();
 
+	void create(String subject, String property, String object);
+	
 	ResultSet query(String query);
+	
 	
 	
 }

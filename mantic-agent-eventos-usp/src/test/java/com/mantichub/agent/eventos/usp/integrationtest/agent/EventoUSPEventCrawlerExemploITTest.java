@@ -6,8 +6,9 @@ import org.apache.jena.query.ResultSetFactory;
 import org.apache.jena.query.ResultSetFormatter;
 import org.apache.jena.query.ResultSetRewindable;
 import org.apache.jena.rdf.model.Model;
-import org.mantic.datastore.TdbRepository;
-import org.mantic.datastore.TdbRepositoryImpl;
+import org.mantic.datastore.client.api.DatastoreApiImpl;
+import org.mantic.datastore.repository.DatastoreRepository;
+import org.mantic.datastore.repository.DatastoreRepositoryImpl;
 
 import com.mantichub.agent.eventos.usp.agent.UspEventAgent;
 import com.mantichub.agent.eventos.usp.http.EventosUspHttpClient;
@@ -16,15 +17,16 @@ import com.mantichub.core.http.HttpClientFactory;
 
 public class EventoUSPEventCrawlerExemploITTest {
 
-	public static void main(String[] args) throws Exception {
-//		persiste();
+	public static void main(final String[] args) throws Exception {
+		// persiste();
 		recupera();
 	}
 
+	
 	public static void recupera() {
-		final TdbRepository tdbRepository = new TdbRepositoryImpl("/opt/apps/mantichub/datastore", "teste");
-		ResultSet query = tdbRepository.query("SELECT * { ?s ?p ?o }");
-		ResultSetRewindable results = ResultSetFactory.makeRewindable(query);
+		final DatastoreRepository tdbRepository = new DatastoreRepositoryImpl("/opt/apps/mantichub/datastore", "teste");
+		final ResultSet query = tdbRepository.query("SELECT * { ?s ?p ?o }");
+		final ResultSetRewindable results = ResultSetFactory.makeRewindable(query);
 		ResultSetFormatter.out(results);
 		results.reset();
 
@@ -32,12 +34,12 @@ public class EventoUSPEventCrawlerExemploITTest {
 
 	public static void persiste() throws Exception {
 		final HttpClient httpClient = HttpClientFactory.get(10, 5, 3);
-		final EventosUspHttpClient eventosUspHttpClient = new EventosUspHttpClientImpl(httpClient);
-		final UspEventAgent uspEventAgent = new UspEventAgent(eventosUspHttpClient);
-		final Model model = uspEventAgent.retrieve(10);
-		// info(model);
+		final EventosUspHttpClient eventosUspHttpClient = new EventosUspHttpClientImpl(httpClient, null);
+		final UspEventAgent uspEventAgent = new UspEventAgent(eventosUspHttpClient, new DatastoreApiImpl(httpClient, null));
+		final Model model = uspEventAgent.retrieve(1);
+		info(model);
 		System.out.println("Iniciando a criação do modelo");
-		final TdbRepository tdbRepository = new TdbRepositoryImpl("/opt/apps/mantichub/datastore", "teste");
+		final DatastoreRepository tdbRepository = new DatastoreRepositoryImpl("/opt/apps/mantichub/datastore", "teste");
 		tdbRepository.create(model);
 		System.out.println("Criação de modelo finalizada");
 	}
