@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mantichub</groupId>
 	<artifactId>mantichub</artifactId>
@@ -16,9 +15,9 @@
 		<jetty.port>8080</jetty.port>
 		
 		<!-- Project dependencies -->
-		<httpclient.version>4.5.2</httpclient.version>
 		<commons-httpclient.version>3.1</commons-httpclient.version>
-		
+		<httpclient.version>4.5.2</httpclient.version>
+		<jena.version>3.0.0</jena.version>
 
 		<!-- Maven plugin dependencies -->
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
@@ -34,7 +33,8 @@
 	<modules>
 		<module>mantic-core</module>
 		<module>mantic-agent-eventos-usp</module>
-	</modules>
+    <module>mantic-datastore</module>
+  </modules>
 
 	<dependencyManagement>
 		<dependencies>

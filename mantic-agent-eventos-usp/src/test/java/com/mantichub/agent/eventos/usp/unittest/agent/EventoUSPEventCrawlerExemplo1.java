@@ -1,6 +1,6 @@
-package com.mantichub.agent.eventos.usp.agent;
+package com.mantichub.agent.eventos.usp.unittest.agent;
 
-import static com.mantichub.agent.eventos.usp.infra.TestUtils.fromFile;
+import static com.mantichub.agent.eventos.usp.unittest.infra.TestUtils.fromFile;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -10,10 +10,11 @@ import java.util.Date;
 import org.apache.jena.rdf.model.Resource;
 import org.junit.Test;
 
+import com.mantichub.agent.eventos.usp.agent.EventoUSPEventCrawler;
 import com.mantichub.core.agent.EventCrawler;
 import com.mantichub.core.vocabulary.SCHEMA;
 
-public class EventoUSPEventCrawlerExemplo2 {
+public class EventoUSPEventCrawlerExemplo1 {
 
 	private final static String arquivo = "src/test/resources/exemplo2.html";
 

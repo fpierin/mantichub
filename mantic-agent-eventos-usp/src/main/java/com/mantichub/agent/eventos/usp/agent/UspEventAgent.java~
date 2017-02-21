@@ -92,8 +92,12 @@ public class UspEventAgent implements Agent {
 					.startTime(event.getStartTime())
 					.streetAddress(event.getStreetAddress())
 					.type(event.getType())
+<<<<<<< HEAD
 					.title(event.getTitle())
 					.create();
+=======
+					.title(event.getTitle()).create();
+>>>>>>> c8472f74ba624f360974948d1f392bccd2d5016c
 		} catch (final Exception e) {
 			e.printStackTrace();
 			return null;
