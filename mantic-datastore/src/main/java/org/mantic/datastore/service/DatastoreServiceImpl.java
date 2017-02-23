@@ -1,6 +1,6 @@
 package org.mantic.datastore.service;
 
-import static com.mantichub.core.util.ListUtils.isNotEmpty;
+import static com.mantichub.core.util.ListUtils.isEmpty;
 
 import java.util.List;
 
@@ -26,16 +26,25 @@ public class DatastoreServiceImpl implements DatastoreService {
 
 	@Override
 	public void create(final List<DatastoreTriple> triples) {
-		if (isNotEmpty(triples)) {
-			for (final DatastoreTriple triple : triples) {
-				final String subject = triple.getSubject();
-				final String predicate = triple.getPredicate();
-				final String object = triple.getObject();
+		if (isEmpty(triples)) {
+			return;
+		}
+		
+		for (final DatastoreTriple triple : triples) {
+			if (notFound(new DatastoreTriple(triple.getSubject(), triple.getPredicate(), null))) {
 				System.out.println("Criando " + triple);
-				datastoreRepository.create(subject, predicate, object);
+				datastoreRepository.create(triple);
 				System.out.println("Tripla criada com sucesso");
 			}
 		}
+		
+	}
+
+	private boolean notFound(final DatastoreTriple triple) {
+		System.out.println("Criando " + triple);
+		boolean findResult = datastoreRepository.find(triple);
+		System.out.println("Resultado de busca de tripla: " + findResult);
+		return !findResult;
 	}
 
 	@Override

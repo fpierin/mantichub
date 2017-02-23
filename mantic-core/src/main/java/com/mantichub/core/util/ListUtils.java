@@ -4,8 +4,12 @@ import java.util.List;
 
 public class ListUtils {
 	
-	public static boolean isNotEmpty(final List<?> triples) {
-		return (triples != null) && (!triples.isEmpty());
+	public static boolean isNotEmpty(final List<?> list) {
+		return !isEmpty(list);
 	}
+	
+	public static boolean isEmpty(final List<?> list) {
+		return (list == null) || (list.isEmpty());
+	}	
 	
 }
