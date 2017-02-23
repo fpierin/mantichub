@@ -1,14 +1,19 @@
 package org.mantic.datastore.repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
+import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.tdb.TDBFactory;
@@ -16,15 +21,15 @@ import org.mantichub.commons.domain.DatastoreTriple;
 import org.mantichub.commons.domain.TripleNode;
 
 public class DatastoreRepositoryImpl implements DatastoreRepository {
-
+	
 	private final Dataset dataset;
 	private final String modelName;
-
+	
 	public DatastoreRepositoryImpl(final String path, final String modelName) {
 		this.modelName = modelName;
 		dataset = TDBFactory.createDataset(path);
 	}
-
+	
 	@Override
 	public void create(final Model model) {
 		dataset.begin(ReadWrite.WRITE);
@@ -35,7 +40,7 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 			dataset.end();
 		}
 	}
-
+	
 	@Override
 	public ResultSet query(final String queryString) {
 		dataset.begin(ReadWrite.READ);
@@ -48,7 +53,7 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 			dataset.end();
 		}
 	}
-
+	
 	@Override
 	public void create(final String subject, final String predicate, final String object) {
 		Model model = null;
@@ -67,9 +72,9 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 			}
 			dataset.end();
 		}
-
+		
 	}
-
+	
 	@Override
 	public void create(final DatastoreTriple triple) {
 		final String subject = triple.getSubject().toString();
@@ -77,13 +82,30 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 		final String object = triple.getObject().toString();
 		this.create(subject, predicate, object);
 	}
-
+	
 	@Override
-	public boolean find(final DatastoreTriple triple) {
-		final ResultSet resultSet = this.query(queryFrom(triple));
-		return resultSet.hasNext();
+	public List<DatastoreTriple> find(final DatastoreTriple triple) {
+		final List<DatastoreTriple> results = new ArrayList<>();
+		final ResultSet resultSet = query(queryFrom(triple));
+		while (resultSet.hasNext()) {
+			final QuerySolution next = resultSet.next();
+			final RDFNode resultNode = next.get(next.varNames().next());
+			final TripleNode object = new TripleNode();
+			if (!resultNode.isLiteral()) {
+				final String nameSpace = resultNode.asNode().getNameSpace();
+				final String uri = resultNode.asNode().getURI();
+				final boolean isNamespace = nameSpace.contains("http://");
+				object.setNamespace(isNamespace ? nameSpace : null);
+				object.setValue(isNamespace ? uri.replaceAll(nameSpace, "") : nameSpace);
+			} else {
+				object.setValue(resultNode.asLiteral().toString());
+			}
+			results.add(new DatastoreTriple(triple.getSubject(), triple.getPredicate(), object));
+			System.out.println(next);
+		}
+		return results;
 	}
-
+	
 	@Override
 	public String queryFrom(final DatastoreTriple triple) {
 		final StringBuilder stringBuilder = new StringBuilder();
@@ -100,12 +122,11 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 	
 	public static void main(final String[] args) {
 		final DatastoreRepositoryImpl datastoreRepositoryImpl = new DatastoreRepositoryImpl(null, null);
-		final DatastoreTriple triple = new DatastoreTriple(new TripleNode("http://mantichub.com", "vlaaaaaaav"), 
-				new TripleNode("http://schema.org/", "startDate"), null);
+		final DatastoreTriple triple = new DatastoreTriple(new TripleNode("http://mantichub.com", "vlaaaaaaav"), new TripleNode("http://schema.org/", "startDate"), null);
 		final String queryFrom = datastoreRepositoryImpl.queryFrom(triple);
 		System.out.println(queryFrom);
 	}
-
+	
 	private String addParam(final String arg, final String namespace, final TripleNode node) {
 		if (node != null) {
 			if (!node.isLiteral()) {
@@ -115,12 +136,31 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 		}
 		return arg;
 	}
-
+	
 	private void addPrefix(final String prefixName, final TripleNode node, final StringBuilder stringBuilder) {
-		if (node != null && !node.isLiteral()) {
+		if ((node != null) && !node.isLiteral()) {
 			stringBuilder.append("PREFIX " + prefixName + ":<" + node.getNamespace() + ">\n");
 		}
 	}
-
+	
+	@Override
+	public void remove(final DatastoreTriple triple) {
+		Model model = null;
+		dataset.begin(ReadWrite.WRITE);
+		try {
+			model = dataset.getNamedModel(modelName);
+			final Resource jenaSubject = model.createResource(triple.getSubject().toString());
+			final Property jenaProperty = model.createProperty(triple.getPredicate().toString());
+			final Resource jenaObject = model.createResource(triple.getObject().toString());
+			final Statement stmt = model.createStatement(jenaSubject, jenaProperty, jenaObject);
+			model.remove(stmt);
+			dataset.commit();
+		} finally {
+			if (model != null) {
+				model.close();
+			}
+			dataset.end();
+		}
+	}
+	
 }
-

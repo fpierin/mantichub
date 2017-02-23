@@ -15,7 +15,7 @@ import org.mantichub.commons.domain.DatastoreTriple;
 
 @Named("datastoreService")
 public class DatastoreServiceImpl implements DatastoreService {
-
+	
 	private final DatastoreRepository datastoreRepository;
 
 	public DatastoreServiceImpl() {
@@ -23,28 +23,41 @@ public class DatastoreServiceImpl implements DatastoreService {
 		final String modelname = "teste";
 		datastoreRepository = new DatastoreRepositoryImpl(path, modelname);
 	}
-
+	
 	@Override
 	public void create(final List<DatastoreTriple> triples) {
 		if (isEmpty(triples)) {
 			return;
 		}
-		
+
 		for (final DatastoreTriple triple : triples) {
-			if (notFound(new DatastoreTriple(triple.getSubject(), triple.getPredicate(), null))) {
+			if (shouldCreate(triple)) {
 				System.out.println("Criando " + triple);
 				datastoreRepository.create(triple);
 				System.out.println("Tripla criada com sucesso");
+			} else {
+				System.out.println("Tripla ja existe " + triple);
 			}
 		}
-		
 	}
+	
+	private boolean shouldCreate(final DatastoreTriple triple) {
+		final DatastoreTriple tripleFilter = triple.clone();
+		tripleFilter.setObject(null);
+		final List<DatastoreTriple> filterResults = datastoreRepository.find(tripleFilter);
 
-	private boolean notFound(final DatastoreTriple triple) {
-		System.out.println("Criando " + triple);
-		boolean findResult = datastoreRepository.find(triple);
-		System.out.println("Resultado de busca de tripla: " + findResult);
-		return !findResult;
+		if (filterResults.size() == 1) {
+			if (filterResults.get(0).equals(triple)) {
+				return false;
+			}
+		}
+
+		for (final DatastoreTriple datastoreTriple : filterResults) {
+			datastoreRepository.remove(datastoreTriple);
+		}
+		
+		return true;
+
 	}
 
 	@Override
@@ -54,5 +67,5 @@ public class DatastoreServiceImpl implements DatastoreService {
 		final String result = jOut.asString(resultSet);
 		return result;
 	}
-	
+
 }

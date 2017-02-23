@@ -1,5 +1,7 @@
 package org.mantic.datastore.repository;
 
+import java.util.List;
+
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.mantichub.commons.domain.DatastoreTriple;
@@ -14,9 +16,11 @@ public interface DatastoreRepository {
 	
 	ResultSet query(String query);
 
-	boolean find(DatastoreTriple triple);
+	List<DatastoreTriple> find(DatastoreTriple triple);
 
 	String queryFrom(DatastoreTriple triple);
+	
+	void remove(DatastoreTriple datastoreTriple);
 
 	
 	
