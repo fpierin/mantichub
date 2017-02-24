@@ -8,8 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import org.mantichub.commons.domain.DatastoreQuery;
-import org.mantichub.commons.domain.DatastoreTriple;
+import com.mantichub.commons.domain.DatastoreQuery;
+import com.mantichub.commons.domain.DatastoreTriple;
 
 @Produces({ "application/json; charset=utf-8" })
 @Consumes({ "application/json; charset=utf-8" })

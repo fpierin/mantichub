@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
-import org.mantichub.commons.domain.DatastoreTriple;
+
+import com.mantichub.commons.domain.DatastoreTriple;
 
 public interface DatastoreRepository {
 	

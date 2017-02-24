@@ -45,7 +45,9 @@
 		<module>mantic-core</module>
 		<module>mantic-datastore</module>
 		<module>mantic-datastore-api</module>
+		<module>mantic-agent-core</module>
 		<module>mantic-agent-eventos-usp</module>
+		<module>mantic-agent-guia-da-semana</module>
 	</modules>
 
 	<dependencyManagement>

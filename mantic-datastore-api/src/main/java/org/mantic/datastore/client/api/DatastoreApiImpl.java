@@ -14,14 +14,14 @@ import org.apache.jena.graph.Triple;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
-import org.mantichub.commons.builder.DatastoreTripleBuilder;
-import org.mantichub.commons.domain.DatastoreQuery;
-import org.mantichub.commons.domain.DatastoreTriple;
 
-import com.mantichub.core.http.RestSupport;
+import com.mantichub.commons.builder.DatastoreTripleBuilder;
+import com.mantichub.commons.domain.DatastoreQuery;
+import com.mantichub.commons.domain.DatastoreTriple;
+import com.mantichub.core.http.RestfulSupport;
 import com.mantichub.core.serialization.SerializationService;
 
-public class DatastoreApiImpl extends RestSupport implements DatastoreApi {
+public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
 
 	String url = "http://localhost:8080/api/triplestore";
 

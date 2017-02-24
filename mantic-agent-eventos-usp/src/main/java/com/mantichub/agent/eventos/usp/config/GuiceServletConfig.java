@@ -10,11 +10,11 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
-import com.mantichub.agent.eventos.usp.agent.UspEventAgent;
-import com.mantichub.agent.eventos.usp.http.EventosUspHttpClient;
-import com.mantichub.agent.eventos.usp.http.EventosUspHttpClientImpl;
+import com.mantichub.agent.core.http.HttpAgent;
+import com.mantichub.agent.core.http.HttpAgentImpl;
+import com.mantichub.agent.core.infra.Agent;
+import com.mantichub.agent.eventos.usp.agent.EventoUspAgent;
 import com.mantichub.agent.eventos.usp.resource.EventosUSPResource;
-import com.mantichub.core.agent.Agent;
 import com.mantichub.core.http.HttpClientFactory;
 import com.mantichub.core.serialization.JsonSerializationServiceImpl;
 import com.mantichub.core.serialization.SerializationService;
@@ -44,10 +44,10 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 				final DatastoreApi datastoreApi = new DatastoreApiImpl(httpClient, serializationService);
 
 				bind(HttpClient.class).toInstance(httpClient);
-				bind(EventosUspHttpClient.class).to(EventosUspHttpClientImpl.class).asEagerSingleton();
+				bind(HttpAgent.class).to(HttpAgentImpl.class).asEagerSingleton();
 				bind(DatastoreApi.class).toInstance(datastoreApi);
 				bind(SerializationService.class).toInstance(serializationService);
-				bind(Agent.class).to(UspEventAgent.class).asEagerSingleton();
+				bind(Agent.class).to(EventoUspAgent.class).asEagerSingleton();
 			}
 		};
 	}

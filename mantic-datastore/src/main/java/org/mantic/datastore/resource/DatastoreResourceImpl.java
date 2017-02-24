@@ -7,8 +7,9 @@ import javax.inject.Named;
 import javax.ws.rs.core.Response;
 
 import org.mantic.datastore.service.DatastoreService;
-import org.mantichub.commons.domain.DatastoreQuery;
-import org.mantichub.commons.domain.DatastoreTriple;
+
+import com.mantichub.commons.domain.DatastoreQuery;
+import com.mantichub.commons.domain.DatastoreTriple;
 
 @Named("datastoreResource")
 public class DatastoreResourceImpl implements DatastoreResource {

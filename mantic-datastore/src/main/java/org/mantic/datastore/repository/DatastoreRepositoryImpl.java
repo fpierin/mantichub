@@ -17,8 +17,9 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.tdb.TDBFactory;
-import org.mantichub.commons.domain.DatastoreTriple;
-import org.mantichub.commons.domain.TripleNode;
+
+import com.mantichub.commons.domain.DatastoreTriple;
+import com.mantichub.commons.domain.TripleNode;
 
 public class DatastoreRepositoryImpl implements DatastoreRepository {
 	

@@ -11,8 +11,8 @@ import org.junit.Test;
 import org.mantic.datastore.client.api.DatastoreApi;
 import org.mantic.datastore.client.api.DatastoreApiImpl;
 
-import com.mantichub.agent.eventos.usp.agent.UspEventAgent;
-import com.mantichub.core.agent.Agent;
+import com.mantichub.agent.core.infra.Agent;
+import com.mantichub.agent.eventos.usp.agent.EventoUspAgent;
 import com.mantichub.core.http.HttpClientFactory;
 import com.mantichub.core.serialization.JsonSerializationServiceImpl;
 import com.mantichub.core.serialization.SerializationService;
@@ -26,7 +26,7 @@ public class EventoUSPEventCrawlerExemplo3 {
 		final HttpClient httpClient = HttpClientFactory.get(10, 10, 3);
 		final SerializationService serializationService = new JsonSerializationServiceImpl();
 		final DatastoreApi datastoreApi = new DatastoreApiImpl(httpClient, serializationService);
-		final Agent agent = new UspEventAgent(null, datastoreApi);
+		final Agent agent = new EventoUspAgent(null, datastoreApi);
 		final Model model = getRDFXMLFastWriter();
 		final Resource resource = agent.resourceFromHtml("http://teste.com", model, fromFile(arquivo));
 		datastoreApi.create(resource);

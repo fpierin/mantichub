@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mantichub</groupId>
+		<artifactId>mantichub</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>mantic-agent-core</artifactId>
+	<name>mantic-agent-core</name>
+	<packaging>jar</packaging>
+
+	<properties>
+		<jena.version>3.0.1</jena.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.mantichub</groupId>
+			<artifactId>mantic-datastore-api</artifactId>
+			<version>${mantichub.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mantichub</groupId>
+			<artifactId>mantic-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+			<version>${jena.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-arq</artifactId>
+			<version>${jena.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>${gson.version}</version>
+		</dependency>
+	</dependencies>
+
+</project>

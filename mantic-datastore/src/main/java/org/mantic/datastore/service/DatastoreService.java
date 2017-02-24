@@ -2,8 +2,8 @@ package org.mantic.datastore.service;
 
 import java.util.List;
 
-import org.mantichub.commons.domain.DatastoreQuery;
-import org.mantichub.commons.domain.DatastoreTriple;
+import com.mantichub.commons.domain.DatastoreQuery;
+import com.mantichub.commons.domain.DatastoreTriple;
 
 public interface DatastoreService {
 	

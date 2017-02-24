@@ -37,12 +37,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mantichub</groupId>
-			<artifactId>mantic-core</artifactId>
+			<artifactId>mantic-agent-core</artifactId>
+			<version>${mantichub.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mantichub</groupId>
-			<artifactId>mantic-datastore-api</artifactId>
-			<version>${mantichub.version}</version>
+			<artifactId>mantic-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject</groupId>

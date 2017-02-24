@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>com.mantichub</groupId>
 			<artifactId>mantic-core</artifactId>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-arq</artifactId>

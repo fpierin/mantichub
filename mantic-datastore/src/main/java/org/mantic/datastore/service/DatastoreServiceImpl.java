@@ -10,8 +10,9 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.resultset.JSONOutput;
 import org.mantic.datastore.repository.DatastoreRepository;
 import org.mantic.datastore.repository.DatastoreRepositoryImpl;
-import org.mantichub.commons.domain.DatastoreQuery;
-import org.mantichub.commons.domain.DatastoreTriple;
+
+import com.mantichub.commons.domain.DatastoreQuery;
+import com.mantichub.commons.domain.DatastoreTriple;
 
 @Named("datastoreService")
 public class DatastoreServiceImpl implements DatastoreService {
