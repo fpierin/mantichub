@@ -1,4 +1,4 @@
-package com.mantichub.agent.eventos.usp.config;
+package com.mantichub.agent.eventos.guiadasemana.config;
 
 import org.apache.http.client.HttpClient;
 import org.mantic.datastore.client.api.DatastoreApi;
@@ -13,8 +13,8 @@ import com.google.inject.servlet.ServletModule;
 import com.mantichub.agent.core.http.HttpAgent;
 import com.mantichub.agent.core.http.HttpAgentImpl;
 import com.mantichub.agent.core.infra.Agent;
-import com.mantichub.agent.eventos.usp.agent.GuiaDaSemanaAgent;
-import com.mantichub.agent.eventos.usp.resource.EventosUSPResource;
+import com.mantichub.agent.eventos.guiadasemana.agent.GuiaDaSemanaAgent;
+import com.mantichub.agent.eventos.guiadasemana.resource.GuiaDaSemanaResource;
 import com.mantichub.core.http.HttpClientFactory;
 import com.mantichub.core.serialization.JsonSerializationServiceImpl;
 import com.mantichub.core.serialization.SerializationService;
@@ -30,7 +30,7 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 		return new ServletModule() {
 			@Override
 			protected void configureServlets() {
-				serve("*").with(EventosUSPResource.class);
+				serve("*").with(GuiaDaSemanaResource.class);
 			}
 		};
 	}
@@ -39,7 +39,7 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 		return new AbstractModule() {
 			@Override
 			protected void configure() {
-				final HttpClient httpClient = HttpClientFactory.get(10, 10, 3);
+				final HttpClient httpClient = HttpClientFactory.get(2, 2, 3);
 				final SerializationService serializationService = new JsonSerializationServiceImpl();
 				final DatastoreApi datastoreApi = new DatastoreApiImpl(httpClient, serializationService);
 

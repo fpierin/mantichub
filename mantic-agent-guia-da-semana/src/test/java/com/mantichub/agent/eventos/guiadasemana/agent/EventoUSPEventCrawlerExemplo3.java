@@ -1,6 +1,6 @@
-package com.mantichub.agent.eventos.usp.agent;
+package com.mantichub.agent.eventos.guiadasemana.agent;
 
-import static com.mantichub.agent.eventos.usp.infra.TestUtils.fromFile;
+import static com.mantichub.agent.eventos.guiadasemana.infra.TestUtils.fromFile;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -10,6 +10,7 @@ import java.util.Date;
 import org.junit.Test;
 
 import com.mantichub.agent.core.infra.EventResource;
+import com.mantichub.agent.eventos.guiadasemana.agent.GuiaDaSemanaEventAdapter;
 
 public class EventoUSPEventCrawlerExemplo3 {
 

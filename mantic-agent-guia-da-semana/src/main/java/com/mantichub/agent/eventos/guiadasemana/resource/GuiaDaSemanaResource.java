@@ -1,4 +1,4 @@
-package com.mantichub.agent.eventos.usp.resource;
+package com.mantichub.agent.eventos.guiadasemana.resource;
 
 import static com.mantichub.agent.core.constant.AgentConfiguration.RDF_FORMAT;
 
@@ -17,13 +17,13 @@ import org.apache.jena.rdf.model.Model;
 import com.mantichub.agent.core.infra.Agent;
 
 @Singleton
-public class EventosUSPResource extends HttpServlet {
+public class GuiaDaSemanaResource extends HttpServlet {
 	
 	private static final long serialVersionUID = -4929126819985636942L;
 	private final Agent agent;
 	
 	@Inject
-	public EventosUSPResource(final Agent agent) {
+	public GuiaDaSemanaResource(final Agent agent) {
 		this.agent = agent;
 	}
 	

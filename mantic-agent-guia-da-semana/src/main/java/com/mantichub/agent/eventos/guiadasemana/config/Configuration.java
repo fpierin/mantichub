@@ -1,4 +1,4 @@
-package com.mantichub.agent.eventos.usp.config;
+package com.mantichub.agent.eventos.guiadasemana.config;
 
 public class Configuration {
 

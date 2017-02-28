@@ -1,4 +1,4 @@
-package com.mantichub.agent.eventos.usp.agent;
+package com.mantichub.agent.eventos.guiadasemana.agent;
 
 import static com.mantichub.core.util.HTMLUtils.dateFromRegex;
 import static com.mantichub.core.util.HTMLUtils.doubleFromRegex;
