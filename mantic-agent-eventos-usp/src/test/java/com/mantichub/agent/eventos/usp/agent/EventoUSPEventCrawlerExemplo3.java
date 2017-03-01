@@ -40,7 +40,6 @@ public class EventoUSPEventCrawlerExemplo3 {
 				+ "    <td>07/02/17 | 20:00 - 21:00<br /></td>\n" + "  </tr>";
 		// // final String regex = ;
 		final EventResource crawler = new EventoUspEventAdapter(fromFile);
-		EventoUspEventAdapter.START_DATE_PATTERN = "<td>(\\d{2}/\\d{2}/\\d{2})( - \\d{2}/\\d{2}/\\d{2})? \\| \\d{2}:\\d{2} - \\d{2}:\\d{2}<br>";
 		final Date valorEsperado = new SimpleDateFormat("dd/MM/yy").parse("07/02/17");
 		final Date valorEncontrado = crawler.getStartDate();
 		assertThat(valorEncontrado, is(valorEsperado));
