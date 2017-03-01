@@ -22,7 +22,7 @@ public class EventoUspEventAdapter implements EventResource {
 	public static final String LATITUDE_PATTERN = "maps\\?q=([^,]+)";
 	public static final String LONGITITUDE_PATTERN = "maps\\?q=[^,]+,([^+]+)";
 	public static final String OVERVIEW_PATTERN = "evento-conteudo\">(.+?)(?=<!--)";
-	public static String START_DATE_PATTERN = "<td>(\\d{2}/\\d{2}/\\d{2})( - \\d{2}/\\d{2}/\\d{2})? \\| \\d{2}:\\d{2} - \\d{2}:\\d{2}<br>";
+	public static final String START_DATE_PATTERN = "<td>(\\d{2}/\\d{2}/\\d{2})( - \\d{2}/\\d{2}/\\d{2})? \\| \\d{2}:\\d{2} - \\d{2}:\\d{2}<br>";
 	public static final String START_TIME_PATTERN = "<td>\\d{2}/\\d{2}/\\d{2} - \\d{2}/\\d{2}/\\d{2} \\| (\\d{2}:\\d{2}) - \\d{2}:\\d{2}<br>";
 	public static final String STREET_ADDRESS_PATTERN = "var endereco = '(([^,]+?), [\\d|s/n]+)";
 	public static final String TITLE_PATTERN = "evento-titulo\\\"[^>]+>([^<]+)";

@@ -1,5 +1,10 @@
 package com.mantichub.agent.eventos.guiadasemana.agent;
 
+import static com.mantichub.agent.eventos.guiadasemana.config.Configuration.BASE_URL;
+import static com.mantichub.agent.eventos.guiadasemana.config.Configuration.EVENT_URL_PATTERN;
+import static com.mantichub.agent.eventos.guiadasemana.config.Configuration.NEXT_PAGE_URL;
+import static com.mantichub.agent.eventos.guiadasemana.config.Configuration.PORTAL_URL;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -17,10 +22,6 @@ import com.mantichub.agent.core.infra.EventResource;
 
 public class GuiaDaSemanaAgent extends DefaultAgent implements Agent {
 	
-	public static final String NEXT_PAGE_URL = "(/sao-paulo/agenda\\?page=\\d+).*";
-	public static final String BASE_URL = "http://www.guiadasemana.com.br";
-	public static final String PORTAL_URL = BASE_URL + "/sao-paulo/agenda?page=1";
-	public static final String EVENT_URL_PATTERN = "href=\"(/sao-paulo/.+?)\" title=\"";
 	private static final Set<String> ignoreUrls = new HashSet<>(); 
 	
 	@Inject

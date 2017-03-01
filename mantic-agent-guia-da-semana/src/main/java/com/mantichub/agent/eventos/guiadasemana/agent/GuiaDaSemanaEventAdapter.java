@@ -8,6 +8,7 @@ import static com.mantichub.core.util.StringUtils.isNotBlank;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.rdf.model.Resource;
 
 import com.mantichub.agent.core.infra.EventResource;
@@ -19,13 +20,13 @@ public class GuiaDaSemanaEventAdapter implements EventResource {
 
 	public static final String END_DATE_PATTERN = "<td>\\d{2}/\\d{2}/\\d{2} - (\\d{2}/\\d{2}/\\d{2}) \\| \\d{2}:\\d{2} - \\d{2}:\\d{2}<br>";
 	public static final String END_TIME_PATTERN = "<td>\\d{2}/\\d{2}/\\d{2} - \\d{2}/\\d{2}/\\d{2} \\| \\d{2}:\\d{2} - (\\d{2}:\\d{2})<br>";
-	public static final String LATITUDE_PATTERN = "maps\\?q=([^,]+)";
-	public static final String LONGITITUDE_PATTERN = "maps\\?q=[^,]+,([^+]+)";
+	public static final String LATITUDE_PATTERN = "<meta itemprop=\"latitude\" content=\"(.+?)\">";
+	public static final String LONGITITUDE_PATTERN = "<meta itemprop=\"longitude\" content=\"(.+?)\">";
 	public static final String OVERVIEW_PATTERN = "evento-conteudo\">(.+?)(?=<!--)";
-	public static String START_DATE_PATTERN = "<td>(\\d{2}/\\d{2}/\\d{2})( - \\d{2}/\\d{2}/\\d{2})? \\| \\d{2}:\\d{2} - \\d{2}:\\d{2}<br>";
+	public static final String START_DATE_PATTERN = "<td>(\\d{2}/\\d{2}/\\d{2})( - \\d{2}/\\d{2}/\\d{2})? \\| \\d{2}:\\d{2} - \\d{2}:\\d{2}<br>";
 	public static final String START_TIME_PATTERN = "<td>\\d{2}/\\d{2}/\\d{2} - \\d{2}/\\d{2}/\\d{2} \\| (\\d{2}:\\d{2}) - \\d{2}:\\d{2}<br>";
-	public static final String STREET_ADDRESS_PATTERN = "var endereco = '(([^,]+?), [\\d|s/n]+)";
-	public static final String TITLE_PATTERN = "evento-titulo\\\"[^>]+>([^<]+)";
+	public static final String STREET_ADDRESS_PATTERN = "<span itemprop=\"streetAddress\">(.+?)</span>";
+	public static final String TITLE_PATTERN = "<h4>(.+?)</h4>";
 	public static final String FREE_EVENT_PATTERN = "(<strong>Evento Gratuito</strong>)";
 
 	public GuiaDaSemanaEventAdapter(final String html) {
@@ -34,7 +35,14 @@ public class GuiaDaSemanaEventAdapter implements EventResource {
 
 	@Override
 	public String getStreetAddress() {
-		return valueByPattern(html, STREET_ADDRESS_PATTERN);
+		String value = valueByPattern(html, STREET_ADDRESS_PATTERN);
+		if (!StringUtils.isEmpty(value)) {
+			value = value.trim();
+			if (value.endsWith(",")) {
+				value = value.substring(0, value.length() -1);
+			}
+		}
+		return value;
 	}
 
 	@Override

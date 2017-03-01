@@ -108,7 +108,7 @@ public class EventoUSPEventCrawlerExemplo3 {
 	// }
 	//
 	// @Test
-	// public void verificaLongirude() throws Exception {
+	// public void verificaLongitude() throws Exception {
 	// final EventCrawler crawler = new EventoUSPEventCrawler(fromFile(arquivo));
 	// final Double valorEsperado = -46.652423;
 	// final Double valorEncontrado = crawler.getLongitude();
