@@ -13,7 +13,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.compatibility.version>1.8</java.compatibility.version>
 		<javaee.version>8</javaee.version>
-		<jetty.port>8080</jetty.port>
 
 		<!-- Project dependencies -->
 		<commons-httpclient.version>3.1</commons-httpclient.version>
@@ -38,6 +37,10 @@
 		<!-- Test dependencies -->
 		<junit.version>4.12</junit.version>
 		<mantichub.version>1.0-SNAPSHOT</mantichub.version>
+		
+		<mantichub.agent.eventosusp.port>9090</mantichub.agent.eventosusp.port>
+		<mantichub.agent.guiadasemana.port>9091</mantichub.agent.guiadasemana.port>
+		<mantichub.datastore.port>8080</mantichub.datastore.port>
 	</properties>
 
 	<modules>

@@ -92,7 +92,7 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 			final QuerySolution next = resultSet.next();
 			final RDFNode resultNode = next.get(next.varNames().next());
 			final TripleNode object = new TripleNode();
-			if (!resultNode.isLiteral()) {
+			if (resultNode != null && !resultNode.isLiteral()) {
 				final String nameSpace = resultNode.asNode().getNameSpace();
 				final String uri = resultNode.asNode().getURI();
 				final boolean isNamespace = nameSpace.contains("http://");

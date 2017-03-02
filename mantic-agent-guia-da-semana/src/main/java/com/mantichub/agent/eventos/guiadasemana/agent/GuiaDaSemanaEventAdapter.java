@@ -27,6 +27,7 @@ public class GuiaDaSemanaEventAdapter implements EventResource {
 	public static final String LONGITITUDE_PATTERN = "<meta itemprop=\"longitude\" content=\"(.+?)\">";
 	public static String MAX_PRICE_PATTERN = "<span itemprop=\"priceRange\">.+?R\\$(\\d+[.]\\d+)[\\s\\r\\n]*?</span>";
 	public static final String OVERVIEW_PATTERN = "<div itemprop=\"description\">(.*)</div>[\\s\\r\\n]*?<div class=\"borderEnd \">";
+	public static final String SINGLE_DATE_PATTERN = "Data</strong>[\\s\\n]+?(\\w+ \\d+ \\w+)";
 	public static final String START_DATE_PATTERN = "Data</strong>[\\s\\n]+?(\\d+ \\w+)";
 	public static final String START_TIME_PATTERN = "<td>\\d{2}/\\d{2}/\\d{2} - \\d{2}/\\d{2}/\\d{2} \\| (\\d{2}:\\d{2}) - \\d{2}:\\d{2}<br>";
 	public static final String STREET_ADDRESS_PATTERN = "<span itemprop=\"streetAddress\">(.+?)</span>";
@@ -71,7 +72,8 @@ public class GuiaDaSemanaEventAdapter implements EventResource {
 
 	@Override
 	public Date getEndDate() {
-		return dateWithYear(END_DATE_PATTERN);
+		final Date dateWithYear = dateWithYear(SINGLE_DATE_PATTERN, "EEE dd MMM");
+		return dateWithYear != null ? dateWithYear : dateWithYear(END_DATE_PATTERN, "dd MMM");		
 	}
 
 	@Override
@@ -81,7 +83,8 @@ public class GuiaDaSemanaEventAdapter implements EventResource {
 
 	@Override
 	public Date getStartDate() {
-		return dateWithYear(START_DATE_PATTERN);
+		final Date dateWithYear = dateWithYear(SINGLE_DATE_PATTERN, "EEE dd MMM");
+		return dateWithYear != null ? dateWithYear : dateWithYear(START_DATE_PATTERN, "dd MMM");
 	}
 
 	@Override
@@ -99,12 +102,15 @@ public class GuiaDaSemanaEventAdapter implements EventResource {
 		return doubleFromRegex(html, MAX_PRICE_PATTERN);
 	}
 	
-	private Date dateWithYear(final String endDatePattern) {
-		final Date dateFromRegex = dateFromRegex(html, endDatePattern, "dd MMM");
-		final Calendar c = Calendar.getInstance();
-		c.setTime(dateFromRegex);
-		c.set(Calendar.getInstance().get(YEAR), c.get(MONTH), c.get(DATE));
-		return c.getTime();
+	private Date dateWithYear(final String endDatePattern, final String dateFormat) {
+		final Date dateFromRegex = dateFromRegex(html, endDatePattern, dateFormat);
+		if (dateFromRegex != null) {
+			final Calendar c = Calendar.getInstance();
+			c.setTime(dateFromRegex);
+			c.set(Calendar.getInstance().get(YEAR), c.get(MONTH), c.get(DATE));
+			return c.getTime();
+		}
+		return null;
 	}
 
 }

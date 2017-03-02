@@ -89,8 +89,5 @@ public class GuiaDaSemanaEventAdapterExemplo1 {
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
-	public static void main(String[] args) {
-	}
-	
 
 }

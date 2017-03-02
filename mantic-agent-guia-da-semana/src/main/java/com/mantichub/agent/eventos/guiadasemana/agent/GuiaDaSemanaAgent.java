@@ -11,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Resource;
 import org.mantic.datastore.client.api.DatastoreApi;
 
 import com.google.inject.Inject;
@@ -52,18 +51,13 @@ public class GuiaDaSemanaAgent extends DefaultAgent implements Agent {
 				baseUrls.add(BASE_URL + url);
 			}
 		}
+		Thread.sleep(1000);
 		return super.retrieveFromUrls(ammount, model, baseUrls);
 	}
 	
 	@Override
 	public EventResource getAdapter(final String html) {
 		return new GuiaDaSemanaEventAdapter(html);
-	}
-	
-	@Override
-	public Resource resourceFromHtml(final String url, final Model model, final String html) {
-		System.out.println(url);
-		return null;
 	}
 	
 }

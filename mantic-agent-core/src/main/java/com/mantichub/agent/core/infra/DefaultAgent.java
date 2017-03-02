@@ -31,6 +31,9 @@ public abstract class DefaultAgent implements Agent {
 
 	protected final HttpAgent httpAgent;
 	protected final DatastoreApi datastoreApi;
+	
+	protected final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_AMOUNT);
+	protected final ListeningExecutorService service = MoreExecutors.listeningDecorator(executorService);
 
 	public DefaultAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi) {
 		this.httpAgent = httpAgent;
@@ -47,13 +50,14 @@ public abstract class DefaultAgent implements Agent {
 		return extractResource(url, model, getAdapter(html));
 	}
 
-	protected Model retrieveFromUrl(final int ammount, final String portalUrl, final String eventUrlPattern) throws Exception {
+	protected Model retrieveFromUrl(final int ammount, final String portalUrl, final String eventUrlPattern)
+			throws Exception {
 		final Model model = getRDFXMLFastWriter();
 		return retrieveFromUrl(ammount, portalUrl, eventUrlPattern, model);
 	}
 
-	protected Model retrieveFromUrl(final int ammount, final String portalUrl, final String eventUrlPattern, final Model model)
-			throws Exception {
+	protected Model retrieveFromUrl(final int ammount, final String portalUrl, final String eventUrlPattern,
+			final Model model) throws Exception {
 		final String htmlFromURL = httpAgent.htmlFromURL(portalUrl);
 		final Set<String> urls = setByPattern(htmlFromURL, eventUrlPattern);
 		return retrieveFromUrls(ammount, model, urls);
@@ -77,8 +81,6 @@ public abstract class DefaultAgent implements Agent {
 	protected List<ListenableFuture<Resource>> createCallables(final Model model, final Set<String> urls,
 			final int limit) {
 		int amount = 0;
-		final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_AMOUNT);
-		final ListeningExecutorService service = MoreExecutors.listeningDecorator(executorService);
 		final Iterator<String> iterator = urls.iterator();
 		final List<ListenableFuture<Resource>> resources = new ArrayList<>();
 		while (iterator.hasNext() && ((limit == 0) || (amount < limit))) {

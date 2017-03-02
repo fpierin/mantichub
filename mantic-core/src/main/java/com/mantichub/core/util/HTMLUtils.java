@@ -55,7 +55,14 @@ public class HTMLUtils {
 
 	public static Double doubleFromRegex(final String html, final String regex) {
 		final String value = valueByPattern(html, regex);
-		return StringUtils.isNotBlank(value) ? new Double(value) : null;
+		if (isNotBlank(value)) {
+			try {
+				return new Double(value);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 }

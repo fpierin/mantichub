@@ -14,7 +14,7 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<app.port>9090</app.port>
+		<app.port>${mantichub.agent.eventosusp.port}</app.port>
 
 		<guice.version>3.0</guice.version>
 	</properties>
