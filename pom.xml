@@ -37,7 +37,7 @@
 		<!-- Test dependencies -->
 		<junit.version>4.12</junit.version>
 		<mantichub.version>1.0-SNAPSHOT</mantichub.version>
-		
+
 		<mantichub.agent.eventosusp.port>9090</mantichub.agent.eventosusp.port>
 		<mantichub.agent.guiadasemana.port>9091</mantichub.agent.guiadasemana.port>
 		<mantichub.datastore.port>8080</mantichub.datastore.port>
@@ -52,6 +52,15 @@
 		<module>mantic-agent-eventos-usp</module>
 		<module>mantic-agent-guia-da-semana</module>
 	</modules>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
 	<dependencyManagement>
 		<dependencies>

@@ -12,60 +12,44 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.rdf.model.impl.StmtIteratorImpl;
 import org.apache.jena.tdb.TDBFactory;
 
 import com.mantichub.commons.domain.DatastoreTriple;
 import com.mantichub.commons.domain.TripleNode;
 
 public class DatastoreRepositoryImpl implements DatastoreRepository {
-	
+
 	private final Dataset dataset;
 	private final String modelName;
-	
+
 	public DatastoreRepositoryImpl(final String path, final String modelName) {
 		this.modelName = modelName;
 		dataset = TDBFactory.createDataset(path);
 	}
-	
+
 	@Override
 	public void create(final Model model) {
+		if (model != null) {
+			create(model.listStatements());
+		}
+	}
+
+	@Override
+	public void create(final StmtIterator stmts) {
 		dataset.begin(ReadWrite.WRITE);
-		try {
-			dataset.addNamedModel(modelName, model);
-			dataset.commit();
-		} finally {
-			dataset.end();
-		}
-	}
-	
-	@Override
-	public ResultSet query(final String queryString) {
-		dataset.begin(ReadWrite.READ);
-		try {
-			final Query query = QueryFactory.create(queryString);
-			final QueryExecution qexec = QueryExecutionFactory.create(query, dataset.getNamedModel(modelName));
-			final ResultSet execSelect = qexec.execSelect();
-			return execSelect;
-		} finally {
-			dataset.end();
-		}
-	}
-	
-	@Override
-	public void create(final String subject, final String predicate, final String object) {
 		Model model = null;
-		dataset.begin(ReadWrite.WRITE);
 		try {
 			model = dataset.getNamedModel(modelName);
-			final Resource jenaSubject = model.createResource(subject);
-			final Property jenaProperty = model.createProperty(predicate);
-			final Resource jenaObject = model.createResource(object);
-			final Statement stmt = model.createStatement(jenaSubject, jenaProperty, jenaObject);
-			model.add(stmt);
+			while (stmts.hasNext()) {
+				model.add(stmts.next());
+			}
 			dataset.commit();
 		} finally {
 			if (model != null) {
@@ -73,9 +57,37 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 			}
 			dataset.end();
 		}
-		
 	}
-	
+
+	private void create(final Statement stmt) {
+		if (stmt != null) {
+			final List<Statement> list = new ArrayList<>();
+			list.add(stmt);
+			create(new StmtIteratorImpl(list.iterator()));
+		}
+
+	}
+
+	@Override
+	public void create(final String subject, final String predicate, final String object) {
+		dataset.begin(ReadWrite.READ);
+		Model model = null;
+		Statement stmt = null;
+		try {
+			model = dataset.getNamedModel(modelName);
+			final Resource jenaSubject = model.createResource(subject);
+			final Property jenaProperty = model.createProperty(predicate);
+			final Resource jenaObject = model.createResource(object);
+			stmt = model.createStatement(jenaSubject, jenaProperty, jenaObject);
+		} finally {
+			if (model != null) {
+				model.close();
+			}
+			dataset.end();
+		}
+		create(stmt);
+	}
+
 	@Override
 	public void create(final DatastoreTriple triple) {
 		final String subject = triple.getSubject().toString();
@@ -83,7 +95,7 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 		final String object = triple.getObject().toString();
 		this.create(subject, predicate, object);
 	}
-	
+
 	@Override
 	public List<DatastoreTriple> find(final DatastoreTriple triple) {
 		final List<DatastoreTriple> results = new ArrayList<>();
@@ -106,7 +118,7 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 		}
 		return results;
 	}
-	
+
 	@Override
 	public String queryFrom(final DatastoreTriple triple) {
 		final StringBuilder stringBuilder = new StringBuilder();
@@ -120,14 +132,7 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 		stringBuilder.append("}");
 		return stringBuilder.toString();
 	}
-	
-	public static void main(final String[] args) {
-		final DatastoreRepositoryImpl datastoreRepositoryImpl = new DatastoreRepositoryImpl(null, null);
-		final DatastoreTriple triple = new DatastoreTriple(new TripleNode("http://mantichub.com", "vlaaaaaaav"), new TripleNode("http://schema.org/", "startDate"), null);
-		final String queryFrom = datastoreRepositoryImpl.queryFrom(triple);
-		System.out.println(queryFrom);
-	}
-	
+
 	private String addParam(final String arg, final String namespace, final TripleNode node) {
 		if (node != null) {
 			if (!node.isLiteral()) {
@@ -137,13 +142,13 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 		}
 		return arg;
 	}
-	
+
 	private void addPrefix(final String prefixName, final TripleNode node, final StringBuilder stringBuilder) {
 		if ((node != null) && !node.isLiteral()) {
 			stringBuilder.append("PREFIX " + prefixName + ":<" + node.getNamespace() + ">\n");
 		}
 	}
-	
+
 	@Override
 	public void remove(final DatastoreTriple triple) {
 		Model model = null;
@@ -163,5 +168,31 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 			dataset.end();
 		}
 	}
+
+	@Override
+	public void infer() {
+		Model infModel = null;
+		dataset.begin(ReadWrite.READ);
+		try {
+			final Model model = dataset.getNamedModel(modelName);
+			infModel = ModelFactory.createRDFSModel(model);
+		} finally {
+			dataset.end();
+		}
+		create(infModel);
+	}
 	
+	@Override
+	public ResultSet query(final String queryString) {
+		dataset.begin(ReadWrite.READ);
+		try {
+			final Query query = QueryFactory.create(queryString);
+			final QueryExecution qexec = QueryExecutionFactory.create(query, dataset.getNamedModel(modelName));
+			final ResultSet execSelect = qexec.execSelect();
+			return execSelect;
+		} finally {
+			dataset.end();
+		}
+	}
+
 }

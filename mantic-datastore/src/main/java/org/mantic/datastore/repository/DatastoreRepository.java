@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.StmtIterator;
 
 import com.mantichub.commons.domain.DatastoreTriple;
 
@@ -22,6 +23,10 @@ public interface DatastoreRepository {
 	String queryFrom(DatastoreTriple triple);
 	
 	void remove(DatastoreTriple datastoreTriple);
+
+	void infer();
+
+	void create(StmtIterator stmts);
 
 	
 	
