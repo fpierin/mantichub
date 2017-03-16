@@ -89,6 +89,7 @@
 						<extended>false</extended>
 						<logTimeZone>GMT</logTimeZone>
 					</requestLog>
+					<scanIntervalSeconds>3</scanIntervalSeconds>
 				</configuration>
 			</plugin>
 		</plugins>

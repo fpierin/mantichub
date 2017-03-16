@@ -22,14 +22,14 @@ import com.mantichub.core.http.RestfulSupport;
 import com.mantichub.core.serialization.SerializationService;
 
 public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
-
+	
 	String url = "http://localhost:8080/api/triplestore";
-
+	
 	@Inject
 	public DatastoreApiImpl(final HttpClient httpClient, final SerializationService serializationService) {
 		super(httpClient, serializationService);
 	}
-	
+
 	@Override
 	public void create(final Resource resource) {
 		final StmtIterator listProperties = resource.listProperties();
@@ -43,19 +43,19 @@ public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
 			System.out.println(post(url, triples));
 		}
 	}
-
+	
 	@Override
 	public void query(final String queryStr) {
 		if (isNotBlank(queryStr)) {
 			System.out.println(post(url + "/query", new DatastoreQuery(queryStr)));
 		}
 	}
-	
+
 	private DatastoreTriple buildTripleFromStatement(final Statement statement) {
 		final Triple asTriple = statement.asTriple();
-		final Node object = asTriple.getObject();
-		final Node predicate = asTriple.getPredicate();
 		final Node subject = asTriple.getSubject();
+		final Node predicate = asTriple.getPredicate();
+		final Node object = asTriple.getObject();
 		final DatastoreTriple datastoreTriple = new DatastoreTripleBuilder()
 				.withSubject(namespaceFrom(subject), valueFrom(subject))
 				.withPredicate(namespaceFrom(predicate), valueFrom(predicate))
@@ -63,14 +63,22 @@ public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
 				.create();
 		return datastoreTriple;
 	}
-
+	
 	private String valueFrom(final Node node) {
-		return node.isLiteral()? node.getLiteral().toString() : node.getURI().replaceAll(namespaceFrom(node), "") ;
+		return node.isLiteral() ? clearLiteral(node) : clearUrl(node);
 	}
 
+	private String clearUrl(final Node node) {
+		return node.getURI().replaceAll(namespaceFrom(node), "");
+	}
+
+	private String clearLiteral(final Node node) {
+		return node.getLiteral().toString();
+	}
+	
 	private String namespaceFrom(final Node node) {
 		return node.isLiteral()? null : node.getNameSpace();
 	}
-
+	
 }
 

@@ -59,7 +59,8 @@ public class EventBuilder {
 
 	public Resource create() throws Exception {
 		if (resource == null) {
-			resource(isNotBlank(title) ? title.replace(" ", "") : md5(serviceUrl));
+			final String resourceName = isNotBlank(title) ? title : md5(serviceUrl);
+			resource(resourceName);
 		}
 		addProperty(RDF.type, type);
 		addProperty(SCHEMA.addressRegion, addressRegion);
@@ -85,7 +86,8 @@ public class EventBuilder {
 	public EventBuilder resource(final String resourceName) {
 		try {
 			model.enterCriticalSection(Lock.WRITE);
-			resource = model.createResource(projectNS + normalize(resourceName));
+			final String resourceUri = projectNS + normalize(resourceName);
+			resource = model.createResource(resourceUri);
 		} finally {
 			model.leaveCriticalSection();
 

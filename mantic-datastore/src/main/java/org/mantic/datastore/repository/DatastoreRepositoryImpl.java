@@ -43,19 +43,25 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 
 	@Override
 	public void create(final StmtIterator stmts) {
-		dataset.begin(ReadWrite.WRITE);
-		Model model = null;
 		try {
-			model = dataset.getNamedModel(modelName);
-			while (stmts.hasNext()) {
-				model.add(stmts.next());
+			
+			dataset.begin(ReadWrite.WRITE);
+			Model model = null;
+			try {
+				model = dataset.getNamedModel(modelName);
+				while (stmts.hasNext()) {
+					model.add(stmts.next());
+				}
+				dataset.commit();
+			} finally {
+				if (model != null) {
+					model.close();
+				}
+				dataset.end();
 			}
-			dataset.commit();
-		} finally {
-			if (model != null) {
-				model.close();
-			}
-			dataset.end();
+		} catch (final Exception e) {
+			System.out.println(stmts);
+			e.printStackTrace();
 		}
 	}
 
@@ -99,12 +105,13 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 	@Override
 	public List<DatastoreTriple> find(final DatastoreTriple triple) {
 		final List<DatastoreTriple> results = new ArrayList<>();
-		final ResultSet resultSet = query(queryFrom(triple));
+		final String query = queryFrom(triple);
+		final ResultSet resultSet = query(query);
 		while (resultSet.hasNext()) {
 			final QuerySolution next = resultSet.next();
 			final RDFNode resultNode = next.get(next.varNames().next());
 			final TripleNode object = new TripleNode();
-			if (resultNode != null && !resultNode.isLiteral()) {
+			if ((resultNode != null) && !resultNode.isLiteral()) {
 				final String nameSpace = resultNode.asNode().getNameSpace();
 				final String uri = resultNode.asNode().getURI();
 				final boolean isNamespace = nameSpace.contains("http://");
@@ -135,12 +142,13 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 
 	private String addParam(final String arg, final String namespace, final TripleNode node) {
 		if (node != null) {
+			String returnValue = node.getValue().replaceAll("[^A-Za-z0-9]", "");
 			if (!node.isLiteral()) {
-				return namespace + ":" + node.getValue();
+				returnValue = namespace + ":" + returnValue;
 			}
-			return node.getValue();
+			return returnValue;
 		}
-		return arg;
+		return arg; 
 	}
 
 	private void addPrefix(final String prefixName, final TripleNode node, final StringBuilder stringBuilder) {

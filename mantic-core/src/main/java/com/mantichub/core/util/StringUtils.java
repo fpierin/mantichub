@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class StringUtils {
 
 	public static boolean isNotBlank(final String keyString) {
-		return keyString != null && !keyString.isEmpty();
+		return (keyString != null) && !keyString.isEmpty();
 	}
 
 	public static boolean isBlank(final String keyString) {
@@ -35,7 +35,9 @@ public class StringUtils {
 	}
 
 	public static String normalize(final String word) {
-		return Normalizer.normalize(word, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+		return Normalizer.normalize(word, Normalizer.Form.NFD)
+						 .replaceAll("[^\\p{ASCII}]", "")
+						 .replaceAll("[^A-Za-z0-9]", "");
 	}
-
+	
 }
