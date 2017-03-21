@@ -43,25 +43,19 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 
 	@Override
 	public void create(final StmtIterator stmts) {
+		dataset.begin(ReadWrite.WRITE);
+		Model model = null;
 		try {
-			
-			dataset.begin(ReadWrite.WRITE);
-			Model model = null;
-			try {
-				model = dataset.getNamedModel(modelName);
-				while (stmts.hasNext()) {
-					model.add(stmts.next());
-				}
-				dataset.commit();
-			} finally {
-				if (model != null) {
-					model.close();
-				}
-				dataset.end();
+			model = dataset.getNamedModel(modelName);
+			while (stmts.hasNext()) {
+				model.add(stmts.next());
 			}
-		} catch (final Exception e) {
-			System.out.println(stmts);
-			e.printStackTrace();
+			dataset.commit();
+		} finally {
+			if (model != null) {
+				model.close();
+			}
+			dataset.end();
 		}
 	}
 
@@ -148,7 +142,7 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 			}
 			return returnValue;
 		}
-		return arg; 
+		return arg;
 	}
 
 	private void addPrefix(final String prefixName, final TripleNode node, final StringBuilder stringBuilder) {
@@ -189,7 +183,7 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 		}
 		create(infModel);
 	}
-	
+
 	@Override
 	public ResultSet query(final String queryString) {
 		dataset.begin(ReadWrite.READ);
