@@ -154,8 +154,8 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 	@Override
 	public void remove(final DatastoreTriple triple) {
 		Model model = null;
-		dataset.begin(ReadWrite.WRITE);
 		try {
+			dataset.begin(ReadWrite.WRITE);
 			model = dataset.getNamedModel(modelName);
 			final Resource jenaSubject = model.createResource(triple.getSubject().toString());
 			final Property jenaProperty = model.createProperty(triple.getPredicate().toString());
@@ -186,8 +186,8 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 
 	@Override
 	public ResultSet query(final String queryString) {
-		dataset.begin(ReadWrite.READ);
 		try {
+			dataset.begin(ReadWrite.READ);
 			final Query query = QueryFactory.create(queryString);
 			final QueryExecution qexec = QueryExecutionFactory.create(query, dataset.getNamedModel(modelName));
 			final ResultSet execSelect = qexec.execSelect();

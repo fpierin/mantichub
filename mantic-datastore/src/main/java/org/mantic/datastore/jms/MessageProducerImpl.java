@@ -43,6 +43,10 @@ public class MessageProducerImpl implements MessageProducer {
 
 	@Override
 	public void send(final Serializable object) {
+		if (object == null) {
+			return;
+		}
+		
 		jmsTemplate.send(new MessageCreator() {
 			@Override
 			public Message createMessage(final Session session) throws JMSException {
