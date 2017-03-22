@@ -20,6 +20,9 @@ import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.rdf.model.impl.StmtIteratorImpl;
 import org.apache.jena.tdb.TDBFactory;
+import org.apache.jena.tdb.base.file.Location;
+import org.apache.jena.tdb.setup.StoreParams;
+import org.apache.jena.tdb.setup.StoreParamsBuilder;
 
 import com.mantichub.commons.domain.DatastoreTriple;
 import com.mantichub.commons.domain.TripleNode;
@@ -31,7 +34,10 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 
 	public DatastoreRepositoryImpl(final String path, final String modelName) {
 		this.modelName = modelName;
-		dataset = TDBFactory.createDataset(path);
+		final Location location = Location.create(path);
+		final StoreParams params = StoreParamsBuilder.create().build();
+		TDBFactory.setup(location, params);
+		dataset = TDBFactory.createDataset(location);
 	}
 
 	@Override
