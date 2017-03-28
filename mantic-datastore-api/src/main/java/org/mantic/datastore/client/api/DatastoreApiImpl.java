@@ -19,6 +19,7 @@ import com.mantichub.commons.builder.DatastoreTripleBuilder;
 import com.mantichub.commons.domain.DatastoreQuery;
 import com.mantichub.commons.domain.DatastoreTriple;
 import com.mantichub.core.http.RestfulSupport;
+import com.mantichub.core.http.ServerResponse;
 import com.mantichub.core.serialization.SerializationService;
 
 public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
@@ -40,14 +41,20 @@ public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
 			triples.add(datastoreTriple);
 		}
 		if (isNotEmpty(triples)) {
-			System.out.println(post(url, triples));
+			System.out.println(create(triples));
 		}
+	}
+
+	@Override
+	public ServerResponse create(final List<DatastoreTriple> triples) {
+		return post(url, triples);
 	}
 	
 	@Override
 	public void query(final String queryStr) {
 		if (isNotBlank(queryStr)) {
-			System.out.println(post(url + "/query", new DatastoreQuery(queryStr)));
+			ServerResponse post = post(url + "/query", new DatastoreQuery(queryStr));
+			System.out.println(post.getContent());
 		}
 	}
 

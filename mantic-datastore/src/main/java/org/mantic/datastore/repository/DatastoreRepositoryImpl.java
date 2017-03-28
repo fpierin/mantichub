@@ -1,5 +1,7 @@
 package org.mantic.datastore.repository;
 
+import static org.apache.jena.query.ReadWrite.WRITE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
@@ -23,6 +26,7 @@ import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.tdb.base.file.Location;
 import org.apache.jena.tdb.setup.StoreParams;
 import org.apache.jena.tdb.setup.StoreParamsBuilder;
+import org.mantic.datastore.transaction.TdbTransaction;
 
 import com.mantichub.commons.domain.DatastoreTriple;
 import com.mantichub.commons.domain.TripleNode;
@@ -42,27 +46,32 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 
 	@Override
 	public void create(final Model model) {
-		if (model != null) {
-			create(model.listStatements());
-		}
+		new TdbTransaction(dataset, WRITE) {
+			@Override
+			public void execute() {
+				if (model != null) {
+					create(model.listStatements());
+				}
+			}
+		}.start();
 	}
 
 	@Override
 	public void create(final StmtIterator stmts) {
-		dataset.begin(ReadWrite.WRITE);
-		Model model = null;
-		try {
-			model = dataset.getNamedModel(modelName);
-			while (stmts.hasNext()) {
-				model.add(stmts.next());
+		new TdbTransaction(dataset, WRITE) {
+			@Override
+			public void execute() {
+				if (stmts == null) {
+					return;
+				}
+				final Model model = dataset.getNamedModel(modelName);
+				while (stmts.hasNext()) {
+					final Statement statement = stmts.next();
+					model.add(statement);
+				}
+				dataset.commit();
 			}
-			dataset.commit();
-		} finally {
-			if (model != null) {
-				model.close();
-			}
-			dataset.end();
-		}
+		}.start();
 	}
 
 	private void create(final Statement stmt) {
@@ -161,33 +170,58 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 	public void remove(final DatastoreTriple triple) {
 		Model model = null;
 		try {
-			dataset.begin(ReadWrite.WRITE);
-			model = dataset.getNamedModel(modelName);
-			final Resource jenaSubject = model.createResource(triple.getSubject().toString());
-			final Property jenaProperty = model.createProperty(triple.getPredicate().toString());
-			final Resource jenaObject = model.createResource(triple.getObject().toString());
-			final Statement stmt = model.createStatement(jenaSubject, jenaProperty, jenaObject);
-			model.remove(stmt);
-			dataset.commit();
+			if (triple != null && triple.isValid()) {
+				dataset.begin(ReadWrite.WRITE);
+				model = dataset.getNamedModel(modelName);
+				final Resource jenaSubject = model.createResource(triple.getSubject().toString());
+				final Property jenaProperty = model.createProperty(triple.getPredicate().toString());
+				final Resource jenaObject = model.createResource(triple.getObject().toString());
+				final Statement stmt = model.createStatement(jenaSubject, jenaProperty, jenaObject);
+				model.remove(stmt);
+				dataset.commit();
+			}
 		} finally {
 			if (model != null) {
-				model.close();
+				if (dataset.isInTransaction()) {
+					model.close();
+				}
 			}
 			dataset.end();
 		}
 	}
 
 	@Override
-	public void infer() {
-		Model infModel = null;
+	public StmtIterator infer() {
 		dataset.begin(ReadWrite.READ);
 		try {
 			final Model model = dataset.getNamedModel(modelName);
-			infModel = ModelFactory.createRDFSModel(model);
+			final InfModel infModel = ModelFactory.createRDFSModel(model);
+			return infModel.listStatements();
 		} finally {
 			dataset.end();
 		}
-		create(infModel);
+	}
+	
+	@Override
+	public void infer2() {
+		new TdbTransaction(dataset, WRITE) {
+			@Override
+			public void execute() {
+				final Model model = dataset.getNamedModel(modelName);
+				final InfModel rdfsModel = ModelFactory.createRDFSModel(model);
+				model.union(rdfsModel);
+//				final StmtIterator stmts = rdfsModel.listStatements();
+//				while (stmts.hasNext()) {
+//					try {
+//						final Statement statement = stmts.next();
+//						model.add(statement);
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//					}
+//				}
+				dataset.commit();
+			}
+		}.start();
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package org.mantic.datastore.resource;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -23,6 +24,14 @@ public interface DatastoreResource {
 	@POST
 	@Path("/query")
 	Response query(DatastoreQuery datastoreQuery);
+
+	@GET
+	@Path("/infer")
+	Response infer();
+
+	@GET
+	@Path("/infer2")
+	Response infer2();
 	
 
 }

@@ -24,7 +24,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import org.mantic.datastore.jms.MessageProducer;
 import org.mantic.datastore.repository.DatastoreRepository;
 
 import com.mantichub.commons.domain.DatastoreTriple;
@@ -38,12 +37,10 @@ import com.mantichub.commons.domain.DatastoreTriple;
 public class CreateDataServiceListener implements MessageListener {
 
 	private final DatastoreRepository datastoreRepository;
-	private final MessageProducer messageProducer;
 
 	@Inject
-	public CreateDataServiceListener(final DatastoreRepository datastoreRepository, final MessageProducer messageProducer) {
+	public CreateDataServiceListener(final DatastoreRepository datastoreRepository) {
 		this.datastoreRepository = datastoreRepository;
-		this.messageProducer = messageProducer;
 	}
 
 	@Override
@@ -56,7 +53,6 @@ public class CreateDataServiceListener implements MessageListener {
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
-			messageProducer.send(getObject(message));
 		}
 	}
 

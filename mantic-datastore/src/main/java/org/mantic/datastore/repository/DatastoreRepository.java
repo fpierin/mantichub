@@ -24,9 +24,11 @@ public interface DatastoreRepository {
 	
 	void remove(DatastoreTriple datastoreTriple);
 
-	void infer();
+	StmtIterator infer();
 
 	void create(StmtIterator stmts);
+
+	void infer2();
 
 	
 	

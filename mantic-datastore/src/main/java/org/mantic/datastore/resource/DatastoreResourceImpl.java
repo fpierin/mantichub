@@ -32,5 +32,17 @@ public class DatastoreResourceImpl implements DatastoreResource {
 		final String result = datastoreService.query(datastoreQuery);
 		return Response.ok(result).build();
 	}
+	
+	@Override
+	public Response infer() {
+		datastoreService.infer();
+		return Response.ok().build();
+	}
+
+	@Override
+	public Response infer2() {
+		datastoreService.infer2();
+		return Response.ok().build();
+	}
 
 }

@@ -32,8 +32,8 @@ public abstract class DefaultAgent implements Agent {
 	protected final HttpAgent httpAgent;
 	protected final DatastoreApi datastoreApi;
 	
-	protected final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_AMOUNT);
-	protected final ListeningExecutorService service = MoreExecutors.listeningDecorator(executorService);
+	protected static final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_AMOUNT);
+	protected static final ListeningExecutorService service = MoreExecutors.listeningDecorator(executorService);
 
 	public DefaultAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi) {
 		this.httpAgent = httpAgent;

@@ -28,16 +28,29 @@
 		<property name="defaultDestination" ref="defaultDestination" />
 	</bean>
 
-	<jms:listener-container container-type="default" connection-factory="jmsFactory" acknowledge="auto" concurrency="1-2">
-		<jms:listener destination="CREATE.QUEUE" ref="createDataServiceListener" method="onMessage" />
+	<jms:listener-container container-type="default"
+		connection-factory="jmsFactory" acknowledge="auto" concurrency="1-2">
+		<jms:listener destination="CREATE.QUEUE" ref="createDataServiceListener"
+			method="onMessage" />
 	</jms:listener-container>
-	
-  <amq:broker useJmx="false" persistent="false">
-    <amq:transportConnectors>
-      <amq:transportConnector uri="tcp://localhost:0" />
-    </amq:transportConnectors>
-  </amq:broker>
- 
-  <amq:connectionFactory id="jmsFactory" brokerURL="vm://localhost"/>
+
+	<amq:broker useJmx="false" persistent="false">
+		<amq:transportConnectors>
+			<amq:transportConnector uri="tcp://localhost:0" />
+		</amq:transportConnectors>
+	</amq:broker>
+
+	<bean id="redeliveryPolicy" class="org.apache.activemq.RedeliveryPolicy">
+		<property name="backOffMultiplier" value="3" />
+		<property name="initialRedeliveryDelay" value="15000" />
+		<property name="maximumRedeliveries" value="5" />
+		<property name="queue" value="*" />
+		<property name="redeliveryDelay" value="15000" />
+		<property name="useExponentialBackOff" value="true" />
+	</bean>
+
+	<amq:connectionFactory id="jmsFactory" brokerURL="vm://localhost">
+		<property name="redeliveryPolicy" ref="redeliveryPolicy" />
+	</amq:connectionFactory>
 
 </beans>
