@@ -3,7 +3,7 @@ package org.mantic.datastore.transaction;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.ReadWrite;
 
-public abstract class TdbTransaction {
+public abstract class TdbTransaction<T> {
 
 	private final Dataset dataset;
 	private final ReadWrite readWrite;
@@ -13,14 +13,23 @@ public abstract class TdbTransaction {
 		this.readWrite = readWrite;
 	}
 
-	public abstract void execute();
+	public abstract T routine();
 	
-	public void start() {
+	public T execute() {
 		if (!dataset.isInTransaction()) {
 			dataset.begin(readWrite);
 		}
 		try {
-			execute();
+			T result = routine();
+			if (dataset.isInTransaction()) {
+				dataset.commit();
+			}
+			return result; 
+		} catch (final Exception e) {
+			if (dataset.isInTransaction()) {
+				dataset.abort();
+			}
+			throw e;
 		} finally {
 			if (dataset.isInTransaction()) {
 				dataset.end();

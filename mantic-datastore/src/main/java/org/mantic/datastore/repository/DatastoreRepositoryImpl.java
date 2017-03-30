@@ -1,23 +1,29 @@
 package org.mantic.datastore.repository;
 
+import static org.apache.jena.query.ReadWrite.READ;
 import static org.apache.jena.query.ReadWrite.WRITE;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.jena.graph.Node;
+import org.apache.jena.graph.Triple;
 import org.apache.jena.query.Dataset;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
-import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Bag;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.RSIterator;
+import org.apache.jena.rdf.model.ReifiedStatement;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
@@ -26,6 +32,8 @@ import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.tdb.base.file.Location;
 import org.apache.jena.tdb.setup.StoreParams;
 import org.apache.jena.tdb.setup.StoreParamsBuilder;
+import org.apache.jena.util.FileManager;
+import org.mantic.datastore.jms.MessageProducer;
 import org.mantic.datastore.transaction.TdbTransaction;
 
 import com.mantichub.commons.domain.DatastoreTriple;
@@ -46,32 +54,32 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 
 	@Override
 	public void create(final Model model) {
-		new TdbTransaction(dataset, WRITE) {
+		new TdbTransaction<Void>(dataset, WRITE) {
 			@Override
-			public void execute() {
+			public Void routine() {
 				if (model != null) {
 					create(model.listStatements());
 				}
+				return null;
 			}
-		}.start();
+		}.execute();
 	}
 
 	@Override
 	public void create(final StmtIterator stmts) {
-		new TdbTransaction(dataset, WRITE) {
+		new TdbTransaction<Void>(dataset, WRITE) {
 			@Override
-			public void execute() {
-				if (stmts == null) {
-					return;
+			public Void routine() {
+				if (stmts != null) {
+					final Model model = dataset.getNamedModel(modelName);
+					while (stmts.hasNext()) {
+						final Statement statement = stmts.next();
+						model.add(statement);
+					}
 				}
-				final Model model = dataset.getNamedModel(modelName);
-				while (stmts.hasNext()) {
-					final Statement statement = stmts.next();
-					model.add(statement);
-				}
-				dataset.commit();
+				return null;
 			}
-		}.start();
+		}.execute();
 	}
 
 	private void create(final Statement stmt) {
@@ -85,22 +93,16 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 
 	@Override
 	public void create(final String subject, final String predicate, final String object) {
-		dataset.begin(ReadWrite.READ);
-		Model model = null;
-		Statement stmt = null;
-		try {
-			model = dataset.getNamedModel(modelName);
-			final Resource jenaSubject = model.createResource(subject);
-			final Property jenaProperty = model.createProperty(predicate);
-			final Resource jenaObject = model.createResource(object);
-			stmt = model.createStatement(jenaSubject, jenaProperty, jenaObject);
-		} finally {
-			if (model != null) {
-				model.close();
+		create(new TdbTransaction<Statement>(dataset, READ) {
+			@Override
+			public Statement routine() {
+				final Model model = dataset.getNamedModel(modelName);
+				final Resource jenaSubject = model.createResource(subject);
+				final Property jenaProperty = model.createProperty(predicate);
+				final Resource jenaObject = model.createResource(object);
+				return model.createStatement(jenaSubject, jenaProperty, jenaObject);
 			}
-			dataset.end();
-		}
-		create(stmt);
+		}.execute());
 	}
 
 	@Override
@@ -168,73 +170,131 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 
 	@Override
 	public void remove(final DatastoreTriple triple) {
-		Model model = null;
-		try {
-			if (triple != null && triple.isValid()) {
-				dataset.begin(ReadWrite.WRITE);
-				model = dataset.getNamedModel(modelName);
-				final Resource jenaSubject = model.createResource(triple.getSubject().toString());
-				final Property jenaProperty = model.createProperty(triple.getPredicate().toString());
-				final Resource jenaObject = model.createResource(triple.getObject().toString());
-				final Statement stmt = model.createStatement(jenaSubject, jenaProperty, jenaObject);
-				model.remove(stmt);
-				dataset.commit();
-			}
-		} finally {
-			if (model != null) {
-				if (dataset.isInTransaction()) {
-					model.close();
+		if (triple != null && triple.isValid()) {
+			new TdbTransaction<Void>(dataset, WRITE) {
+				@Override
+				public Void routine() {
+					final Model model = dataset.getNamedModel(modelName);
+					final Resource jenaSubject = model.createResource(triple.getSubject().toString());
+					final Property jenaProperty = model.createProperty(triple.getPredicate().toString());
+					final Resource jenaObject = model.createResource(triple.getObject().toString());
+					final Statement stmt = model.createStatement(jenaSubject, jenaProperty, jenaObject);
+					model.remove(stmt);
+					return null;
 				}
-			}
-			dataset.end();
+			}.execute();
 		}
-	}
-
-	@Override
-	public StmtIterator infer() {
-		dataset.begin(ReadWrite.READ);
-		try {
-			final Model model = dataset.getNamedModel(modelName);
-			final InfModel infModel = ModelFactory.createRDFSModel(model);
-			return infModel.listStatements();
-		} finally {
-			dataset.end();
-		}
-	}
-	
-	@Override
-	public void infer2() {
-		new TdbTransaction(dataset, WRITE) {
-			@Override
-			public void execute() {
-				final Model model = dataset.getNamedModel(modelName);
-				final InfModel rdfsModel = ModelFactory.createRDFSModel(model);
-				model.union(rdfsModel);
-//				final StmtIterator stmts = rdfsModel.listStatements();
-//				while (stmts.hasNext()) {
-//					try {
-//						final Statement statement = stmts.next();
-//						model.add(statement);
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//				}
-				dataset.commit();
-			}
-		}.start();
 	}
 
 	@Override
 	public ResultSet query(final String queryString) {
-		try {
-			dataset.begin(ReadWrite.READ);
-			final Query query = QueryFactory.create(queryString);
-			final QueryExecution qexec = QueryExecutionFactory.create(query, dataset.getNamedModel(modelName));
-			final ResultSet execSelect = qexec.execSelect();
-			return execSelect;
-		} finally {
-			dataset.end();
+		return new TdbTransaction<ResultSet>(dataset, READ) {
+			@Override
+			public ResultSet routine() {
+				final Query query = QueryFactory.create(queryString);
+				final QueryExecution qexec = QueryExecutionFactory.create(query, dataset.getNamedModel(modelName));
+				final ResultSet execSelect = qexec.execSelect();
+				return execSelect;
+			}
+		}.execute();
+	}
+
+	@Override
+	public void infer() {
+		infer(dataset.getNamedModel(modelName));
+	}
+
+	@Override
+	public void infer(final String url) {
+		infer(modelFrom(url));
+	}
+
+	private Model modelFrom(final String url) {
+		return FileManager.get().loadModel(url);
+	}
+
+	private void infer(final Model model) {
+		new TdbTransaction<Void>(dataset, WRITE) {
+			@Override
+			public Void routine() {
+				final Model namedModel = dataset.getNamedModel(modelName);
+				final InfModel inferences = ModelFactory.createRDFSModel(model);
+				namedModel.add(inferences);
+				return null;
+			}
+		}.execute();
+	}
+
+	@Override
+	public void infer(final MessageProducer messageProducer, final String... urls) throws Exception {
+		if (urls != null) {
+			for (final String url : urls) {
+				final Model model = modelFrom(url);
+				infer(messageProducer, model);
+			}
 		}
+		infer(messageProducer, dataset.getNamedModel(modelName));
+	}
+
+	private void infer(final MessageProducer messageProducer, final Model model) throws Exception {
+		final InfModel inferences = ModelFactory.createRDFSModel(model);
+		final StmtIterator stmts = inferences.listStatements();
+		doCreate(messageProducer, stmts);
+	}
+
+	private void doCreate(final MessageProducer messageProducer, final StmtIterator stmts) throws Exception {
+		while (stmts != null && stmts.hasNext()) {
+			final Statement stmt = stmts.next();
+			if (stmt.isReified()) {
+				RSIterator listReifiedStatements = stmt.listReifiedStatements();
+				while (listReifiedStatements.hasNext()) {
+					ReifiedStatement next = listReifiedStatements.next();
+					System.out.println(next);
+				}
+			}
+			
+			if (stmt.getSubject().isAnon()) {
+				final StmtIterator listProperties = stmt.getBag().listProperties();
+				doCreate(messageProducer, listProperties);
+			} else {
+				createStatement(messageProducer, stmt);
+			}
+		}
+	}
+
+	private void createStatement(final MessageProducer messageProducer, final Statement stmt) {
+		final Triple asTriple = stmt.asTriple();
+		final Node subjectNode = asTriple.getSubject();
+		final Node predicateNode = asTriple.getPredicate();
+		final Node objectNode = asTriple.getObject();
+
+		final TripleNode subject = buildTripleNode(subjectNode);
+		final TripleNode predicate = buildTripleNode(predicateNode);
+		final TripleNode object = buildTripleNode(objectNode);
+
+		if (subject != null && predicate != null && object != null) {
+			final Serializable triple = new DatastoreTriple(subject, predicate, object);
+			messageProducer.send(triple);
+		}
+	}
+
+	private TripleNode buildTripleNode(final Node node) {
+		try {
+			if (node == null) {
+				return null;
+			}
+			if (!node.isURI()) {
+				return new TripleNode(null, node.toString());
+			} else {
+				final String nameSpace = node.getNameSpace();
+				final String uri = node.getURI();
+				return new TripleNode(nameSpace, uri.replaceAll(nameSpace, ""));
+			}
+		} catch (final Exception e) {
+			System.out.println("Falha no node -> " + node);
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.mantic.datastore.jms.MessageProducer;
 
 import com.mantichub.commons.domain.DatastoreTriple;
 
@@ -24,11 +25,13 @@ public interface DatastoreRepository {
 	
 	void remove(DatastoreTriple datastoreTriple);
 
-	StmtIterator infer();
-
 	void create(StmtIterator stmts);
 
-	void infer2();
+	void infer();
+
+	void infer(String string);
+
+	void infer(MessageProducer messageProducer, String... urls) throws Exception;
 
 	
 	

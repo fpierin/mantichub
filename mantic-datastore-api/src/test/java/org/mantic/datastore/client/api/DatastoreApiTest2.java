@@ -9,21 +9,20 @@ import com.mantichub.core.serialization.SerializationService;
 public class DatastoreApiTest2 {
 
 	public static void main(final String[] args) {
-		query();
-	}
-
-	public static void query() {
 		doQuery( 
-			"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-			"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n" +
-			"PREFIX mantichub:<http://www.wemantic.com/events#>\n" +
-			"PREFIX schema:<http://schema.org/>\n" +
-			"SELECT * WHERE { mantichub:OqueaFisicaeosfisicospodemfazerparaasuasaude a ?o }"
-		);
-	}
-
-	public static void queryGeral() {
-		doQuery("SELECT * { ?s ?p ?o }");
+				"PREFIX rdfs:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"PREFIX mantichub:<http://www.wemantic.com/events#>\n" +
+				"PREFIX schema:<http://schema.org/>\n" +
+				"SELECT * WHERE { ?s rdfs:type schema:Event }"
+			);
+//		doQuery( 
+//				"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+//						"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n" +
+//						"PREFIX mantichub:<http://www.wemantic.com/events#>\n" +
+//						"PREFIX schema:<http://schema.org/>\n" +
+//						"SELECT * WHERE { mantichub:OqueaFisicaeosfisicospodemfazerparaasuasaude a ?o }"
+//				);
+//		doQuery("SELECT * { ?s ?p ?o }");
 	}
 
 	public static void doQuery(String query) {

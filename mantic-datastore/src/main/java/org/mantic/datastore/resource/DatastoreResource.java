@@ -29,9 +29,4 @@ public interface DatastoreResource {
 	@Path("/infer")
 	Response infer();
 
-	@GET
-	@Path("/infer2")
-	Response infer2();
-	
-
 }

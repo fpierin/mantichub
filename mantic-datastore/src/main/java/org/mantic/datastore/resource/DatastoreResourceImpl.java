@@ -39,10 +39,4 @@ public class DatastoreResourceImpl implements DatastoreResource {
 		return Response.ok().build();
 	}
 
-	@Override
-	public Response infer2() {
-		datastoreService.infer2();
-		return Response.ok().build();
-	}
-
 }

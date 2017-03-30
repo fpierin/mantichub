@@ -13,6 +13,4 @@ public interface DatastoreService {
 
 	void infer();
 
-	void infer2();
-
 }
