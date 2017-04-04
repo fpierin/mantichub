@@ -54,9 +54,9 @@ public class DatastoreServiceImpl implements DatastoreService {
 	@Override
 	public void infer() {
 		try {
-//			datastoreRepository.infer("http://topbraid.org/schema/schema.rdf");
-//			datastoreRepository.infer();
-			datastoreRepository.infer(messageProducer, "http://topbraid.org/schema/schema.rdf");
+			datastoreRepository.infer("http://topbraid.org/schema/schema.rdf");
+			datastoreRepository.infer();
+//			datastoreRepository.infer(messageProducer, "http://topbraid.org/schema/schema.rdf");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -114,6 +114,7 @@ public abstract class DefaultAgent implements Agent {
 					.type(event.getType())
 					.title(event.getTitle()).create();
 		} catch (final Exception e) {
+			System.out.println("Falha ao recuperar dados do dominio: " + url);
 			e.printStackTrace();
 			return null;
 		}
