@@ -1,4 +1,4 @@
-package com.mantichub.agent.eventos.usp.agent;
+package com.mantichub.agent.eventos.guiafolha.agent;
 
 import org.apache.jena.rdf.model.Model;
 import org.mantic.datastore.client.api.DatastoreApi;

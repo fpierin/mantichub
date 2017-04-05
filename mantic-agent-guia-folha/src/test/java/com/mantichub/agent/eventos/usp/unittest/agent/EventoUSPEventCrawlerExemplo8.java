@@ -11,7 +11,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.junit.Test;
 
 import com.mantichub.agent.core.infra.EventResource;
-import com.mantichub.agent.eventos.usp.agent.EventoUspEventAdapter;
+import com.mantichub.agent.eventos.guiafolha.agent.EventoUspEventAdapter;
 import com.mantichub.core.vocabulary.SCHEMA;
 
 public class EventoUSPEventCrawlerExemplo8 {

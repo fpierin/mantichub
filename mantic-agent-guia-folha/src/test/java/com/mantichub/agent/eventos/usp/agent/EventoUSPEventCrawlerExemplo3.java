@@ -10,6 +10,7 @@ import java.util.Date;
 import org.junit.Test;
 
 import com.mantichub.agent.core.infra.EventResource;
+import com.mantichub.agent.eventos.guiafolha.agent.EventoUspEventAdapter;
 
 public class EventoUSPEventCrawlerExemplo3 {
 

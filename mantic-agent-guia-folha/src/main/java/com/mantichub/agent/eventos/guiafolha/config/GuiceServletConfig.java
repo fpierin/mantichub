@@ -1,4 +1,4 @@
-package com.mantichub.agent.eventos.usp.config;
+package com.mantichub.agent.eventos.guiafolha.config;
 
 import org.apache.http.client.HttpClient;
 import org.mantic.datastore.client.api.DatastoreApi;
@@ -13,8 +13,8 @@ import com.google.inject.servlet.ServletModule;
 import com.mantichub.agent.core.http.HttpAgent;
 import com.mantichub.agent.core.http.HttpAgentImpl;
 import com.mantichub.agent.core.infra.Agent;
-import com.mantichub.agent.eventos.usp.agent.EventoUspAgent;
-import com.mantichub.agent.eventos.usp.resource.EventosUSPResource;
+import com.mantichub.agent.eventos.guiafolha.agent.EventoUspAgent;
+import com.mantichub.agent.eventos.guiafolha.resource.EventosUSPResource;
 import com.mantichub.core.http.HttpClientFactory;
 import com.mantichub.core.serialization.JsonSerializationServiceImpl;
 import com.mantichub.core.serialization.SerializationService;

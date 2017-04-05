@@ -9,7 +9,7 @@ import org.mantic.datastore.repository.DatastoreRepositoryImpl;
 
 import com.mantichub.agent.core.http.HttpAgent;
 import com.mantichub.agent.core.http.HttpAgentImpl;
-import com.mantichub.agent.eventos.usp.agent.EventoUspAgent;
+import com.mantichub.agent.eventos.guiafolha.agent.EventoUspAgent;
 import com.mantichub.core.http.HttpClientFactory;
 import com.mantichub.core.serialization.JsonSerializationServiceImpl;
 

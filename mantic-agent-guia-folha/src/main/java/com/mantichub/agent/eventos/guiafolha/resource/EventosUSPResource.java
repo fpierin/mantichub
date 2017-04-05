@@ -1,4 +1,4 @@
-package com.mantichub.agent.eventos.usp.resource;
+package com.mantichub.agent.eventos.guiafolha.resource;
 
 import static com.mantichub.agent.core.constant.AgentConfiguration.RDF_FORMAT;
 

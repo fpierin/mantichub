@@ -11,7 +11,7 @@ import org.mantic.datastore.client.api.DatastoreApiImpl;
 
 import com.mantichub.agent.core.builder.EventBuilder;
 import com.mantichub.agent.core.infra.EventResource;
-import com.mantichub.agent.eventos.usp.agent.EventoUspEventAdapter;
+import com.mantichub.agent.eventos.guiafolha.agent.EventoUspEventAdapter;
 import com.mantichub.commons.constant.MantichubConstants;
 import com.mantichub.core.http.HttpClientFactory;
 import com.mantichub.core.serialization.JsonSerializationServiceImpl;
