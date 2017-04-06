@@ -1,4 +1,4 @@
-package com.mantichub.agent.eventos.usp.agent;
+package com.mantichub.agent.guiafolha.agent;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
@@ -10,13 +10,13 @@ import com.mantichub.agent.core.infra.Agent;
 import com.mantichub.agent.core.infra.DefaultAgent;
 import com.mantichub.agent.core.infra.ResourceCreator;
 
-public class EventoUspAgent extends DefaultAgent implements Agent {
+public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 	
 	public static final String PORTAL_URL = "http://www.eventos.usp.br/";
 	public static final String EVENT_URL_PATTERN = "href=\"(http://www.eventos.usp.br/\\?events=(.*?))\"";
 	
 	@Inject
-	public EventoUspAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi) {
+	public GuiaDaFolhaAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi) {
 		super(httpAgent, datastoreApi);
 	}
 	
@@ -28,13 +28,12 @@ public class EventoUspAgent extends DefaultAgent implements Agent {
 	@Override
 	public Resource fromHtml(final Model model, final String url, final String html) {
 		try {
-			return ResourceCreator.build(model, new EventoUspEventAdapter(url, html));
+			return ResourceCreator.build(model, new GuiaDaFolhaRestaurantAdapter(url, html));
 		} catch (final Exception e) {
 			System.out.println("Falha ao recuperar dados do dominio: " + url);
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
 
 }

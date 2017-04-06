@@ -11,6 +11,4 @@ public interface Agent {
 	
 	Resource resourceFromHtml(String url, Model model, String html);
 
-	EventResource getAdapter(String html);
-
 }

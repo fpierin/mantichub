@@ -9,28 +9,28 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import com.mantichub.agent.core.infra.EventResource;
+import com.mantichub.agent.core.infra.Event;
 
 public class EventoUSPEventCrawlerExemplo3 {
-
+	
 	private final static String arquivo = "src/test/resources/exemplo3.html";
-
+	
 	@Test
 	public void verificaPrice() throws Exception {
-		final EventResource crawler = new EventoUspEventAdapter(fromFile(arquivo));
+		final Event crawler = new EventoUspEventAdapter(fromFile(arquivo), null);
 		final Double valorEsperado = 0.00;
 		final Double valorEncontrado = crawler.getPrice();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-
+	
 	@Test
 	public void verificaEndereco() throws Exception {
-		final EventResource crawler = new EventoUspEventAdapter(fromFile(arquivo));
+		final Event crawler = new EventoUspEventAdapter(fromFile(arquivo), null);
 		final String valorEsperado = "Rua Major Diogo, 353";
 		final String valorEncontrado = crawler.getStreetAddress();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-	
+
 	@Test
 	public void verificaDataInicio() throws Exception {
 		// final String fromFile = fromFile(arquivo);
@@ -39,16 +39,16 @@ public class EventoUSPEventCrawlerExemplo3 {
 				+ "    <td width=\"130\" align=\"right\" class=\"desc-align\">Data<img src=\"http://www.eventos.usp.br/wp-content/themes/eventos2011b/images/evento-data-ico.png\" class=\"img-align\" alt=\"data\" /></td>\n"
 				+ "    <td>07/02/17 | 20:00 - 21:00<br /></td>\n" + "  </tr>";
 		// // final String regex = ;
-		final EventResource crawler = new EventoUspEventAdapter(fromFile);
+		final Event crawler = new EventoUspEventAdapter(fromFile, fromFile);
 		final Date valorEsperado = new SimpleDateFormat("dd/MM/yy").parse("07/02/17");
 		final Date valorEncontrado = crawler.getStartDate();
 		assertThat(valorEncontrado, is(valorEsperado));
-
+		
 		// final String valueByPattern = HTMLUtils.valueByPattern(fromFile, "<td>(\\d{2}/\\d{2}/\\d{2})( -
 		// \\d{2}/\\d{2}/\\d{2})? \\| \\d{2}:\\d{2} - \\d{2}:\\d{2}<br");
 		// System.out.println(valueByPattern);
 	}
-
+	
 	// @Test
 	// public void verificaOverview() throws Exception {
 	// final EventCrawler crawler = new EventoUSPEventCrawler(fromFile(arquivo));
@@ -72,7 +72,7 @@ public class EventoUSPEventCrawlerExemplo3 {
 	// assertThat(valorEncontrado, is(valorEsperado));
 	// }
 	//
-
+	
 	//
 	// @Test
 	// public void verificaDataFim() throws Exception {
@@ -130,5 +130,5 @@ public class EventoUSPEventCrawlerExemplo3 {
 	// final Resource valorEncontrado = crawler.getType();
 	// assertThat(valorEncontrado, is(valorEsperado));
 	// }
-
+	
 }

@@ -11,29 +11,30 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Resource;
 import org.mantic.datastore.client.api.DatastoreApi;
 
 import com.google.inject.Inject;
 import com.mantichub.agent.core.http.HttpAgent;
 import com.mantichub.agent.core.infra.Agent;
 import com.mantichub.agent.core.infra.DefaultAgent;
-import com.mantichub.agent.core.infra.EventResource;
+import com.mantichub.agent.core.infra.ResourceCreator;
 
 public class GuiaDaSemanaAgent extends DefaultAgent implements Agent {
-	
-	private static final Set<String> ignoreUrls = new HashSet<>(); 
-	
+
+	private static final Set<String> ignoreUrls = new HashSet<>();
+
 	@Inject
 	public GuiaDaSemanaAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi) {
 		super(httpAgent, datastoreApi);
 	}
-	
+
 	@Override
 	public Model retrieve(final int ammount) throws Exception {
 		ignoreUrls.add(PORTAL_URL);
 		return retrieveFromUrl(ammount, PORTAL_URL, EVENT_URL_PATTERN);
 	}
-	
+
 	@Override
 	protected Model retrieveFromUrls(final int ammount, final Model model, final Set<String> urls) throws Exception {
 		final Set<String> baseUrls = new HashSet<>();
@@ -54,10 +55,16 @@ public class GuiaDaSemanaAgent extends DefaultAgent implements Agent {
 		Thread.sleep(1000);
 		return super.retrieveFromUrls(ammount, model, baseUrls);
 	}
-	
+
 	@Override
-	public EventResource getAdapter(final String html) {
-		return new GuiaDaSemanaEventAdapter(html);
+	public Resource fromHtml(final Model model, final String url, final String html) {
+		try {
+			return ResourceCreator.build(model, new GuiaDaSemanaEventAdapter(url, html));
+		} catch (final Exception e) {
+			System.out.println("Falha ao recuperar dados do dominio: " + url);
+			e.printStackTrace();
+			return null;
+		}
 	}
-	
+
 }
