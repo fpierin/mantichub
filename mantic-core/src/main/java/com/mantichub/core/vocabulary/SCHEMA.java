@@ -8,8 +8,7 @@ import org.apache.jena.rdf.model.Resource;
 public class SCHEMA {
 	
 	private static Model m_model = ModelFactory.createDefaultModel();
-
-
+	
 	public static final String NS = "http://schema.org/";
 	public static final String NSX = "http://topbraid.org/schemax/";
 	
@@ -27,8 +26,10 @@ public class SCHEMA {
 	public static final Property endTime = retrieveProperty("endTime");
 	public static final Property latitude = retrieveProperty("latitude");
 	public static final Property longitude = retrieveProperty("longitude");
+	public static final Property openingHours = retrieveProperty("openingHours");
 	public static final Property overview = retrieveProperty("overview");
 	public static final Property price = retrieveProperty("price");
+	public static final Property priceRange = retrieveProperty("priceRange");
 	public static final Property serviceURL = retrieveProperty("serviceURL");
 	public static final Property startDate = retrieveProperty("startDate");
 	public static final Property startTime = retrieveProperty("startTime");

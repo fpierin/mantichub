@@ -4,6 +4,8 @@ import static com.mantichub.agent.usp.infra.TestUtils.fromFile;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.List;
+
 import org.apache.jena.rdf.model.Resource;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,6 +44,17 @@ public class CantinhoPortuguesTest {
 		final String valorEncontrado = resource.getStreetAddress();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
+	
+	@Test
+	public void verificaHorarioAbertura() throws Exception {
+		final List<String> valorEncontrado = resource.getOpeningHours();
+		assertThat(valorEncontrado.get(0), is("We 09:00-23:00"));
+		assertThat(valorEncontrado.get(1), is("Th 09:00-23:00"));
+		assertThat(valorEncontrado.get(2), is("Fr 09:00-23:00"));
+		assertThat(valorEncontrado.get(3), is("Sa 09:00-00:00"));
+		assertThat(valorEncontrado.get(4), is("Su 09:00-18:00"));
+		assertThat(valorEncontrado.get(5), is("Tu 09:00-23:00"));
+	}
 
 	@Test
 	public void verificaLatitude() throws Exception {
@@ -75,6 +88,13 @@ public class CantinhoPortuguesTest {
 	public void verificaTitulo() throws Exception {
 		final String valorEsperado = "Cantinho Português";
 		final String valorEncontrado = resource.getTitle();
+		assertThat(valorEncontrado, is(valorEsperado));
+	}
+	
+	@Test
+	public void verificaVariacaoPreco() throws Exception {
+		final String valorEsperado = "$$$$";
+		final String valorEncontrado = resource.getPriceRange();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	

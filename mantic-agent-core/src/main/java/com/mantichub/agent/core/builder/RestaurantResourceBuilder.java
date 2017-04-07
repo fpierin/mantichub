@@ -3,6 +3,8 @@ package com.mantichub.agent.core.builder;
 import static com.mantichub.core.util.StringUtils.isNotBlank;
 import static com.mantichub.core.util.StringUtils.md5;
 
+import java.util.List;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.RDF;
@@ -16,6 +18,8 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 	private String description;
 	private Double latitude;
 	private Double longitude;
+	private List<String> openingHours;
+	private String priceRange;
 	private String serviceUrl;
 	private String streetAddress;
 	private String telephone;
@@ -36,6 +40,12 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 		addProperty(SCHEMA.description, description);
 		addProperty(SCHEMA.latitude, latitude);
 		addProperty(SCHEMA.longitude, longitude);
+		if ((openingHours != null) && !openingHours.isEmpty()) {
+			openingHours.forEach(openingHour -> {
+				addProperty(SCHEMA.openingHours, openingHour);
+			});
+		}
+		addProperty(SCHEMA.priceRange, priceRange);
 		addProperty(SCHEMA.serviceURL, serviceUrl);
 		addProperty(SCHEMA.streetAddress, streetAddress);
 		addProperty(SCHEMA.telephone, telephone);
@@ -67,6 +77,16 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 		this.longitude = longitude;
 		return this;
 	}
+	
+	public RestaurantResourceBuilder openingHours(final List<String> openingHours) {
+		this.openingHours = openingHours;
+		return this;
+	}
+
+	public RestaurantResourceBuilder priceRange(final String priceRange) {
+		this.priceRange = priceRange;
+		return this;
+	}
 
 	public RestaurantResourceBuilder serviceUrl(final String serviceUrl) {
 		this.serviceUrl = serviceUrl;
@@ -87,5 +107,6 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 		this.title = title;
 		return this;
 	}
+
 
 }

@@ -30,6 +30,8 @@ public class ResourceCreator {
 				.description(o.getDescription())
 				.latitude(o.getLatitude())
 				.longitude(o.getLongitude())
+				.openingHours(o.getOpeningHours())
+				.priceRange(o.getPriceRange())
 				.serviceUrl(o.getUrl())
 				.streetAddress(o.getStreetAddress())
 				.telephone(o.getTelephone())
