@@ -14,7 +14,7 @@ import com.mantichub.agent.core.http.HttpAgent;
 import com.mantichub.agent.core.http.HttpAgentImpl;
 import com.mantichub.agent.core.infra.Agent;
 import com.mantichub.agent.guiafolha.agent.GuiaDaFolhaAgent;
-import com.mantichub.agent.guiafolha.resource.GuiaDaSemanaResource;
+import com.mantichub.agent.guiafolha.resource.GuiaDaFolhaResource;
 import com.mantichub.core.http.HttpClientFactory;
 import com.mantichub.core.serialization.JsonSerializationServiceImpl;
 import com.mantichub.core.serialization.SerializationService;
@@ -30,7 +30,7 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 		return new ServletModule() {
 			@Override
 			protected void configureServlets() {
-				serve("*").with(GuiaDaSemanaResource.class);
+				serve("*").with(GuiaDaFolhaResource.class);
 			}
 		};
 	}

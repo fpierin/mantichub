@@ -1,5 +1,9 @@
 package com.mantichub.agent.guiafolha.agent;
 
+import static java.text.MessageFormat.format;
+
+import java.util.Set;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.mantic.datastore.client.api.DatastoreApi;
@@ -12,8 +16,9 @@ import com.mantichub.agent.core.infra.ResourceCreator;
 
 public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 	
-	public static final String PORTAL_URL = "http://www.eventos.usp.br/";
-	public static final String EVENT_URL_PATTERN = "href=\"(http://www.eventos.usp.br/\\?events=(.*?))\"";
+	public static final String GUIA_FOLHA_URL = "http://guia.folha.uol.com.br";
+	public static final String GUIA_FOLHA_PAGINACAO = GUIA_FOLHA_URL + "/busca/{0}/?page={1}";
+	public static final String OBJETO_URL = "(" + GUIA_FOLHA_URL + "/{0}/[^/]*/[^\\.]*.shtml)";
 	
 	@Inject
 	public GuiaDaFolhaAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi) {
@@ -22,7 +27,24 @@ public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 	
 	@Override
 	public Model retrieve(final int ammount) throws Exception {
-		return retrieveFromUrl(ammount, PORTAL_URL, EVENT_URL_PATTERN);
+		Model m = null;
+		boolean hasNext = true;
+		int i = 1;
+		do {
+			final String objeto = "restaurantes";
+			final String galleryUrl = format(GUIA_FOLHA_PAGINACAO, objeto, i);
+			final String objectUrlPattern = format(OBJETO_URL, objeto);
+			if (m == null) {
+				m = retrieveFromUrl(ammount, galleryUrl, objectUrlPattern);
+				i++;
+			} else {
+				final Set<String> objectUrls = objectUrls(galleryUrl, objectUrlPattern);
+				m = retrieveFromUrls(ammount, m, objectUrls);
+				hasNext = !objectUrls.isEmpty();
+			}
+		} while (hasNext);
+		
+		return m;
 	}
 
 	@Override

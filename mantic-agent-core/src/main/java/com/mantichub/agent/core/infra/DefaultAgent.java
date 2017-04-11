@@ -56,9 +56,14 @@ public abstract class DefaultAgent implements Agent {
 	
 	protected Model retrieveFromUrl(final int ammount, final String portalUrl, final String eventUrlPattern,
 			final Model model) throws Exception {
+		final Set<String> urls = objectUrls(portalUrl, eventUrlPattern);
+		return retrieveFromUrls(ammount, model, urls);
+	}
+
+	protected Set<String> objectUrls(final String portalUrl, final String eventUrlPattern) {
 		final String htmlFromURL = httpAgent.htmlFromURL(portalUrl);
 		final Set<String> urls = setByPattern(htmlFromURL, eventUrlPattern);
-		return retrieveFromUrls(ammount, model, urls);
+		return urls;
 	}
 	
 	protected Model retrieveFromUrls(final int ammount, final Model model, final Set<String> urls) throws Exception {
