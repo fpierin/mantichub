@@ -21,7 +21,7 @@ public class BiozoneTest {
 	
 	@Before
 	public void prepara() throws Exception {
-		resource = new GuiaDaFolhaRestaurantAdapter(fromFile(arquivo), null);
+		resource = new GuiaDaFolhaRestaurantAdapter(null, fromFile(arquivo));
 	}
 	
 	@Test
