@@ -30,7 +30,7 @@ public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 		Model m = null;
 		boolean hasNext = true;
 		int i = 1;
-		do {
+		while (hasNext) {
 			final String objeto = "restaurantes";
 			final String galleryUrl = format(GUIA_FOLHA_PAGINACAO, objeto, i);
 			final String objectUrlPattern = format(OBJETO_URL, objeto);
@@ -42,8 +42,7 @@ public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 				m = retrieveFromUrls(ammount, m, objectUrls);
 				hasNext = !objectUrls.isEmpty();
 			}
-		} while (hasNext);
-		
+		}
 		return m;
 	}
 
@@ -56,6 +55,11 @@ public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	protected boolean useParallelCalls() {
+		return false;
 	}
 
 }

@@ -12,8 +12,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.jena.ext.com.google.common.util.concurrent.Futures;
 import org.apache.jena.ext.com.google.common.util.concurrent.ListenableFuture;
@@ -68,6 +70,27 @@ public abstract class DefaultAgent implements Agent {
 	
 	protected Model retrieveFromUrls(final int ammount, final Model model, final Set<String> urls) throws Exception {
 		System.out.println(MessageFormat.format("Foram encontrados {0} eventos", urls.size()));
+		if (useParallelCalls()) {
+			return asyncRetrieveFromUrls(ammount, model, urls);
+		} else {
+			return syncRetrieveFromUrls(ammount, model, urls);
+		}
+
+	}
+	
+	private Model syncRetrieveFromUrls(final int limit, final Model model, final Set<String> urls) {
+		final Iterator<String> iterator = urls.iterator();
+		int amount = 0;
+		while (iterator.hasNext() && ((limit == 0) || (amount < limit))) {
+			amount++;
+			final String nextUrl = iterator.next();
+			final Resource resource = resourceFromURI(nextUrl, model);
+			datastoreApi.create(resource);
+		}
+		return model;
+	}
+	
+	private Model asyncRetrieveFromUrls(final int ammount, final Model model, final Set<String> urls) throws InterruptedException, ExecutionException, TimeoutException {
 		final List<ListenableFuture<Resource>> resources = createCallables(model, urls, ammount);
 		final ListenableFuture<List<Resource>> successfulResources = Futures.successfulAsList(resources);
 		final List<Resource> list = successfulResources.get(REQUEST_TIMEOUT, MILLISECONDS);
@@ -102,5 +125,9 @@ public abstract class DefaultAgent implements Agent {
 	}
 	
 	public abstract Resource fromHtml(Model model, String url, String html);
+	
+	protected boolean useParallelCalls() {
+		return true;
+	}
 	
 }

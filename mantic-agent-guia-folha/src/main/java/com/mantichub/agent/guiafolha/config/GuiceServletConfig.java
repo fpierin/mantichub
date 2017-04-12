@@ -39,7 +39,7 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 		return new AbstractModule() {
 			@Override
 			protected void configure() {
-				final HttpClient httpClient = HttpClientFactory.get(2, 2, 3);
+				final HttpClient httpClient = HttpClientFactory.get(5, 5, 3);
 				final SerializationService serializationService = new JsonSerializationServiceImpl();
 				final DatastoreApi datastoreApi = new DatastoreApiImpl(httpClient, serializationService);
 				
