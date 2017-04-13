@@ -1,14 +1,9 @@
 package com.mantichub.agent.eventos.guiadasemana.agent;
 
-import static com.mantichub.agent.eventos.guiadasemana.config.Configuration.BASE_URL;
-import static com.mantichub.agent.eventos.guiadasemana.config.Configuration.EVENT_URL_PATTERN;
-import static com.mantichub.agent.eventos.guiadasemana.config.Configuration.NEXT_PAGE_URL;
-import static com.mantichub.agent.eventos.guiadasemana.config.Configuration.PORTAL_URL;
+import static java.text.MessageFormat.format;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
@@ -21,8 +16,10 @@ import com.mantichub.agent.core.infra.DefaultAgent;
 import com.mantichub.agent.core.infra.ResourceCreator;
 
 public class GuiaDaSemanaAgent extends DefaultAgent implements Agent {
-
-	private static final Set<String> ignoreUrls = new HashSet<>();
+	
+	public static final String GUIA_SEMANA_URL = "http://www.guiadasemana.com.br";
+	public static final String GUIA_SEMANA_PAGINACAO = GUIA_SEMANA_URL + "/sao-paulo/agenda?page={0}";
+	public static final String OBJETO_URL = "href=\"(/sao-paulo/[^/]+/evento/[^\"]+)";
 
 	@Inject
 	public GuiaDaSemanaAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi) {
@@ -31,29 +28,35 @@ public class GuiaDaSemanaAgent extends DefaultAgent implements Agent {
 
 	@Override
 	public Model retrieve(final int ammount) throws Exception {
-		ignoreUrls.add(PORTAL_URL);
-		return retrieveFromUrl(ammount, PORTAL_URL, EVENT_URL_PATTERN);
+		Model m = null;
+		boolean hasNext = true;
+		int i = 1;
+		while (hasNext) {
+			final String galleryUrl = format(GUIA_SEMANA_PAGINACAO, i);
+			final String objectUrlPattern = OBJETO_URL;
+			if (m == null) {
+				m = retrieveFromUrl(ammount, galleryUrl, objectUrlPattern);
+			} else {
+				final Set<String> objectUrls = objectUrls(galleryUrl, objectUrlPattern);
+				m = retrieveFromUrls(ammount, m, objectUrls);
+				hasNext = !objectUrls.isEmpty();
+			}
+			i++;
+		}
+		return m;
 	}
 
 	@Override
-	protected Model retrieveFromUrls(final int ammount, final Model model, final Set<String> urls) throws Exception {
-		final Set<String> baseUrls = new HashSet<>();
-		final Pattern pattern = Pattern.compile(NEXT_PAGE_URL);
-		for (final String url : urls) {
-			final Matcher matcher = pattern.matcher(url);
-			if (matcher.find()) {
-				final String nextPageUrl = BASE_URL + matcher.group(1);
-				if (!ignoreUrls.contains(nextPageUrl)) {
-					ignoreUrls.add(nextPageUrl);
-					System.out.println(nextPageUrl);
-					retrieveFromUrl(ammount, nextPageUrl, EVENT_URL_PATTERN, model);
-				}
-			} else {
-				baseUrls.add(BASE_URL + url);
-			}
+	protected Set<String> objectUrls(String portalUrl, String eventUrlPattern) {
+		final Set<String> parcialUrls = super.objectUrls(portalUrl, eventUrlPattern);
+		if (parcialUrls != null && !parcialUrls.isEmpty()) {
+			final Set<String> completeUrls = new HashSet<>();
+			parcialUrls.forEach(parcialUrl -> {
+				completeUrls.add(GUIA_SEMANA_URL + parcialUrl);
+			});
+			return completeUrls;
 		}
-		Thread.sleep(1000);
-		return super.retrieveFromUrls(ammount, model, baseUrls);
+		return parcialUrls;
 	}
 
 	@Override
@@ -65,6 +68,11 @@ public class GuiaDaSemanaAgent extends DefaultAgent implements Agent {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	protected boolean useParallelCalls() {
+		return false;
 	}
 
 }

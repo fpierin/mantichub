@@ -39,4 +39,10 @@ public class DatastoreResourceImpl implements DatastoreResource {
 		return Response.ok().build();
 	}
 
+	@Override
+	public Response query(final String query, final String output) {
+		final String result = datastoreService.query(query, output);
+		return Response.ok(result).build();
+	}
+
 }

@@ -36,5 +36,9 @@ public class EventoUspAgent extends DefaultAgent implements Agent {
 		}
 	}
 	
+	@Override
+	protected boolean useParallelCalls() {
+		return false;
+	}
 
 }

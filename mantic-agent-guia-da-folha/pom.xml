@@ -9,8 +9,8 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 	<url>http://maven.apache.org</url>
-	<name>mantic-agent-eventos-usp</name>
-	<artifactId>mantic-agent-guia-folha</artifactId>
+	<name>mantic-agent-guia-da-folha</name>
+	<artifactId>mantic-agent-guia-da-folha</artifactId>
 	<packaging>war</packaging>
 
 	<properties>

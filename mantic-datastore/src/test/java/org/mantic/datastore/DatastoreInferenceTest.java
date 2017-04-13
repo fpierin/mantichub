@@ -24,24 +24,25 @@ public class DatastoreInferenceTest {
 	
 	public static void main(final String[] args) {
 		final Dataset dataset = loadDataset();
-//		createData(dataset);
+		createData(dataset);
 		query(dataset);
 		
 	}
 
-	private static void query(final Dataset dataset) {
+	protected static void query(final Dataset dataset) {
 		dataset.begin(ReadWrite.READ);
 		final Model namedModel = dataset.getNamedModel("teste2");
 		final Query query = QueryFactory.create(
-//				"SELECT * { ?s ?p ?o }"
-		"PREFIX rdfs:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-		"PREFIX mantichub:<http://www.wemantic.com/events#>\n" +
-		"PREFIX schema:<http://schema.org/>\n" +
-		"SELECT * WHERE { ?s rdfs:type schema:Event }"
+				"SELECT * { ?s ?p ?o }"
+//		"PREFIX rdfs:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+//		"PREFIX mantichub:<http://www.wemantic.com/events#>\n" +
+//		"PREFIX schema:<http://schema.org/>\n" +
+//		"SELECT * WHERE { ?s rdfs:type schema:Event }"
 		);
 		final QueryExecution qexec = QueryExecutionFactory.create(query, namedModel);
 		final ResultSet rs = qexec.execSelect();
-		ResultSetFormatter.outputAsJSON(System.out, rs);
+//		ResultSetFormatter.outputAsJSON(System.out, rs);
+		ResultSetFormatter.out(rs);
 		dataset.end();
 	}
 
@@ -49,20 +50,36 @@ public class DatastoreInferenceTest {
 		dataset.begin(ReadWrite.WRITE);
 		final Model namedModel = dataset.getNamedModel("teste2");
 
-		makeDefaultInferences(namedModel);
-		addStatement(namedModel, "http://schema.org/ExhibitionEvent", "http://www.w3.org/2000/01/rdf-schema#subClassOf", "http://schema.org/Event");
+//		makeDefaultInferences(namedModel);
+		addStatement(namedModel, "http://schema.org/ExhibitionEvent", 
+				"http://www.w3.org/2000/01/rdf-schema#subClassOf", 
+				"http://schema.org/Event");
+		addStatement(namedModel, "http://schema.org/ExhibitionEvent", 
+				"http://www.w3.org/2000/01/rdf-schema#subClassOf", 
+				"http://schema.org/Event");
+		addStatement(namedModel, "http://schema.org/ExhibitionEvent", 
+				"http://www.w3.org/2000/01/rdf-schema#subClassOf", 
+				"http://schema.org/Event");		
 		addStatement(namedModel, 
 				"http://www.wemantic.com/events#OqueaFisicaeosfisicospodemfazerparaasuasaude", 
 				"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", 
 				"http://schema.org/ExhibitionEvent");
-		makeModelInferences(namedModel);
+		addStatement(namedModel, 
+				"http://www.wemantic.com/events#OqueaFisicaeosfisicospodemfazerparaasuasaude", 
+				"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", 
+				"http://schema.org/ExhibitionEvent");
+		addStatement(namedModel, 
+				"http://www.wemantic.com/events#OqueaFisicaeosfisicospodemfazerparaasuasaude", 
+				"http://www.w3.org/1999/02/22-rdf-syntax-ns#type", 
+				"http://schema.org/ExhibitionEvent");		
+//		makeModelInferences(namedModel);
 		
 		dataset.commit();
 		dataset.end();
 		return namedModel;
 	}
 
-	private static Model makeModelInferences(final Model namedModel) {
+	protected static Model makeModelInferences(final Model namedModel) {
 		final InfModel infModel2 = ModelFactory.createRDFSModel(namedModel);
 		namedModel.add(infModel2);
 		return namedModel;
@@ -77,7 +94,7 @@ public class DatastoreInferenceTest {
 		namedModel.add(s);
 	}
 
-	private static Model makeDefaultInferences(final Model namedModel) {
+	protected static Model makeDefaultInferences(final Model namedModel) {
 		final Model m = FileManager.get().loadModel("http://topbraid.org/schema/schema.rdf");
 		final InfModel infModel3 = ModelFactory.createRDFSModel(m);
 		namedModel.add(infModel3);
@@ -94,3 +111,4 @@ public class DatastoreInferenceTest {
 	}
 
 }
+

@@ -2,6 +2,7 @@ package com.mantichub.agent.guiafolha.agent;
 
 import static java.text.MessageFormat.format;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.jena.rdf.model.Model;
@@ -18,7 +19,7 @@ public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 	
 	public static final String GUIA_FOLHA_URL = "http://guia.folha.uol.com.br";
 	public static final String GUIA_FOLHA_PAGINACAO = GUIA_FOLHA_URL + "/busca/{0}/?page={1}";
-	public static final String OBJETO_URL = "(" + GUIA_FOLHA_URL + "/{0}/[^/]*/[^\\.]*.shtml)";
+	public static final String OBJETO_URL = "(/(bares|litoral|restaurantes)/[^/]*/[^\\.]*.shtml)";
 	
 	@Inject
 	public GuiaDaFolhaAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi) {
@@ -36,14 +37,27 @@ public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 			final String objectUrlPattern = format(OBJETO_URL, objeto);
 			if (m == null) {
 				m = retrieveFromUrl(ammount, galleryUrl, objectUrlPattern);
-				i++;
 			} else {
 				final Set<String> objectUrls = objectUrls(galleryUrl, objectUrlPattern);
 				m = retrieveFromUrls(ammount, m, objectUrls);
 				hasNext = !objectUrls.isEmpty();
 			}
+			i++;
 		}
 		return m;
+	}
+	
+	@Override
+	protected Set<String> objectUrls(String portalUrl, String eventUrlPattern) {
+		final Set<String> parcialUrls = super.objectUrls(portalUrl, eventUrlPattern);
+		if (parcialUrls != null && !parcialUrls.isEmpty()) {
+			final Set<String> completeUrls = new HashSet<>();
+			parcialUrls.forEach(parcialUrl -> {
+				completeUrls.add(GUIA_FOLHA_URL + parcialUrl);
+			});
+			return completeUrls;
+		}
+		return parcialUrls;
 	}
 
 	@Override

@@ -11,6 +11,9 @@ public interface DatastoreService {
 
 	String query(DatastoreQuery datastoreQuery);
 
+	String query(String query, String output);
+	
 	void infer();
+
 
 }
