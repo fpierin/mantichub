@@ -1,10 +1,12 @@
 package com.mantichub.agent.eventos.guiadasemana.agent;
 
+import static com.mantichub.agent.eventos.guiadasemana.config.Configuration.USE_PARALLELL_CALLS;
 import static java.text.MessageFormat.format;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.jena.ext.com.google.common.util.concurrent.ListeningExecutorService;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.mantic.datastore.client.api.DatastoreApi;
@@ -22,8 +24,8 @@ public class GuiaDaSemanaAgent extends DefaultAgent implements Agent {
 	public static final String OBJETO_URL = "href=\"(/sao-paulo/[^/]+/evento/[^\"]+)";
 
 	@Inject
-	public GuiaDaSemanaAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi) {
-		super(httpAgent, datastoreApi);
+	public GuiaDaSemanaAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi, final ListeningExecutorService service) {
+		super(httpAgent, datastoreApi, service);
 	}
 
 	@Override
@@ -72,7 +74,7 @@ public class GuiaDaSemanaAgent extends DefaultAgent implements Agent {
 
 	@Override
 	protected boolean useParallelCalls() {
-		return false;
+		return USE_PARALLELL_CALLS;
 	}
 
 }

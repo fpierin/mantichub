@@ -25,7 +25,7 @@ public class GuiaDaSemanaEventAdapterExemplo4 {
 	public void init() throws Exception {
 		final String arquivo = "src/test/resources/evento4.html";
 		html = fromFile(arquivo);
-		crawler = new GuiaDaSemanaEventAdapter(html, "");
+		crawler = new GuiaDaSemanaEventAdapter("", html);
 	}
 	
 	@Test
@@ -37,7 +37,7 @@ public class GuiaDaSemanaEventAdapterExemplo4 {
 	
 	@Test
 	public void verificaEndereco() throws Exception {
-		final String valorEsperado = "Avenida das Nações Unidas, 17955";
+		final String valorEsperado = "Rua Agostinho Cantu, 47";
 		final String valorEncontrado = crawler.getStreetAddress();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
@@ -64,13 +64,6 @@ public class GuiaDaSemanaEventAdapterExemplo4 {
 	}
 	
 	@Test
-	public void verificaPrice() throws Exception {
-		final Double valorEsperado = 230.00;
-		final Double valorEncontrado = crawler.getPrice();
-		assertThat(valorEncontrado, is(valorEsperado));
-	}
-	
-	@Test
 	public void verificaDataInicio() throws Exception {
 		final Date valorEsperado = new SimpleDateFormat("dd/MM/yy").parse("21/06/17");
 		final Date valorEncontrado = crawler.getStartDate();
@@ -86,7 +79,7 @@ public class GuiaDaSemanaEventAdapterExemplo4 {
 	
 	@Test
 	public void verificaOverview() throws Exception {
-		final String valorEsperado = "O cantor Fábio Jr. se apresenta no dia 16 de setembro de 2017, sábado às 22h, no palco do Citibank Hall, em São Paulo.&nbsp;Os ingressos custam de R$ 80 a R$ 230 e podem ser comprados pelo site Tickets for Fun.\n    \n          \n         Shows da semana em São Paulo\n      \n          \n         Shows internacionais no Brasil em 2017\n      \n          \n         Programação Grátis em São Paulo\n      \n        \n  \n\nFábio Jr. chega com a turnê que iniciou no segundo semestre de 2014 e que já passou pela maior parte das grandes cidades brasileiras. “O Que Importa é a Gente Ser Feliz” é nome da música que batiza essa temporada de apresentações do artista. Também fazem parte do repertório grandes sucessos da carreira do artista, entre eles “Só Você”, “O Que Que Há”, “Alma Gêmea” e “Caça e Caçador”.\n\n        ";
+		final String valorEsperado = "No dia 21 de junho, das 20h às 23h, o Duas Terezas, bistrô localizado no espaço gastronômico Vila Butantan, realiza um Jantar às Cegas com o tema Pratos Harmonizados com Cerveja. São 18 vagas para o evento e cada ingressos custa R$ 120, podendo ser comprados pelo site Foodpass.    Bistrô em São Paulo realiza série de jantares às cegas    Veja também: Jantar às Cegas - Carnes Exóticas    Veja também: Jantar às Cegas - Pratos O Feminismo em Pratos    A experiência, preparada pela chef Mariana Pelozio, acontece em cinco atos: entrada, salada, dois pratos e sobremesa. O participante nunca sabe o que será servido. Restrições e preferências alimentares podem ser indicadas no ato da compra do ingresso. Na preparação do prato e também para acompanhar a refeição os participantes do evento são convidados a fechar os olhos. Em cada jantar o participante será surpreendido em como é possível aguçar e descobrir novas sensações em sabores até então escondidos. O participante só descobrirá o cardápio na hora do jantar.";
 		final String valorEncontrado = crawler.getOverview();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}

@@ -1,6 +1,11 @@
 package com.mantichub.agent.guiafolha.config;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.apache.http.client.HttpClient;
+import org.apache.jena.ext.com.google.common.util.concurrent.ListeningExecutorService;
+import org.apache.jena.ext.com.google.common.util.concurrent.MoreExecutors;
 import org.mantic.datastore.client.api.DatastoreApi;
 import org.mantic.datastore.client.api.DatastoreApiImpl;
 
@@ -42,7 +47,10 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 				final HttpClient httpClient = HttpClientFactory.get(5, 5, 3);
 				final SerializationService serializationService = new JsonSerializationServiceImpl();
 				final DatastoreApi datastoreApi = new DatastoreApiImpl(httpClient, serializationService);
+				final ExecutorService executorService = Executors.newFixedThreadPool(Configuration.THREADS);
+				final ListeningExecutorService service = MoreExecutors.listeningDecorator(executorService);
 				
+				bind(ListeningExecutorService.class).toInstance(service);				
 				bind(HttpClient.class).toInstance(httpClient);
 				bind(HttpAgent.class).to(HttpAgentImpl.class).asEagerSingleton();
 				bind(DatastoreApi.class).toInstance(datastoreApi);

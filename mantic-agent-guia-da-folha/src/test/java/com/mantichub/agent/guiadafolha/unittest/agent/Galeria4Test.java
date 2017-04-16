@@ -1,4 +1,4 @@
-package com.mantichub.agent.usp.unittest.agent;
+package com.mantichub.agent.guiadafolha.unittest.agent;
 
 import static com.mantichub.core.util.HTMLUtils.setByPattern;
 import static org.hamcrest.core.Is.is;
@@ -8,8 +8,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.mantichub.agent.guiadafolha.infra.TestUtils;
 import com.mantichub.agent.guiafolha.agent.GuiaDaFolhaAgent;
-import com.mantichub.agent.usp.infra.TestUtils;
 
 public class Galeria4Test {
 	

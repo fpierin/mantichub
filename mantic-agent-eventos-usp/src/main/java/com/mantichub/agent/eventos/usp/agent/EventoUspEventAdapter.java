@@ -2,7 +2,8 @@ package com.mantichub.agent.eventos.usp.agent;
 
 import static com.mantichub.core.util.HTMLUtils.dateFromRegex;
 import static com.mantichub.core.util.HTMLUtils.doubleFromRegex;
-import static com.mantichub.core.util.HTMLUtils.nonhtmlValueByPattern;
+import static com.mantichub.core.util.HTMLUtils.nonHtml;
+import static com.mantichub.core.util.HTMLUtils.trimValueByPattern;
 import static com.mantichub.core.util.HTMLUtils.valueByPattern;
 import static com.mantichub.core.util.StringUtils.isNotBlank;
 
@@ -18,13 +19,15 @@ public class EventoUspEventAdapter implements Event {
 	private final String html;
 	private final String url;
 	
-	public static final String END_DATE_PATTERN = "<td>\\d{2}/\\d{2}/\\d{2} - (\\d{2}/\\d{2}/\\d{2}) \\| \\d{2}:\\d{2} - \\d{2}:\\d{2}<br>";
-	public static final String END_TIME_PATTERN = "<td>\\d{2}/\\d{2}/\\d{2} - \\d{2}/\\d{2}/\\d{2} \\| \\d{2}:\\d{2} - (\\d{2}:\\d{2})<br>";
+	public static final String END_DATE_PATTERN = "<td>\\d{2}/\\d{2}/\\d{2} - (\\d{2}/\\d{2}/\\d{2}) \\| \\d{2}:\\d{2} - \\d{2}:\\d{2}<br";
+	public static final String END_TIME_PATTERN = "<td>\\d{2}/\\d{2}/\\d{2} - \\d{2}/\\d{2}/\\d{2} \\| \\d{2}:\\d{2} - (\\d{2}:\\d{2})<br";
+	public static final String END_TIME_PATTERN_2 = "<td>\\d{2}/\\d{2}/\\d{2} \\| \\d{2}:\\d{2} - (\\d{2}:\\d{2})<br";
 	public static final String LATITUDE_PATTERN = "maps\\?q=([^,]+)";
 	public static final String LONGITITUDE_PATTERN = "maps\\?q=[^,]+,([^+]+)";
 	public static final String OVERVIEW_PATTERN = "evento-conteudo\">(.+?)(?=<!--)";
-	public static final String START_DATE_PATTERN = "<td>(\\d{2}/\\d{2}/\\d{2})( - \\d{2}/\\d{2}/\\d{2})? \\| \\d{2}:\\d{2} - \\d{2}:\\d{2}<br>";
-	public static final String START_TIME_PATTERN = "<td>\\d{2}/\\d{2}/\\d{2} - \\d{2}/\\d{2}/\\d{2} \\| (\\d{2}:\\d{2}) - \\d{2}:\\d{2}<br>";
+	public static final String START_DATE_PATTERN = "<td>(\\d{2}/\\d{2}/\\d{2})( - \\d{2}/\\d{2}/\\d{2})? \\| \\d{2}:\\d{2} - \\d{2}:\\d{2}<br";
+	public static final String START_TIME_PATTERN = "<td>\\d{2}/\\d{2}/\\d{2} - \\d{2}/\\d{2}/\\d{2} \\| (\\d{2}:\\d{2}) - \\d{2}:\\d{2}<br";
+	public static final String START_TIME_PATTERN_2 = "<td>\\d{2}/\\d{2}/\\d{2} \\| (\\d{2}:\\d{2}) - \\d{2}:\\d{2}<br";
 	public static final String STREET_ADDRESS_PATTERN = "var endereco = '(([^,]+?), [\\d|s/n]+)";
 	public static final String TITLE_PATTERN = "evento-titulo\\\"[^>]+>([^<]+)";
 	public static final String FREE_EVENT_PATTERN = "(<strong>Evento Gratuito</strong>)";
@@ -61,12 +64,20 @@ public class EventoUspEventAdapter implements Event {
 	
 	@Override
 	public Date getEndDate() {
-		return dateFromRegex(html, END_DATE_PATTERN, "dd/MM/yy");
+		Date endDate = dateFromRegex(html, END_DATE_PATTERN, "dd/MM/yy");
+		if (endDate == null) {
+			endDate = dateFromRegex(html, START_DATE_PATTERN, "dd/MM/yy");
+		}
+		return endDate;
 	}
 	
 	@Override
 	public Date getEndTime() {
-		return dateFromRegex(html, END_TIME_PATTERN, "HH:mm");
+		Date endTime = dateFromRegex(html, END_TIME_PATTERN, "HH:mm");
+		if (endTime == null) {
+			endTime = dateFromRegex(html, END_TIME_PATTERN_2, "HH:mm");
+		}
+		return endTime;
 	}
 	
 	@Override
@@ -76,12 +87,20 @@ public class EventoUspEventAdapter implements Event {
 	
 	@Override
 	public Date getStartTime() {
-		return dateFromRegex(html, START_TIME_PATTERN, "HH:mm");
+		Date startTime = dateFromRegex(html, START_TIME_PATTERN, "HH:mm");
+		if (startTime == null) {
+			startTime = dateFromRegex(html, START_TIME_PATTERN_2, "HH:mm");
+		}
+		return startTime;		
 	}
 	
 	@Override
 	public String getOverview() {
-		return nonhtmlValueByPattern(html, OVERVIEW_PATTERN);
+		final String[] replacements = {"\n| ", "\t| ", "&nbsp;| ", "&atilde;|ã",
+				"&otilde;|õ", "&ecirc;|ê",
+				"&aacute;|á", "&eacute;|é","&iacute;|í","&oacute;|ó","&uacute;|ú",
+				"&ccedil;|ç", "&ndash;|–", "  | "};
+		return nonHtml(trimValueByPattern(html, OVERVIEW_PATTERN, replacements));
 	}
 	
 	@Override

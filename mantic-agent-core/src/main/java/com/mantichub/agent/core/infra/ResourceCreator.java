@@ -22,6 +22,7 @@ public class ResourceCreator {
 				.startTime(o.getStartTime())
 				.streetAddress(o.getStreetAddress())
 				.title(o.getTitle())
+				.type(o.getType())
 				.create();
 	}
 	
@@ -36,6 +37,7 @@ public class ResourceCreator {
 				.streetAddress(o.getStreetAddress())
 				.telephone(o.getTelephone())
 				.title(o.getTitle())
+				.type(o.getType())
 				.create();
 	}
 	

@@ -1,7 +1,6 @@
 package com.mantichub.agent.core.infra;
 
 import static com.mantichub.agent.core.constant.AgentConfiguration.REQUEST_TIMEOUT;
-import static com.mantichub.agent.core.constant.AgentConfiguration.THREAD_AMOUNT;
 import static com.mantichub.core.util.HTMLUtils.setByPattern;
 import static com.mantichub.core.util.ModelUtils.getRDFXMLFastWriter;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -13,14 +12,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.jena.ext.com.google.common.util.concurrent.Futures;
 import org.apache.jena.ext.com.google.common.util.concurrent.ListenableFuture;
 import org.apache.jena.ext.com.google.common.util.concurrent.ListeningExecutorService;
-import org.apache.jena.ext.com.google.common.util.concurrent.MoreExecutors;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.mantic.datastore.client.api.DatastoreApi;
@@ -31,13 +27,13 @@ public abstract class DefaultAgent implements Agent {
 	
 	protected final HttpAgent httpAgent;
 	protected final DatastoreApi datastoreApi;
+	protected final ListeningExecutorService service;
 
-	protected static final ExecutorService executorService = Executors.newFixedThreadPool(THREAD_AMOUNT);
-	protected static final ListeningExecutorService service = MoreExecutors.listeningDecorator(executorService);
 	
-	public DefaultAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi) {
+	public DefaultAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi, ListeningExecutorService service) {
 		this.httpAgent = httpAgent;
 		this.datastoreApi = datastoreApi;
+		this.service = service;
 	}
 	
 	@Override

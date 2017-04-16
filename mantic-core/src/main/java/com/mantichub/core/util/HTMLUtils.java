@@ -1,6 +1,7 @@
 package com.mantichub.core.util;
 
 import static com.mantichub.core.util.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,6 +91,7 @@ public class HTMLUtils {
 		try {
 			final String value = replace(valueByPattern(html, regexPattern), replacements);
 			final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern, locale);
+			System.out.println(html);
 			return StringUtils.isNotBlank(value) ? simpleDateFormat.parse(value) : null;
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -103,17 +105,28 @@ public class HTMLUtils {
 	
 	public static String nonhtmlValueByPattern(final String html, final String regex) {
 		String value = valueByPattern(html, regex);
-		value = isNotBlank(value) ? value.replaceAll(HTML_TAG_PATTERN, "") : value;
+		value = isNotBlank(value) ? nonHtml(value) : value;
 		return value;
 	}
+
+	public static String nonHtml(final String value) {
+		String replaceAll = value.replaceAll(HTML_TAG_PATTERN, "");
+		if (isNotBlank(replaceAll)) {
+			replaceAll = replaceAll.trim();
+		}
+		return replaceAll;
+	}
 	
-	public static Double doubleFromRegex(final String html, final String regex) {
-		final String value = valueByPattern(html, regex);
-		if (isNotBlank(value)) {
-			try {
-				return new Double(value);
-			} catch (final Exception e) {
-				e.printStackTrace();
+	public static Double doubleFromRegex(final String html, final String... regexes) {
+		if (regexes != null && regexes.length > 0) {
+			for (final String regex : regexes) {
+				final String value = valueByPattern(html, regex);
+				if (isNotBlank(value)) {
+					try {
+						return new Double(value);
+					} catch (final Exception e) {
+					}
+				}
 			}
 		}
 		return null;
@@ -145,6 +158,13 @@ public class HTMLUtils {
 			}
 		}
 		return value;
+	}
+
+	public static boolean hasPattern(final String text, final String strPattern) {
+		final Pattern pattern = Pattern.compile(strPattern, Pattern.DOTALL);
+		final Matcher matcher = pattern.matcher(text);
+		final boolean hasPattern = matcher.find();
+		return hasPattern;
 	}
 	
 }

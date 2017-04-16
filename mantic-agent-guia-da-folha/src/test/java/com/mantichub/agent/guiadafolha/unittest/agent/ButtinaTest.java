@@ -1,6 +1,6 @@
-package com.mantichub.agent.usp.unittest.agent;
+package com.mantichub.agent.guiadafolha.unittest.agent;
 
-import static com.mantichub.agent.usp.infra.TestUtils.fromFile;
+import static com.mantichub.agent.guiadafolha.infra.TestUtils.fromFile;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -14,11 +14,11 @@ import com.mantichub.agent.core.infra.Restaurant;
 import com.mantichub.agent.guiafolha.agent.GuiaDaFolhaRestaurantAdapter;
 import com.mantichub.core.vocabulary.SCHEMA;
 
-public class MassariaArtesanalTest {
-
-	private final static String arquivo = "src/test/resources/massaria_artesanal.html";
+public class ButtinaTest {
+	
+	private final static String arquivo = "src/test/resources/buttina.html";
 	private Restaurant resource;
-
+	
 	@Before
 	public void prepara() throws Exception {
 		resource = new GuiaDaFolhaRestaurantAdapter(null, fromFile(arquivo));
@@ -26,75 +26,77 @@ public class MassariaArtesanalTest {
 	
 	@Test
 	public void verificaCozinha() throws Exception {
-		final String valorEsperado = "Variada";
+		final String valorEsperado = "Italiana";
 		final String valorEncontrado = resource.getCuisine();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
 	@Test
 	public void verificaDescricao() throws Exception {
-		final String valorEsperado = "A casa é uma espécie de bistrô que serve massas orgânicas e com baixo teor de glúten. Há três opções: penne, espaguete e talharim, que podem ser combinados com os molhos disponíveis no dia, como pesto de azeitona preta, pesto de manjericão, pomodoro e gorgonzola com pera. O prato chega à mesa acompanhado de uma saladinha de folhas coberta com molho lemon pepper. Os bowls e talheres em que a comida é servida são descartáveis e biodegradáveis e, depois de usados, vão para compostagem. Para beber, há cervejas artesanais, alguns rótulos de vinhos, sucos e refrigerantes orgânicos.";
+		final String valorEsperado = "Esta é a primeira filial do restaurante cuja matriz, em Pinheiros, já soma 20 anos. Com salão amplo e pé direito alto, tem cardápio elaborado pela chef Filomena Chiarella ---ela foca a cozinha do sul da Itália, sua região de origem. Entre os pratos, prepara opções como o Sspaghettini di Cacao, massa artesanal a base de cacau com molho de mascarpone e presunto cru, ou o Gamberi alla Birra, camarões salteados no alho, azeite, cerveja e pimenta vermelha, acompanhados de nhoque de semolina e salada.";
 		final String valorEncontrado = resource.getDescription();
-		assertThat(valorEncontrado, is(valorEsperado));
-	}
-	
-	@Test
-	public void verificaEndereco() throws Exception {
-		final String valorEsperado = "Avenida Jandira, 669";
-		final String valorEncontrado = resource.getStreetAddress();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 
 	@Test
-	public void verificaHorarioAbertura() throws Exception {
-		final List<String> valorEncontrado = resource.getOpeningHours();
-		assertThat(valorEncontrado.get(0), is("We 19:00-23:00"));
-		assertThat(valorEncontrado.get(1), is("Th 19:00-23:00"));
-		assertThat(valorEncontrado.get(2), is("Fr 19:00-23:00"));
-		assertThat(valorEncontrado.get(3), is("Sa 12:00-16:00"));
-		assertThat(valorEncontrado.get(4), is("Su 12:00-16:00"));
+	public void verificaEndereco() throws Exception {
+		final String valorEsperado = "Avenida Giovanni Gronchi, 5930";
+		final String valorEncontrado = resource.getStreetAddress();
+		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
 	@Test
+	public void verificaHorarioAbertura() throws Exception {
+		final List<String> valorEncontrado = resource.getOpeningHours();
+		assertThat(valorEncontrado.get(0), is("We 12:00-22:00"));
+		assertThat(valorEncontrado.get(1), is("Th 12:00-22:00"));
+		assertThat(valorEncontrado.get(2), is("Fr 12:00-23:00"));
+		assertThat(valorEncontrado.get(3), is("Sa 12:00-23:00"));
+		assertThat(valorEncontrado.get(4), is("Su 12:00-21:00"));
+		assertThat(valorEncontrado.get(5), is("Mo 12:00-22:00"));
+		assertThat(valorEncontrado.get(6), is("Tu 12:00-22:00"));
+	}
+
+	@Test
 	public void verificaLatitude() throws Exception {
-		final Double valorEsperado = -23.6095913;
+		final Double valorEsperado = -23.6315938;
 		final Double valorEncontrado = resource.getLatitude();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 
 	@Test
 	public void verificaLongitude() throws Exception {
-		final Double valorEsperado = -46.6591025;
+		final Double valorEsperado = -46.7377384;
 		final Double valorEncontrado = resource.getLongitude();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-	
+
 	@Test
 	public void verificaTelefone() throws Exception {
-		final String valorEsperado = "3791-6826";
+		final String valorEsperado = "5063-4091";
 		final String valorEncontrado = resource.getTelephone();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-	
+
 	@Test
 	public void verificaTipo() throws Exception {
 		final Resource valorEsperado = SCHEMA.Restaurant;
 		final Resource valorEncontrado = resource.getType();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-	
+
 	@Test
 	public void verificaTitulo() throws Exception {
-		final String valorEsperado = "Massaria Artesanal";
+		final String valorEsperado = "Buttina";
 		final String valorEncontrado = resource.getTitle();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-
+	
 	@Test
 	public void verificaVariacaoPreco() throws Exception {
-		final String valorEsperado = "$";
+		final String valorEsperado = "$$";
 		final String valorEncontrado = resource.getPriceRange();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-
+	
 }

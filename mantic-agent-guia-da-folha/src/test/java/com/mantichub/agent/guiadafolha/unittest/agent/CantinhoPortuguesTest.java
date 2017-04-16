@@ -1,6 +1,6 @@
-package com.mantichub.agent.usp.unittest.agent;
+package com.mantichub.agent.guiadafolha.unittest.agent;
 
-import static com.mantichub.agent.usp.infra.TestUtils.fromFile;
+import static com.mantichub.agent.guiadafolha.infra.TestUtils.fromFile;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -14,89 +14,88 @@ import com.mantichub.agent.core.infra.Restaurant;
 import com.mantichub.agent.guiafolha.agent.GuiaDaFolhaRestaurantAdapter;
 import com.mantichub.core.vocabulary.SCHEMA;
 
-public class BiozoneTest {
+public class CantinhoPortuguesTest {
 	
-	private final static String arquivo = "src/test/resources/biozone.html";
+	private final static String arquivo = "src/test/resources/cantinho_portugues.html";
 	private Restaurant resource;
 	
 	@Before
 	public void prepara() throws Exception {
 		resource = new GuiaDaFolhaRestaurantAdapter(null, fromFile(arquivo));
 	}
-	
+
 	@Test
 	public void verificaCozinha() throws Exception {
-		final String valorEsperado = "Variada";
+		final String valorEsperado = "Portuguesa";
 		final String valorEncontrado = resource.getCuisine();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-
+	
 	@Test
 	public void verificaDescricao() throws Exception {
-		final String valorEsperado = "O restaurante, que fica nos fundos de um espaço com estúdio de tatuagem e brechó, tem como proposta fazer comida vegana e orgânica. O menu apresenta um prato do dia, que pode incluir arroz com sementes, dahl de lentilhas com especiarias e bobó de berinjela com shimeji. As receitas de kibe de berinjela ou abóbora são boas pedidas.";
+		final String valorEsperado = "É um restaurante típico português: repare no sotaque carregado dos proprietários e nas sardinhas que chiam na grelha. Tem ambiente simples e não se concentra no bacalhau: além dos bolinhos e de uma salada, tem apenas uma receita em posta (à lagareiro) e mais três com o peixe desfiado. Fora do bacalhau, há um pouco de tudo o que se encontraria numa boa tasca: arrozes de polvo ou pato, dobradinha com feijão branco e folhado de alheira.";
 		final String valorEncontrado = resource.getDescription();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 
 	@Test
 	public void verificaEndereco() throws Exception {
-		final String valorEsperado = "Rua Fradique Coutinho, 1225";
+		final String valorEsperado = "Avenida dos Imarés, 656";
 		final String valorEncontrado = resource.getStreetAddress();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-
+	
 	@Test
 	public void verificaHorarioAbertura() throws Exception {
 		final List<String> valorEncontrado = resource.getOpeningHours();
-		assertThat(valorEncontrado.get(0), is("We 12:00-20:00"));
-		assertThat(valorEncontrado.get(1), is("Th 12:00-20:00"));
-		assertThat(valorEncontrado.get(2), is("Fr 12:00-20:00"));
-		assertThat(valorEncontrado.get(3), is("Sa 12:00-20:00"));
-		assertThat(valorEncontrado.get(4), is("Mo 12:00-20:00"));
-		assertThat(valorEncontrado.get(5), is("Tu 12:00-20:00"));
-
+		assertThat(valorEncontrado.get(0), is("We 09:00-23:00"));
+		assertThat(valorEncontrado.get(1), is("Th 09:00-23:00"));
+		assertThat(valorEncontrado.get(2), is("Fr 09:00-23:00"));
+		assertThat(valorEncontrado.get(3), is("Sa 09:00-00:00"));
+		assertThat(valorEncontrado.get(4), is("Su 09:00-18:00"));
+		assertThat(valorEncontrado.get(5), is("Tu 09:00-23:00"));
 	}
-	
+
 	@Test
 	public void verificaLatitude() throws Exception {
-		final Double valorEsperado = -23.5569221;
+		final Double valorEsperado = -23.6143958;
 		final Double valorEncontrado = resource.getLatitude();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-	
+
 	@Test
 	public void verificaLongitude() throws Exception {
-		final Double valorEsperado = -46.6908631;
+		final Double valorEsperado = -46.6638437;
 		final Double valorEncontrado = resource.getLongitude();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
 	@Test
 	public void verificaTelefone() throws Exception {
-		final String valorEsperado = "3360-3609";
+		final String valorEsperado = "5041-9787";
 		final String valorEncontrado = resource.getTelephone();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-
+	
 	@Test
 	public void verificaTipo() throws Exception {
 		final Resource valorEsperado = SCHEMA.Restaurant;
 		final Resource valorEncontrado = resource.getType();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-	
+
 	@Test
 	public void verificaTitulo() throws Exception {
-		final String valorEsperado = "Biozone";
+		final String valorEsperado = "Cantinho Português";
 		final String valorEncontrado = resource.getTitle();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
 	@Test
 	public void verificaVariacaoPreco() throws Exception {
-		final String valorEsperado = "$";
+		final String valorEsperado = "$$$$";
 		final String valorEncontrado = resource.getPriceRange();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
-
+	
 }

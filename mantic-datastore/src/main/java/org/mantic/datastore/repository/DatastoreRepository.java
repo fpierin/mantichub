@@ -33,6 +33,8 @@ public interface DatastoreRepository {
 
 	void infer(MessageProducer messageProducer, String... urls) throws Exception;
 
+	String query(String query, String output);
+
 	
 	
 	

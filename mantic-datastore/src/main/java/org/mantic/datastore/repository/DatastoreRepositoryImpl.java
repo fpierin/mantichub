@@ -27,6 +27,12 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.rdf.model.impl.StmtIteratorImpl;
+import org.apache.jena.sparql.resultset.CSVOutput;
+import org.apache.jena.sparql.resultset.JSONOutput;
+import org.apache.jena.sparql.resultset.OutputBase;
+import org.apache.jena.sparql.resultset.TextOutput;
+import org.apache.jena.sparql.resultset.XMLOutput;
+import org.apache.jena.sparql.serializer.SerializationContext;
 import org.apache.jena.tdb.TDBFactory;
 import org.apache.jena.tdb.base.file.Location;
 import org.apache.jena.tdb.setup.StoreParams;
@@ -37,6 +43,7 @@ import org.mantic.datastore.transaction.TdbTransaction;
 
 import com.mantichub.commons.domain.DatastoreTriple;
 import com.mantichub.commons.domain.TripleNode;
+import com.mantichub.core.constant.OutputType;
 
 public class DatastoreRepositoryImpl implements DatastoreRepository {
 
@@ -121,16 +128,24 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 			final QuerySolution next = resultSet.next();
 			final RDFNode resultNode = next.get(next.varNames().next());
 			final TripleNode object = new TripleNode();
-			if ((resultNode != null) && !resultNode.isLiteral()) {
-				final String nameSpace = resultNode.asNode().getNameSpace();
-				final String uri = resultNode.asNode().getURI();
-				final boolean isNamespace = nameSpace.contains("http://");
-				object.setNamespace(isNamespace ? nameSpace : null);
-				object.setValue(isNamespace ? uri.replaceAll(nameSpace, "") : nameSpace);
-			} else {
-				object.setValue(resultNode.asLiteral().toString());
+			if (resultNode != null) {
+				if (resultNode.isLiteral()) {
+					object.setValue(resultNode.asLiteral().toString());
+					results.add(new DatastoreTriple(triple.getSubject(), triple.getPredicate(), object));
+				} else if (resultNode.isURIResource()) {
+					final String nameSpace = resultNode.asNode().getNameSpace();
+					final String uri = resultNode.asNode().getURI();
+					final boolean isNamespace = nameSpace.contains("http://");
+					object.setNamespace(isNamespace ? nameSpace : null);
+					object.setValue(isNamespace ? uri.replaceAll(nameSpace, "") : nameSpace);
+					results.add(new DatastoreTriple(triple.getSubject(), triple.getPredicate(), object));
+				} else if (resultNode.isAnon()) {
+					object.setValue(resultNode.asNode().getBlankNodeLabel());
+					results.add(new DatastoreTriple(triple.getSubject(), triple.getPredicate(), object));
+				} else if (resultNode.isResource()) {
+					System.out.println("VERIFICAR -->" + resultNode);
+				}
 			}
-			results.add(new DatastoreTriple(triple.getSubject(), triple.getPredicate(), object));
 			System.out.println(next);
 		}
 		return results;
@@ -245,9 +260,9 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 		while (stmts != null && stmts.hasNext()) {
 			final Statement stmt = stmts.next();
 			if (stmt.isReified()) {
-				RSIterator listReifiedStatements = stmt.listReifiedStatements();
+				final RSIterator listReifiedStatements = stmt.listReifiedStatements();
 				while (listReifiedStatements.hasNext()) {
-					ReifiedStatement next = listReifiedStatements.next();
+					final ReifiedStatement next = listReifiedStatements.next();
 					System.out.println(next);
 				}
 			}
@@ -294,6 +309,37 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public String query(final String query, final String output) {
+		return new TdbTransaction<String>(dataset, READ) {
+			@Override
+			public String routine() {
+				OutputBase out = null;
+				switch (OutputType.from(output)) {
+				case CSV:
+					out = new CSVOutput();
+					break;
+				case JSON:
+					out = new JSONOutput();
+					break;
+				case TSV:
+					out = new JSONOutput();
+					break;
+				case XML:
+					out = new XMLOutput();
+					break;
+				default:
+					out = new TextOutput((SerializationContext) null);
+				}
+				final Query q = QueryFactory.create(query);
+				final QueryExecution qexec = QueryExecutionFactory.create(q, dataset.getNamedModel(modelName));
+				final ResultSet execSelect = qexec.execSelect();
+				return out.asString(execSelect);
+			}
+			
+		}.execute();
 	}
 
 }

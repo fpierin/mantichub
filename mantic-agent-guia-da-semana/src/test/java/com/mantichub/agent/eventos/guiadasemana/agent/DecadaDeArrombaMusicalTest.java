@@ -16,77 +16,75 @@ import org.junit.Test;
 import com.mantichub.agent.core.infra.Event;
 import com.mantichub.core.vocabulary.SCHEMA;
 
-public class GuiaDaSemanaEventAdapterExemplo3 {
+public class DecadaDeArrombaMusicalTest {
 	
-	private Event crawler = null;
-	private String html;
+	private final static String arquivo = "src/test/resources/60decadadearromba.html";
+	private Event crawler;
 	
 	@Before
-	public void init() throws Exception {
-		final String arquivo = "src/test/resources/evento3.html";
-		html = fromFile(arquivo);
-		crawler = new GuiaDaSemanaEventAdapter("", html);
+	public void prepara() throws Exception {
+		crawler = new GuiaDaSemanaEventAdapter(null, fromFile(arquivo));
 	}
 	
 	@Test
 	public void verificaTitulo() throws Exception {
-		final String valorEsperado = "Fábio Jr. em São Paulo";
+		final String valorEsperado = "60! Década de Arromba – Doc. Musical";
 		final String valorEncontrado = crawler.getTitle();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
 	@Test
 	public void verificaEndereco() throws Exception {
-		final String valorEsperado = "Avenida das Nações Unidas, 17955";
+		final String valorEsperado = "Rua Olimpíadas, 360 - 5º andar (Shopping Vila Olímpia)";
 		final String valorEncontrado = crawler.getStreetAddress();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
 	@Test
 	public void verificaLatitude() throws Exception {
-		final Double valorEsperado = -23.625259;
+		final Double valorEsperado = -23.6;
 		final Double valorEncontrado = crawler.getLatitude();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
 	@Test
 	public void verificaLongitude() throws Exception {
-		final Double valorEsperado = -46.707914;
+		final Double valorEsperado = -46.6833;
 		final Double valorEncontrado = crawler.getLongitude();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
 	@Test
 	public void verificaTipoEvento() throws Exception {
-		final Resource valorEsperado = SCHEMA.ExhibitionEvent;
+		final Resource valorEsperado = SCHEMA.TheaterEvent;
 		final Resource valorEncontrado = crawler.getType();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
 	@Test
 	public void verificaPrice() throws Exception {
-		final Double valorEsperado = 230.00;
+		final Double valorEsperado = 200.00;
 		final Double valorEncontrado = crawler.getPrice();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
 	@Test
 	public void verificaDataInicio() throws Exception {
-		final Date valorEsperado = new SimpleDateFormat("dd/MM/yy").parse("16/09/17");
+		final Date valorEsperado = new SimpleDateFormat("dd/MM/yy").parse("13/04/17");
 		final Date valorEncontrado = crawler.getStartDate();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
 	@Test
 	public void verificaDataFim() throws Exception {
-		final Date valorEsperado = new SimpleDateFormat("dd/MM/yy").parse("16/09/17");
+		final Date valorEsperado = new SimpleDateFormat("dd/MM/yy").parse("23/04/17");
 		final Date valorEncontrado = crawler.getEndDate();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	
 	@Test
 	public void verificaOverview() throws Exception {
-		final String valorEsperado = "O cantor Fábio Jr. se apresenta no dia 16 de setembro de 2017, sábado às 22h, no palco do Citibank Hall, em São Paulo. Os ingressos custam de R$ 80 a R$ 230 e podem ser comprados pelo site Tickets for Fun.    Shows da semana em São Paulo    Shows internacionais no Brasil em 2017    Programação Grátis em São Paulo    Fábio Jr. chega com a turnê que iniciou no segundo semestre de 2014 e que já passou pela maior parte das grandes cidades brasileiras. “O Que Importa é a Gente Ser Feliz” é nome da música que batiza essa temporada de apresentações do artista. Também fazem parte do repertório grandes sucessos da carreira do artista, entre eles “Só Você”, “O Que Que Há”, “Alma Gêmea” e “Caça e Caçador”.";
+		final String valorEsperado = "60! Década de Arromba – Doc. Musical chega ao Theatro NET São Paulo no dia 13 de abril para uma temporada até o dia 23 do mesmo mês. A cantora Wanderléa, representante maior da Jovem Guarda, um dos principais movimentos musicais da década de 1960, participa do espetáculo, interpretando ela mesma. O musical começa com um prólogo, em 1922, contando a chegada do Rádio no Brasil, para em seguida mostrar o início da Televisão e aí sim, sua popularização na década de 1960. A partir desse ponto, a peça narra os principais acontecimentos, apresentando mais de cem canções dos mais diversos gêneros – de Roberto e Erasmo, passando por Dalva de Oliveira, Cauby Peixoto, Elvis Presley, Beatles, Tony e Celly Campello, Bibi Ferreira, Edith Piaf, Tom e Vinicius, Milton Nascimento, Gil e Caetano, Maysa, Geraldo Vandré e tantos outros nomes importantes na música.       Peças de teatro em cartaz em São Paulo em março de 2017    Confira os musicais que estreiam em São Paulo em 2017    7 teatros alternativos em SP que você precisa conhecer";
 		final String valorEncontrado = crawler.getOverview();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}

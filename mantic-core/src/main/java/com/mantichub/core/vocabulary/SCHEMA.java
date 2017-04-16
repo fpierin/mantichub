@@ -16,8 +16,10 @@ public class SCHEMA {
 	public static final String datetimeFormat = "yyyy-MM-dd'T'HH:mm:ss";
 	
 	public static final Resource NAMESPACE = m_model.createResource(NS);
+	public static final Resource Event = retrieveResource("Event");
 	public static final Resource ExhibitionEvent = retrieveResource("ExhibitionEvent");
 	public static final Resource Restaurant = retrieveResource("Restaurant");
+	public static final Resource TheaterEvent = retrieveResource("TheaterEvent");
 	
 	public static final Property addressRegion = retrieveProperty("addressRegion");
 	public static final Property addressLocality = retrieveProperty("addressLocality");
@@ -36,6 +38,7 @@ public class SCHEMA {
 	public static final Property streetAddress = retrieveProperty("streetAddress");
 	public static final Property telephone = retrieveProperty("telephone");
 	public static final Property title = retrieveProperty("title");
+
 	
 
 	public static String getURI() {

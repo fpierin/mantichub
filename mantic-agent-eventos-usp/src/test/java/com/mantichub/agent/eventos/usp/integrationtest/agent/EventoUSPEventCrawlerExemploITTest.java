@@ -37,7 +37,7 @@ public class EventoUSPEventCrawlerExemploITTest {
 	public static void persiste() throws Exception {
 		final HttpClient httpClient = HttpClientFactory.get(10, 5, 3);
 		final HttpAgent eventosUspHttpClient = new HttpAgentImpl(httpClient, null);
-		final EventoUspAgent uspEventAgent = new EventoUspAgent(eventosUspHttpClient, new DatastoreApiImpl(httpClient, null));
+		final EventoUspAgent uspEventAgent = new EventoUspAgent(eventosUspHttpClient, new DatastoreApiImpl(httpClient, null), null);
 		final Model model = uspEventAgent.retrieve(1);
 		info(model);
 		System.out.println("Iniciando a criação do modelo");

@@ -28,6 +28,7 @@ public class EventResourceBuilder extends ResourceBuilder {
 	private String startDate;
 	private String startTime;
 	private String streetAddress;
+	private Resource type;
 	private String title;
 	
 	public EventResourceBuilder(final Model model, final String projectNS) {
@@ -39,7 +40,7 @@ public class EventResourceBuilder extends ResourceBuilder {
 			final String resourceName = isNotBlank(title) ? title : md5(serviceUrl);
 			resource(resourceName);
 		}
-		addProperty(RDF.type, SCHEMA.ExhibitionEvent);
+		addProperty(RDF.type, type);
 		addProperty(SCHEMA.addressRegion, addressRegion);
 		addProperty(SCHEMA.addressLocality, addressLocality);
 		addProperty(SCHEMA.endDate, endDate);
@@ -115,6 +116,11 @@ public class EventResourceBuilder extends ResourceBuilder {
 		this.streetAddress = streetAddress;
 		return this;
 	}
+	
+	public EventResourceBuilder type(final Resource type) {
+		this.type = type;
+		return this;
+	}	
 	
 	public EventResourceBuilder title(final String title) {
 		this.title = title;

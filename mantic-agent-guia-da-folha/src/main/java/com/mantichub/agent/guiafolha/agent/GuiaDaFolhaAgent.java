@@ -5,6 +5,7 @@ import static java.text.MessageFormat.format;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.jena.ext.com.google.common.util.concurrent.ListeningExecutorService;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.mantic.datastore.client.api.DatastoreApi;
@@ -22,8 +23,8 @@ public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 	public static final String OBJETO_URL = "(/(bares|litoral|restaurantes)/[^/]*/[^\\.]*.shtml)";
 	
 	@Inject
-	public GuiaDaFolhaAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi) {
-		super(httpAgent, datastoreApi);
+	public GuiaDaFolhaAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi, final ListeningExecutorService service) {
+		super(httpAgent, datastoreApi, service);
 	}
 	
 	@Override

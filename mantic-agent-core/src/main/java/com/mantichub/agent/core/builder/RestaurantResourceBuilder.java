@@ -24,6 +24,7 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 	private String streetAddress;
 	private String telephone;
 	private String title;
+	private Resource type;
 
 	public RestaurantResourceBuilder(final Model model, final String projectNS) {
 		super(model, projectNS);
@@ -34,7 +35,7 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 			final String resourceName = isNotBlank(title) ? title : md5(serviceUrl);
 			resource(resourceName);
 		}
-		addProperty(RDF.type, SCHEMA.Restaurant);
+		addProperty(RDF.type, type);
 		addProperty(SCHEMA.addressRegion, addressRegion);
 		addProperty(SCHEMA.addressLocality, addressLocality);
 		addProperty(SCHEMA.description, description);
@@ -105,6 +106,11 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 	
 	public RestaurantResourceBuilder title(final String title) {
 		this.title = title;
+		return this;
+	}
+
+	public RestaurantResourceBuilder type(Resource type) {
+		this.type = type;
 		return this;
 	}
 
