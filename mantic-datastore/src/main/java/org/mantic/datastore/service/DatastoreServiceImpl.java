@@ -3,14 +3,10 @@ package org.mantic.datastore.service;
 import static com.mantichub.core.util.ListUtils.isEmpty;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.jena.ext.com.google.common.util.concurrent.ListeningExecutorService;
-import org.apache.jena.ext.com.google.common.util.concurrent.MoreExecutors;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.resultset.JSONOutput;
 import org.mantic.datastore.jms.MessageProducer;
@@ -21,9 +17,6 @@ import com.mantichub.commons.domain.DatastoreTriple;
 
 @Named("datastoreService")
 public class DatastoreServiceImpl implements DatastoreService {
-
-	protected static final ExecutorService executorService = Executors.newFixedThreadPool(10);
-	protected static final ListeningExecutorService service = MoreExecutors.listeningDecorator(executorService);
 
 	private final DatastoreRepository datastoreRepository;
 	private final MessageProducer messageProducer;
@@ -56,7 +49,7 @@ public class DatastoreServiceImpl implements DatastoreService {
 		try {
 			datastoreRepository.infer("http://topbraid.org/schema/schema.rdf");
 			datastoreRepository.infer();
-//			datastoreRepository.infer(messageProducer, "http://topbraid.org/schema/schema.rdf");
+			//			datastoreRepository.infer(messageProducer, "http://topbraid.org/schema/schema.rdf");
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
