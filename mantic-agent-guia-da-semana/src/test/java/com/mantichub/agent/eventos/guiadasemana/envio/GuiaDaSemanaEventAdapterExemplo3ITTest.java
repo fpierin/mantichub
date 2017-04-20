@@ -9,10 +9,10 @@ import org.mantic.datastore.client.api.DatastoreApi;
 import org.mantic.datastore.client.api.DatastoreApiImpl;
 
 import com.mantichub.agent.core.builder.EventResourceBuilder;
-import com.mantichub.agent.core.infra.Event;
 import com.mantichub.agent.eventos.guiadasemana.agent.GuiaDaSemanaEventAdapter;
 import com.mantichub.agent.eventos.guiadasemana.infra.TestUtils;
 import com.mantichub.commons.constant.MantichubConstants;
+import com.mantichub.commons.resource.Event;
 import com.mantichub.core.http.HttpClientFactory;
 import com.mantichub.core.serialization.JsonSerializationServiceImpl;
 

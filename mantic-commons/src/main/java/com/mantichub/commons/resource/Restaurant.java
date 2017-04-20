@@ -1,8 +1,6 @@
-package com.mantichub.agent.core.infra;
+package com.mantichub.commons.resource;
 
 import java.util.List;
-
-import org.apache.jena.rdf.model.Resource;
 
 public interface Restaurant {
 	
@@ -22,7 +20,7 @@ public interface Restaurant {
 
 	String getTitle();
 
-	Resource getType();
+	Resources getType();
 
 	String getUrl();
 

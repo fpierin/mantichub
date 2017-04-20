@@ -6,13 +6,12 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.apache.jena.rdf.model.Resource;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mantichub.agent.core.infra.Restaurant;
 import com.mantichub.agent.guiafolha.agent.GuiaDaFolhaRestaurantAdapter;
-import com.mantichub.core.vocabulary.SCHEMA;
+import com.mantichub.commons.resource.Resources;
+import com.mantichub.commons.resource.Restaurant;
 
 public class CantinhoPortuguesTest {
 	
@@ -79,8 +78,8 @@ public class CantinhoPortuguesTest {
 	
 	@Test
 	public void verificaTipo() throws Exception {
-		final Resource valorEsperado = SCHEMA.Restaurant;
-		final Resource valorEncontrado = resource.getType();
+		final Resources valorEsperado = Resources.Restaurant;
+		final Resources valorEncontrado = resource.getType();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 

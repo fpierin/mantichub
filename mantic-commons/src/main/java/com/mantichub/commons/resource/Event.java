@@ -1,8 +1,6 @@
-package com.mantichub.agent.core.infra;
+package com.mantichub.commons.resource;
 
 import java.util.Date;
-
-import org.apache.jena.rdf.model.Resource;
 
 public interface Event {
 	
@@ -24,7 +22,7 @@ public interface Event {
 
 	String getTitle();
 
-	Resource getType();
+	Resources getType();
 
 	Double getPrice();
 

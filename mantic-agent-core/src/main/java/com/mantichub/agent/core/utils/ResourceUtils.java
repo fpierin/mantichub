@@ -19,6 +19,9 @@ import static com.mantichub.core.util.StringUtils.isNotBlank;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 
+import com.mantichub.commons.resource.Resources;
+import com.mantichub.core.vocabulary.SCHEMA;
+
 /**
  *
  * @author Felipe Pierin <fpierin@uolinc.com>
@@ -41,4 +44,21 @@ public class ResourceUtils {
 		}
 	}
 
+	public static Resource resourceFromName(final Resources resource) {
+		if (resource != null) {
+			switch (resource) {
+			case ExhibitionEvent:
+				return SCHEMA.ExhibitionEvent;
+			case Restaurant:
+				return SCHEMA.Restaurant;
+			case TheaterEvent:
+				return SCHEMA.TheaterEvent;
+			default:
+				break;
+			}
+		}
+		return null;
+	}
+
 }
+

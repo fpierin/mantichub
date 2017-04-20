@@ -9,12 +9,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import org.apache.jena.rdf.model.Resource;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mantichub.agent.core.infra.Event;
-import com.mantichub.core.vocabulary.SCHEMA;
+import com.mantichub.commons.resource.Event;
+import com.mantichub.commons.resource.Resources;
 
 public class DecadaDeArrombaMusicalTest {
 	
@@ -56,8 +55,8 @@ public class DecadaDeArrombaMusicalTest {
 	
 	@Test
 	public void verificaTipoEvento() throws Exception {
-		final Resource valorEsperado = SCHEMA.TheaterEvent;
-		final Resource valorEncontrado = crawler.getType();
+		final Resources valorEsperado = Resources.TheaterEvent;
+		final Resources valorEncontrado = crawler.getType();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	

@@ -17,10 +17,9 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.jena.rdf.model.Resource;
 
-import com.mantichub.agent.core.infra.Event;
-import com.mantichub.core.vocabulary.SCHEMA;
+import com.mantichub.commons.resource.Event;
+import com.mantichub.commons.resource.Resources;
 
 public class GuiaDaSemanaEventAdapter implements Event {
 
@@ -80,12 +79,12 @@ public class GuiaDaSemanaEventAdapter implements Event {
 	}
 
 	@Override
-	public Resource getType() {
+	public Resources getType() {
 		final String v = valueByPattern(html, THEATER_PATTERN);
 		if (isNotBlank(v)) {
-			return SCHEMA.TheaterEvent;	
+			return Resources.TheaterEvent;	
 		}
-		return SCHEMA.ExhibitionEvent;
+		return Resources.ExhibitionEvent;
 	}
 
 	@Override

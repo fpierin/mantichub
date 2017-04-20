@@ -9,10 +9,8 @@ import static com.mantichub.core.util.StringUtils.isNotBlank;
 
 import java.util.Date;
 
-import org.apache.jena.rdf.model.Resource;
-
-import com.mantichub.agent.core.infra.Event;
-import com.mantichub.core.vocabulary.SCHEMA;
+import com.mantichub.commons.resource.Event;
+import com.mantichub.commons.resource.Resources;
 
 public class EventoUspEventAdapter implements Event {
 	
@@ -58,8 +56,8 @@ public class EventoUspEventAdapter implements Event {
 	}
 	
 	@Override
-	public Resource getType() {
-		return SCHEMA.ExhibitionEvent;
+	public Resources getType() {
+		return Resources.ExhibitionEvent;
 	}
 	
 	@Override

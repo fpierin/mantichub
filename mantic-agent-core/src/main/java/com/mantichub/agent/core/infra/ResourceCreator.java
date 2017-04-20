@@ -1,11 +1,15 @@
 package com.mantichub.agent.core.infra;
 
+import static com.mantichub.agent.core.utils.ResourceUtils.resourceFromName;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 
 import com.mantichub.agent.core.builder.EventResourceBuilder;
 import com.mantichub.agent.core.builder.RestaurantResourceBuilder;
 import com.mantichub.commons.constant.MantichubConstants;
+import com.mantichub.commons.resource.Event;
+import com.mantichub.commons.resource.Restaurant;
 
 public class ResourceCreator {
 	
@@ -22,7 +26,7 @@ public class ResourceCreator {
 				.startTime(o.getStartTime())
 				.streetAddress(o.getStreetAddress())
 				.title(o.getTitle())
-				.type(o.getType())
+				.type(resourceFromName(o.getType()))
 				.create();
 	}
 	
@@ -37,7 +41,7 @@ public class ResourceCreator {
 				.streetAddress(o.getStreetAddress())
 				.telephone(o.getTelephone())
 				.title(o.getTitle())
-				.type(o.getType())
+				.type(resourceFromName(o.getType()))
 				.create();
 	}
 	

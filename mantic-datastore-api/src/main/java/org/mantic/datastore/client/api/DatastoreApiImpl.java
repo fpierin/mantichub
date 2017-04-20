@@ -18,6 +18,7 @@ import org.apache.jena.rdf.model.StmtIterator;
 import com.mantichub.commons.builder.DatastoreTripleBuilder;
 import com.mantichub.commons.domain.DatastoreQuery;
 import com.mantichub.commons.domain.DatastoreTriple;
+import com.mantichub.commons.domain.QueryResult;
 import com.mantichub.core.http.RestfulSupport;
 import com.mantichub.core.http.ServerResponse;
 import com.mantichub.core.serialization.SerializationService;
@@ -53,7 +54,7 @@ public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
 	@Override
 	public void query(final String queryStr) {
 		if (isNotBlank(queryStr)) {
-			ServerResponse post = post(DATASTORE_URL + "/query", new DatastoreQuery(queryStr));
+			final ServerResponse post = post(DATASTORE_URL + "/query", new DatastoreQuery(queryStr));
 			System.out.println(post.getContent());
 		}
 	}
@@ -86,6 +87,18 @@ public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
 	private String namespaceFrom(final Node node) {
 		return node.isLiteral()? null : node.getNameSpace();
 	}
+
+	@Override
+	public QueryResult query(final com.mantichub.commons.resource.Resource resource, final Long radius) {
+		if (resource == null) {
+			return null;
+		}
+		final QueryResult queryResult = new QueryResult();
+		final String sparqQuery = "";
+		final List<com.mantichub.commons.resource.Resource> resources = new ArrayList<>();
+		queryResult.setSparqlQuery(sparqQuery);
+		queryResult.setResources(resources);
+		return queryResult;
+	}
 	
 }
-
