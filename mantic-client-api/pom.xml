@@ -25,6 +25,11 @@
 			<artifactId>swagger-annotations</artifactId>
 			<version>1.5.13</version>
 		</dependency>
+		<dependency>
+			<groupId>com.mantichub</groupId>
+			<artifactId>mantic-datastore-api</artifactId>
+			<version>${mantichub.version}</version>
+		</dependency>
 
 		<!-- IoC package -->
 		<dependency>
@@ -58,6 +63,11 @@
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxb-provider</artifactId>
+			<version>2.3.5.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson-provider</artifactId>
 			<version>2.3.5.Final</version>
 		</dependency>
 

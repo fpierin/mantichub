@@ -24,7 +24,7 @@ import com.mantichub.core.serialization.SerializationService;
 
 public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
 	
-	String url = "http://localhost:8080/api/triplestore";
+	private static final String DATASTORE_URL = "http://localhost:8081/api/triplestore";
 	
 	@Inject
 	public DatastoreApiImpl(final HttpClient httpClient, final SerializationService serializationService) {
@@ -47,13 +47,13 @@ public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
 
 	@Override
 	public ServerResponse create(final List<DatastoreTriple> triples) {
-		return post(url, triples);
+		return post(DATASTORE_URL, triples);
 	}
 	
 	@Override
 	public void query(final String queryStr) {
 		if (isNotBlank(queryStr)) {
-			ServerResponse post = post(url + "/query", new DatastoreQuery(queryStr));
+			ServerResponse post = post(DATASTORE_URL + "/query", new DatastoreQuery(queryStr));
 			System.out.println(post.getContent());
 		}
 	}
