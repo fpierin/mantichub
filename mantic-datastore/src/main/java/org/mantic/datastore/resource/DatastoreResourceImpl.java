@@ -8,8 +8,9 @@ import javax.ws.rs.core.Response;
 
 import org.mantic.datastore.service.DatastoreService;
 
-import com.mantichub.commons.domain.DatastoreQuery;
 import com.mantichub.commons.domain.DatastoreTriple;
+import com.mantichub.commons.domain.QueryResult;
+import com.mantichub.commons.resource.ResourceObject;
 
 @Named("datastoreResource")
 public class DatastoreResourceImpl implements DatastoreResource {
@@ -28,8 +29,8 @@ public class DatastoreResourceImpl implements DatastoreResource {
 	}
 
 	@Override
-	public Response query(final DatastoreQuery datastoreQuery) {
-		final String result = datastoreService.query(datastoreQuery);
+	public Response query(final ResourceObject resource, final Double radius) {
+		final QueryResult result = datastoreService.query(resource, radius);
 		return Response.ok(result).build();
 	}
 	

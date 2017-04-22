@@ -9,7 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.mantichub.commons.resource.Resource;
+import com.mantichub.commons.resource.ResourceObject;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,7 +39,7 @@ public interface ClientResource {
 			@ApiResponse(code = 200, message = "App ok", response = ClientResource.class, responseContainer = "List"),
 			@ApiResponse(code = 500, message = "Erro interno")
 	})
-	Response query(Resource queryResource);
+	Response query(ResourceObject queryResource);
 	
 	@POST
 	@Path("/radius/{radius}")
@@ -48,6 +48,6 @@ public interface ClientResource {
 			@ApiResponse(code = 200, message = "App ok", response = ClientResource.class, responseContainer = "List"),
 			@ApiResponse(code = 500, message = "Erro interno")
 	})
-	Response query(@PathParam("radius") final Long size, Resource queryResource);
+	Response query(@PathParam("radius") final Long size, ResourceObject queryResource);
 	
 }

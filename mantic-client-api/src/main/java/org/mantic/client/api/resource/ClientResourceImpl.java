@@ -7,7 +7,7 @@ import javax.ws.rs.core.Response;
 import org.mantic.client.api.service.ClientService;
 
 import com.mantichub.commons.domain.QueryResult;
-import com.mantichub.commons.resource.Resource;
+import com.mantichub.commons.resource.ResourceObject;
 
 @Named("clientResource")
 public class ClientResourceImpl implements ClientResource {
@@ -25,16 +25,15 @@ public class ClientResourceImpl implements ClientResource {
 	}
 
 	@Override
-	public Response query(final Resource queryResource) {
+	public Response query(final ResourceObject queryResource) {
 		final QueryResult queryResult = queryService.query(queryResource);
 		return Response.ok(queryResult).build();
 	}
 
 	@Override
-	public Response query(final Long radius, final Resource resource) {
+	public Response query(final Long radius, final ResourceObject resource) {
 		final QueryResult queryResult = queryService.query(resource, radius);
 		return Response.ok(queryResult).build();
 	}
-
 
 }

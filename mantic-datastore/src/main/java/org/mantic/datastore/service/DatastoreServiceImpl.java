@@ -7,23 +7,25 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.sparql.resultset.JSONOutput;
 import org.mantic.datastore.jms.MessageProducer;
+import org.mantic.datastore.query.service.QueryService;
 import org.mantic.datastore.repository.DatastoreRepository;
 
-import com.mantichub.commons.domain.DatastoreQuery;
 import com.mantichub.commons.domain.DatastoreTriple;
+import com.mantichub.commons.domain.QueryResult;
+import com.mantichub.commons.resource.ResourceObject;
 
 @Named("datastoreService")
 public class DatastoreServiceImpl implements DatastoreService {
 
 	private final DatastoreRepository datastoreRepository;
 	private final MessageProducer messageProducer;
+	private final QueryService queryService;
 
 	@Inject
-	public DatastoreServiceImpl(final DatastoreRepository datastoreRepository, final MessageProducer messageProducer) {
+	public DatastoreServiceImpl(final DatastoreRepository datastoreRepository, final QueryService queryService, final MessageProducer messageProducer) {
 		this.datastoreRepository = datastoreRepository;
+		this.queryService = queryService;
 		this.messageProducer = messageProducer;
 	}
 
@@ -37,10 +39,12 @@ public class DatastoreServiceImpl implements DatastoreService {
 	}
 
 	@Override
-	public String query(final DatastoreQuery datastoreQuery) {
-		final ResultSet resultSet = datastoreRepository.query(datastoreQuery.getQuery());
-		final JSONOutput jOut = new JSONOutput();
-		final String result = jOut.asString(resultSet);
+	public QueryResult query(final ResourceObject resource, final Double radius) {
+		final String queryString = queryService.buildQuery(resource, radius);
+		final String jsonResources = query(queryString, "json");
+		final QueryResult result = new QueryResult();
+		result.setSparqlQuery(queryString);
+		result.setResources(queryService.map(jsonResources));
 		return result;
 	}
 

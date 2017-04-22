@@ -10,8 +10,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import com.mantichub.commons.domain.DatastoreQuery;
 import com.mantichub.commons.domain.DatastoreTriple;
+import com.mantichub.commons.resource.ResourceObject;
 
 @Produces({ "application/json; charset=utf-8" })
 @Consumes({ "application/json; charset=utf-8" })
@@ -24,7 +24,7 @@ public interface DatastoreResource {
 	
 	@POST
 	@Path("/query")
-	Response query(DatastoreQuery datastoreQuery);
+	Response query(ResourceObject resource, @QueryParam("radius") Double radius);
 
 	@GET
 	@Path("/infer")
@@ -33,6 +33,7 @@ public interface DatastoreResource {
 	@GET
 	@Path("/")
 	Response query(@QueryParam("query") String query, @QueryParam("output") String output);
+
 
 
 }

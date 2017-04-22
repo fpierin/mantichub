@@ -23,11 +23,10 @@ import com.mantichub.core.serialization.SerializationService;
 
 public class RestfulSupport {
 
-	private final HttpClient httpClient;
-
 	protected final AtomicBoolean open = new AtomicBoolean(true);
+	protected final HttpClient httpClient;
+	protected final SerializationService serializationService;
 	
-	private final SerializationService serializationService;
 
 	public RestfulSupport(final HttpClient httpClient, final SerializationService serializationService) {
 		this.httpClient = httpClient;

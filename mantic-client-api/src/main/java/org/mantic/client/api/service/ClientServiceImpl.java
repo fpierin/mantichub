@@ -6,7 +6,7 @@ import javax.inject.Named;
 import org.mantic.datastore.client.api.DatastoreApi;
 
 import com.mantichub.commons.domain.QueryResult;
-import com.mantichub.commons.resource.Resource;
+import com.mantichub.commons.resource.ResourceObject;
 
 @Named("clientService")
 public class ClientServiceImpl implements ClientService {
@@ -19,12 +19,12 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public QueryResult query(final Resource resource) {
-		return datastoreApi.query(resource, null);
+	public QueryResult query(final ResourceObject resource) {
+		return datastoreApi.query(resource, 0l);
 	}
 
 	@Override
-	public QueryResult query(final Resource resource, final Long radius) {
+	public QueryResult query(final ResourceObject resource, final Long radius) {
 		return datastoreApi.query(resource, radius);
 	}
 
