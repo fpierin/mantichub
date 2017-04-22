@@ -4,6 +4,10 @@ import static java.lang.String.valueOf;
 import static java.text.MessageFormat.format;
 import static org.mantic.datastore.infra.configuration.Configuration.BASIC_SPARQL_QUERY;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.mantichub.commons.resource.ResourceObject;
 import com.mantichub.commons.resource.Resources;
 import com.mantichub.core.domain.GeoCoordinates;
@@ -50,18 +54,45 @@ public class QueryBuilder {
 			filter(sb, "?priceRange", "=", resource.getPriceRange());
 			filter(sb, "?title", "=", resource.getTitle());
 			filter(sb, "?url", "=", resource.getUrl());
-			addType(sb);
+			addDateFilter(sb);
+			addTimeFilter(sb);
+			addTypeFilter(sb);
 			addLatitudeFilter(sb);
 		}
 		return sb.toString();
-//		final Date endDate = resource.getEndDate();
-//		final Date endTime = resource.getEndTime();
-//		final List<String> openingHours = resource.getOpeningHours();
-//		final Date startDate = resource.getStartDate();
-//		final Date startTime = resource.getStartTime();
 	}
 
-	private void addType(final StringBuilder sb) {
+	private void addTimeFilter(final StringBuilder sb) {
+		if (resource != null) {
+			final DateFormat df = new SimpleDateFormat("HH:mm:ss");
+			final Date startTime = resource.getStartTime();
+			final Date endTime = resource.getEndTime();
+			if (startTime != null && endTime != null) {
+				filter(sb, filterStatement("?startTime", ">", df.format(startTime)) + " && " + filterStatement("?endTime", "<", df.format(endTime)));	
+			} else if (startTime != null) {
+				filter(sb, "?startTime", "=", resource.getStartTime());	
+			} else if (endTime != null) {
+				filter(sb, "?endTime", "=", resource.getEndTime());
+			}
+		}
+	}
+
+	private void addDateFilter(final StringBuilder sb) {
+		if (resource != null) {
+			final DateFormat df = new SimpleDateFormat("yyyy-MM-ss");
+			final Date startDate = resource.getStartDate();
+			final Date endDate = resource.getEndDate();
+			if (startDate != null && endDate != null) {
+				filter(sb, filterStatement("?startDate", ">", df.format(startDate)) + " && " + filterStatement("?endDate", "<", df.format(endDate)));	
+			} else if (startDate != null) {
+				filter(sb, filterStatement("?startDate", "=", df.format(startDate)));
+			} else if (endDate != null) {
+				filter(sb, filterStatement("?endDate", "=", df.format(endDate)));
+			}
+		}
+	}
+
+	private void addTypeFilter(final StringBuilder sb) {
 		String typeName = "Resource";
 		final Resources type = resource.getType();
 		if (type != null) {
@@ -81,7 +112,6 @@ public class QueryBuilder {
 				filter(sb, filterStatement("?longitude ", ">", coordinates.getX1()) + " && " + filterStatement("?longitude ", "<", coordinates.getX2()));
 			}
 		}
-//		"2017-04-18" | "2017-04-18" | "09:00:00" | "18:00:00"
 	}
 
 	private void filter(final StringBuilder sb, final String column, final String condition, final Object value) {
@@ -102,8 +132,8 @@ public class QueryBuilder {
 	
 	public static void main(final String[] args) {
 		final ResourceObject resource = new ResourceObject();
-//		resource.setStartDate(new Date());
-//		resource.setEndDate(new Date());
+		resource.setStartDate(new Date());
+		resource.setEndDate(new Date());
 		System.out.println(new QueryBuilder()
 //				.withRadius(new Double(0.5))
 				.withFilter(resource)
