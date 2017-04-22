@@ -1,5 +1,8 @@
 package org.mantic.datastore.query.service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -77,6 +80,13 @@ public class QueryServiceImpl implements QueryService {
 				Object obj = item.getValue();
 				if (clazz == Double.class) {
 					obj = new Double(item.getValue());
+				} else if (clazz == Date.class) {
+					final String value = item.getValue();
+					if (value.contains("-")) {
+						obj = parseDate(value, "yyyy-MM-dd");
+					} else if (value.contains(":")) {
+						obj = parseDate(value, "HH:mm:ss");
+					}
 				}
 				return clazz.cast(obj);
 			}
@@ -86,15 +96,20 @@ public class QueryServiceImpl implements QueryService {
 		return null;
 	}
 
+	private Object parseDate(final String value, final String dateFormat) throws ParseException {
+		final DateFormat df = new SimpleDateFormat(dateFormat);
+		return df.parse(value);
+	}
+
 	public static void main(String[] args) {
 		QueryService queryService = new QueryServiceImpl(new JsonSerializationServiceImpl());
 		Binding binding = new Binding();
 		Item item = new Item();
-		item.setValue("-25.232131");
-		binding.setLatitude(item);
-		;
+		item.setValue("09:00:00");
+		binding.setStartDate(item);
+//		"2017-04-18" | "2017-04-18" | "09:00:00" | "18:00:00"
 		ResourceObject resourceFrom = queryService.resourceFrom(binding);
-		System.out.println(resourceFrom.getLatitude());
+		System.out.println(resourceFrom.getStartDate());
 	}
 
 }

@@ -10,11 +10,12 @@ public class Configuration {
 			"SELECT " + 
 				"?title ?latitude ?longitude ?startDate ?endDate ?startTime ?endTime " +
 				"?cuisine ?description ?priceRange ?telephone ?overview ?streetAddress " +
-				"?price ?url \n" +
+				"?price ?typeObj ?type ?url \n" +
 			"WHERE {\n" + 
 			"	?s schema:title ?titleObj ;\n" + 
 			"	schema:latitude ?latitudeObj ;\n" + 
-			"	schema:longitude ?longitudeObj .\n" +
+			"	schema:longitude ?longitudeObj ;\n" +
+			"	rdf:type ?typeObj .\n" +
 			"	OPTIONAL { ?s schema:cuisine ?cuisineObj }\n" +
 			"	OPTIONAL { ?s schema:description ?descriptionObj }\n" +
 			"	OPTIONAL { ?s schema:endDate ?endDateObj }\n" + 
@@ -40,6 +41,7 @@ public class Configuration {
 			"	BIND (str(?streetAddressObj) as ?streetAddress)\n" +
 			"	BIND (str(?telephoneObj) as ?telephone)\n" +
 			"	BIND (str(?urlObj) as ?url)\n" +
+			"	BIND ( strafter(strafter( str(?typeObj), \"http://\" ),\"/\") as ?type )\n" +
 			"	BIND ( strafter( str(?endTimeObj), \"T\" ) as ?endTime )\n" + 
 			"	BIND ( strafter( str(?startTimeObj), \"T\" ) as ?startTime )\n" +
 			"{filtering} " +

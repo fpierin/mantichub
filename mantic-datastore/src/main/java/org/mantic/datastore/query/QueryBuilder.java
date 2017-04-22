@@ -4,9 +4,6 @@ import static java.lang.String.valueOf;
 import static java.text.MessageFormat.format;
 import static org.mantic.datastore.infra.configuration.Configuration.BASIC_SPARQL_QUERY;
 
-import java.util.Arrays;
-import java.util.Date;
-
 import com.mantichub.commons.resource.ResourceObject;
 import com.mantichub.commons.resource.Resources;
 import com.mantichub.core.domain.GeoCoordinates;
@@ -29,7 +26,16 @@ public class QueryBuilder {
 	}
 	
 	public String build() {
-		return BASIC_SPARQL_QUERY.replace("{filtering}", filtering());
+		return BASIC_SPARQL_QUERY
+				.replace("{rdfType}", rdfType())
+				.replace("{filtering}", filtering());
+	}
+
+	private String rdfType() {
+		if (resource != null && resource.getType() != null) {
+			return "schema:" + resource.getType().name(); 
+		}
+		return "rdfs:Resource";
 	}
 
 	private String filtering() {
@@ -43,18 +49,9 @@ public class QueryBuilder {
 			filter(sb, "?telephone", "=", resource.getTelephone());
 			filter(sb, "?priceRange", "=", resource.getPriceRange());
 			filter(sb, "?title", "=", resource.getTitle());
-			filter(sb, "?type", "=", resource.getType());
 			filter(sb, "?url", "=", resource.getUrl());
-			if (radius == null) {
-				filter(sb, "?latitude", "=", resource.getLatitude());
-				filter(sb, "?longitude", "=", resource.getLongitude());
-			} else {
-				if (resource.getLatitude() != null && resource.getLongitude() != null)  {
-					final GeoCoordinates coordinates = GeoUtils.radius(radius, resource.getLatitude(), resource.getLongitude());
-					filter(sb, filterStatement("?latitude", ">", coordinates.getY1()) + " && " + filterStatement("?latitude", "<", coordinates.getY2()));
-					filter(sb, filterStatement("?longitude ", ">", coordinates.getX1()) + " && " + filterStatement("?longitude ", "<", coordinates.getX2()));
-				}
-			}
+			addType(sb);
+			addLatitudeFilter(sb);
 		}
 		return sb.toString();
 //		final Date endDate = resource.getEndDate();
@@ -62,6 +59,29 @@ public class QueryBuilder {
 //		final List<String> openingHours = resource.getOpeningHours();
 //		final Date startDate = resource.getStartDate();
 //		final Date startTime = resource.getStartTime();
+	}
+
+	private void addType(final StringBuilder sb) {
+		String typeName = "Resource";
+		final Resources type = resource.getType();
+		if (type != null) {
+			typeName = type.name(); 
+		}
+		filter(sb, "?type", "=", typeName);	
+	}
+
+	private void addLatitudeFilter(final StringBuilder sb) {
+		if (radius == null) {
+			filter(sb, "?latitude", "=", resource.getLatitude());
+			filter(sb, "?longitude", "=", resource.getLongitude());
+		} else {
+			if (resource.getLatitude() != null && resource.getLongitude() != null)  {
+				final GeoCoordinates coordinates = GeoUtils.radius(radius, resource.getLatitude(), resource.getLongitude());
+				filter(sb, filterStatement("?latitude", ">", coordinates.getY1()) + " && " + filterStatement("?latitude", "<", coordinates.getY2()));
+				filter(sb, filterStatement("?longitude ", ">", coordinates.getX1()) + " && " + filterStatement("?longitude ", "<", coordinates.getX2()));
+			}
+		}
+//		"2017-04-18" | "2017-04-18" | "09:00:00" | "18:00:00"
 	}
 
 	private void filter(final StringBuilder sb, final String column, final String condition, final Object value) {
@@ -82,25 +102,10 @@ public class QueryBuilder {
 	
 	public static void main(final String[] args) {
 		final ResourceObject resource = new ResourceObject();
-		resource.setCuisine("xpto");
-		resource.setDescription("desc");
-		resource.setEndDate(new Date());
-		resource.setEndTime(new Date());
-		resource.setLatitude(-12.543);
-		resource.setLongitude(-25.187412);
-		resource.setOpeningHours(Arrays.asList(new String[]{"a", "b"}));
-		resource.setOverview("oveeee");
-		resource.setPrice(2.12);
-		resource.setPriceRange("$$");
-		resource.setStartDate(new Date());
-		resource.setStartTime(new Date());
-		resource.setStreetAddress("endeeeeeeeere");
-		resource.setTelephone("12421412");
-		resource.setTitle("titeeelue");
-		resource.setType(Resources.Event);
-		resource.setUrl("http://hgfwhqgfhqw");
+//		resource.setStartDate(new Date());
+//		resource.setEndDate(new Date());
 		System.out.println(new QueryBuilder()
-				.withRadius(new Double(0.5))
+//				.withRadius(new Double(0.5))
 				.withFilter(resource)
 				.build());
 	}
