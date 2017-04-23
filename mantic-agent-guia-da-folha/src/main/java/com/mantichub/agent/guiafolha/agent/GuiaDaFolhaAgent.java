@@ -15,6 +15,7 @@ import com.mantichub.agent.core.http.HttpAgent;
 import com.mantichub.agent.core.infra.Agent;
 import com.mantichub.agent.core.infra.DefaultAgent;
 import com.mantichub.agent.core.infra.ResourceCreator;
+import com.mantichub.agent.guiafolha.config.Configuration;
 
 public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 	
@@ -74,7 +75,7 @@ public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 
 	@Override
 	protected boolean useParallelCalls() {
-		return false;
+		return Configuration.USE_PARALLELL_CALLS;
 	}
 
 }

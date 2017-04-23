@@ -26,7 +26,7 @@ import com.mantichub.core.serialization.SerializationService;
 
 public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
 	
-	private static final String DATASTORE_URL = "http://localhost:8081/api/triplestore";
+	private static final String DATASTORE_URL = "http://52.32.79.76/api";
 	
 	@Inject
 	public DatastoreApiImpl(final HttpClient httpClient, final SerializationService serializationService) {

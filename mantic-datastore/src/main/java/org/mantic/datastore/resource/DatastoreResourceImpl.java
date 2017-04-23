@@ -25,7 +25,7 @@ public class DatastoreResourceImpl implements DatastoreResource {
 	@Override
 	public Response create(final List<DatastoreTriple> triples) {
 		datastoreService.create(triples);
-		return Response.accepted().build();
+		return Response.ok().build();
 	}
 
 	@Override
@@ -44,6 +44,11 @@ public class DatastoreResourceImpl implements DatastoreResource {
 	public Response query(final String query, final String output) {
 		final String result = datastoreService.query(query, output);
 		return Response.ok(result).build();
+	}
+
+	@Override
+	public Response probe() {
+		return Response.ok().build();
 	}
 
 }

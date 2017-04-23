@@ -1,5 +1,9 @@
 package com.mantichub.agent.guiafolha.config;
 
+import static com.mantichub.agent.guiafolha.config.Configuration.MAX_CONNECTION_PER_ROUTE;
+import static com.mantichub.agent.guiafolha.config.Configuration.MAX_CONNECTION_TOTAL;
+import static com.mantichub.agent.guiafolha.config.Configuration.THREADS;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -44,7 +48,7 @@ public class GuiceServletConfig extends GuiceServletContextListener {
 		return new AbstractModule() {
 			@Override
 			protected void configure() {
-				final HttpClient httpClient = HttpClientFactory.get(5, 5, 3);
+				final HttpClient httpClient = HttpClientFactory.get(MAX_CONNECTION_TOTAL, MAX_CONNECTION_PER_ROUTE, THREADS);
 				final SerializationService serializationService = new JsonSerializationServiceImpl();
 				final DatastoreApi datastoreApi = new DatastoreApiImpl(httpClient, serializationService);
 				final ExecutorService executorService = Executors.newFixedThreadPool(Configuration.THREADS);

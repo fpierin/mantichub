@@ -22,7 +22,7 @@
 		<property name="resourcePackage" value="org.mantic.client" />
 		<property name="title" value="Documentação da api de consulta" />
 		<property name="version" value="1.0.0" />
-		<property name="host" value="localhost:8080" />
+		<property name="host" value="http://52.32.79.76/mantic-client-api/" />
 		<property name="basePath" value="/api" />
 		<property name="scan" value="true" />
 	</bean>

@@ -1,6 +1,7 @@
 package com.mantichub.core.http;
 
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -14,7 +15,13 @@ public class HttpClientFactory {
 	public static HttpClient get(final int maxConnectionTotal, final int maxConnectionPerRoute, final int retryAttempts) {
 		final HttpClientBuilder builder = getBuilder(retryAttempts);
 		builder.setConnectionManager(getConnectionManager(maxConnectionTotal, maxConnectionPerRoute));
+		builder.setDefaultRequestConfig(getRequestConfig());
 		return builder.build();
+	}
+
+	private static RequestConfig getRequestConfig() {
+		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(15 * 1000).build();
+		return requestConfig;
 	}
 
 	private static HttpClientBuilder getBuilder(final int retryAttempts) {

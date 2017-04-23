@@ -11,29 +11,65 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import com.mantichub.commons.domain.DatastoreTriple;
+import com.mantichub.commons.domain.QueryResult;
 import com.mantichub.commons.resource.ResourceObject;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @Produces({ "application/json; charset=utf-8" })
 @Consumes({ "application/json; charset=utf-8" })
-@Path("/triplestore")
+@Api(tags = "Query")
+@Path("/")
 public interface DatastoreResource {
+	
+	@GET
+	@Path("/probe")
+	@ApiOperation(value = "Probe da aplicação", response = Response.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "App ok"),
+			@ApiResponse(code = 404, message = "Inexistente"),
+			@ApiResponse(code = 500, message = "Erro interno")
+	})
+	Response probe();
+	
+	@GET
+	@Path("/")
+	@ApiOperation(value = "Faz uma consulta por recurso", response = Response.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "App ok", response = QueryResult.class, responseContainer = "List"),
+			@ApiResponse(code = 500, message = "Erro interno")
+	})
+	Response query(@QueryParam("query") String query, @QueryParam("output") String output);
+	
+	@GET
+	@Path("/infer")
+	@ApiOperation(value = "Realiza inferências na base de dados", response = Response.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Inferências realizadas"),
+			@ApiResponse(code = 500, message = "Erro interno")
+	})
+	Response infer();	
 	
 	@POST
 	@Path("/")
+	@ApiOperation(value = "Cria lista de recurso", response = Response.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Recurso criado com sucesso"),
+			@ApiResponse(code = 500, message = "Falha ao criar recurso")
+	})
 	Response create(List<DatastoreTriple> triples);
 	
 	@POST
 	@Path("/query")
+	@ApiOperation(value = "Faz uma consulta por recurso", response = Response.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "App ok", response = QueryResult.class, responseContainer = "List"),
+			@ApiResponse(code = 500, message = "Erro interno")
+	})
 	Response query(ResourceObject resource, @QueryParam("radius") Double radius);
-
-	@GET
-	@Path("/infer")
-	Response infer();
-	
-	@GET
-	@Path("/")
-	Response query(@QueryParam("query") String query, @QueryParam("output") String output);
-
 
 
 }

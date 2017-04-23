@@ -44,7 +44,7 @@
 		<mantichub.version>1.0-SNAPSHOT</mantichub.version>
 
 		<mantichub.client.api.port>8080</mantichub.client.api.port>
-		<mantichub.datastore.port>8081</mantichub.datastore.port>
+		<mantichub.datastore.port>8080</mantichub.datastore.port>
 		<mantichub.agent.eventosusp.port>9090</mantichub.agent.eventosusp.port>
 		<mantichub.agent.guiadasemana.port>9091</mantichub.agent.guiadasemana.port>
 		<mantichub.agent.guiafolha.port>9092</mantichub.agent.guiafolha.port>
