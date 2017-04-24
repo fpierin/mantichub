@@ -111,5 +111,10 @@ public class EventoUspEventAdapter implements Event {
 	public String getUrl() {
 		return url;
 	}
+
+	@Override
+	public String getDescription() {
+		return getOverview();
+	}
 	
 }

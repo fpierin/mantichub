@@ -91,7 +91,6 @@ public class HTMLUtils {
 		try {
 			final String value = replace(valueByPattern(html, regexPattern), replacements);
 			final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern, locale);
-			System.out.println(html);
 			return StringUtils.isNotBlank(value) ? simpleDateFormat.parse(value) : null;
 		} catch (final Exception e) {
 			e.printStackTrace();

@@ -3,7 +3,9 @@ package com.mantichub.commons.resource;
 import java.util.Date;
 
 public interface Event {
-	
+
+	String getDescription();
+
 	Date getEndDate();
 
 	Date getEndTime();

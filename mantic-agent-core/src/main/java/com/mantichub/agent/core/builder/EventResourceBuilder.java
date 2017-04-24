@@ -18,6 +18,7 @@ public class EventResourceBuilder extends ResourceBuilder {
 	
 	private String addressRegion;
 	private String addressLocality;
+	private String description;
 	private String endDate;
 	private String endTime;
 	private Double latitude;
@@ -48,6 +49,7 @@ public class EventResourceBuilder extends ResourceBuilder {
 		addProperty(SCHEMA.latitude, latitude);
 		addProperty(SCHEMA.longitude, longitude);
 		addProperty(SCHEMA.overview, overview);
+		addProperty(SCHEMA.description, description);
 		addProperty(SCHEMA.price, price);
 		addProperty(SCHEMA.serviceURL, serviceUrl);
 		addProperty(SCHEMA.startDate, startDate);
@@ -66,6 +68,11 @@ public class EventResourceBuilder extends ResourceBuilder {
 		this.addressLocality = addressLocality;
 		return this;
 	}
+	
+	public EventResourceBuilder description(final String description) {
+		this.description = description;
+		return this;
+	}	
 	
 	public EventResourceBuilder endDate(final Date endDate) {
 		this.endDate = getString(endDate, dateFormat);
@@ -128,3 +135,4 @@ public class EventResourceBuilder extends ResourceBuilder {
 	}
 	
 }
+

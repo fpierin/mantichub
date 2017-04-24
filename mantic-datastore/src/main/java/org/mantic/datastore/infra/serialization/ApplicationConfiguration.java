@@ -12,12 +12,9 @@ public class ApplicationConfiguration {
 	public ApplicationConfiguration() {
 	}
 	
-	@Bean("serializationService")
+	@Bean()
 	public SerializationService serializationService() {
 		return new JsonSerializationServiceImpl();
-		
 	}
-	
-	
 
 }

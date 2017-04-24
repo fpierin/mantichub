@@ -14,17 +14,20 @@
 	<packaging>war</packaging>
 	<properties>
 		<app.port>8080</app.port>
+		<spring.version>3.2.18.RELEASE</spring.version>
+		<resteasy.version>2.3.5.Final</resteasy.version>
+		<swagger.version>1.5.13</swagger.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-jaxrs</artifactId>
-			<version>1.5.13</version>
+			<version>${swagger.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-annotations</artifactId>
-			<version>1.5.13</version>
+			<version>${swagger.version}</version>
 		</dependency>
 		
 		<dependency>
@@ -99,15 +102,9 @@
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jackson2-provider</artifactId>
+			<artifactId>resteasy-jackson-provider</artifactId>
 			<version>${resteasy.version}</version>
-		</dependency>		
-<!-- 			<version>2.3.5.Final</version> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.jboss.resteasy</groupId> -->
-<!-- 			<artifactId>resteasy-jackson-provider</artifactId> -->
-<!-- 			<version>2.3.5.Final</version> -->
-<!-- 		</dependency> -->
+		</dependency>
 
 		<!-- JMS -->
 		<dependency>

@@ -18,7 +18,12 @@ public class SCHEMA {
 	public static final Resource NAMESPACE = m_model.createResource(NS);
 	public static final Resource Event = retrieveResource("Event");
 	public static final Resource ExhibitionEvent = retrieveResource("ExhibitionEvent");
+	public static final Resource Festival = retrieveResource("Festival");
+	public static final Resource FoodEvent = retrieveResource("FoodEvent");
+	public static final Resource MusicEvent = retrieveResource("MusicEvent");
 	public static final Resource Restaurant = retrieveResource("Restaurant");
+	public static final Resource ScreeningEvent = retrieveResource("ScreeningEvent");
+	public static final Resource SocialEvent = retrieveResource("SocialEvent");
 	public static final Resource TheaterEvent = retrieveResource("TheaterEvent");
 	
 	public static final Property addressRegion = retrieveProperty("addressRegion");
@@ -38,8 +43,6 @@ public class SCHEMA {
 	public static final Property streetAddress = retrieveProperty("streetAddress");
 	public static final Property telephone = retrieveProperty("telephone");
 	public static final Property title = retrieveProperty("title");
-
-	
 
 	public static String getURI() {
 		return NS;

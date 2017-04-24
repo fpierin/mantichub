@@ -48,8 +48,13 @@ public abstract class DefaultAgent implements Agent {
 	
 	protected Model retrieveFromUrl(final int ammount, final String portalUrl, final String eventUrlPattern)
 			throws Exception {
-		final Model model = getRDFXMLFastWriter();
+		final Model model = getModel();
 		return retrieveFromUrl(ammount, portalUrl, eventUrlPattern, model);
+	}
+
+	protected Model getModel() {
+		final Model model = getRDFXMLFastWriter();
+		return model;
 	}
 	
 	protected Model retrieveFromUrl(final int ammount, final String portalUrl, final String eventUrlPattern,

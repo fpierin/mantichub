@@ -61,8 +61,7 @@
 		<property name="resourcePackage" value="org.mantic.datastore" />
 		<property name="title" value="Documentação da api de consulta" />
 		<property name="version" value="1.0.0" />
-		<property name="host" value="52.32.79.76" />
-<!-- 		<property name="host" value="localhost:8080" /> -->
+		<property name="host" value="integraweb.ddns.net" />
 		<property name="basePath" value="/api" />
 		<property name="scan" value="true" />
 	</bean>

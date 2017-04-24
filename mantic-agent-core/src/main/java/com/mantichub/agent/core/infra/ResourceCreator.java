@@ -18,6 +18,7 @@ public class ResourceCreator {
 				.price(o.getPrice())
 				.endDate(o.getEndDate())
 				.endTime(o.getEndTime())
+				.description(o.getDescription())
 				.latitude(o.getLatitude())
 				.longitude(o.getLongitude())
 				.overview(o.getOverview())

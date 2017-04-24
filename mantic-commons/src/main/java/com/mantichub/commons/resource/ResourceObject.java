@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class ResourceObject implements Event, Restaurant, Serializable {
+public class ResourceObject implements ResourceInterface {
 
 	private static final long serialVersionUID = -6633286043010778566L;
 

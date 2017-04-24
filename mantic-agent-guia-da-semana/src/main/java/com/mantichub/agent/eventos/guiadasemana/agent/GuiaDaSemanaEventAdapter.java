@@ -165,6 +165,11 @@ public class GuiaDaSemanaEventAdapter implements Event {
 		return url;
 	}
 
+	@Override
+	public String getDescription() {
+		return getOverview();
+	}
+
 }
 
 
