@@ -1,5 +1,53 @@
-<maps-header></maps-header>
+<nav id="mantic_menu" class="navbar navbar-toggleable-md navbar-light bg-faded">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="">
+    <i class="material-icons">person_pin</i> Mantic<strong>Hub</strong>
+  </a>
 
-<sebm-google-map [latitude]="lat" [longitude]="lng">
-    <sebm-google-map-marker [latitude]="lat" [longitude]="lng"></sebm-google-map-marker>
-</sebm-google-map>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="text" placeholder="O que deseja procurar">
+    </form>
+    <a (click)="getMarkers()" class="btn btn-primary" >Eventos</a>
+  </div>
+</nav>
+
+<agm-map [latitude]="initPos.lat" [longitude]="initPos.lng" [zoom]="zoom">
+    <agm-marker 
+        *ngFor="let marker of markers" 
+        [latitude]="marker.latitude" 
+        [longitude]="marker.longitude"
+         > <!--[iconUrl]="marker.iconUrl"-->
+    </agm-marker>
+</agm-map>
+
+<div class="right_container h-100">
+
+    <div class="col">
+        <div id="places" [hidden]="showDetail">
+            <div *ngFor="let marker of markers" class="list-group">
+                <a (click)="openDetail(marker)" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="box_image" [ngStyle]="{'background': 'url('+marker.image+') center no-repeat'}"></div>
+                    <h6 [ngStyle]="{'color':'#'+marker.color}" class="mb-1"><i class="material-icons">restaurant</i> {{marker.title}}</h6>
+                    <small> <i class="material-icons">date_range</i> 15/08/2017 - <i class="material-icons">alarm</i> 14h00 - {{marker.priceRange}}</small>
+                    <p class="mb-0 desc">{{marker.description | ellipsis:80}}</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="details" [hidden]="!showDetail">
+        
+        <figure>
+            <img src="{{detail?.image}}" class="img-fluid" alt="Responsive image">
+        </figure>
+
+        <div class="col">
+            <a (click)="hiddenDetail(marker)" class="btn btn-primary">voltar</a>
+            <h3>{{detail?.title}}</h3>
+            <p>{{detail?.description}}</p>
+        </div>
+    </div>
+</div>
