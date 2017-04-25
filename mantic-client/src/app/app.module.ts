@@ -5,7 +5,6 @@ import { HttpModule } from '@angular/http';
 
 import { routing } from './app.routing';
 import { AppComponent } from './app.component';
-import { SharedModule } from './shared/shared.module';
 import { MapsModule } from './maps/maps.module';
 
 @NgModule({
@@ -17,7 +16,6 @@ import { MapsModule } from './maps/maps.module';
     FormsModule,
     HttpModule,
     MapsModule,
-    SharedModule,
     routing
   ],
   providers: [],

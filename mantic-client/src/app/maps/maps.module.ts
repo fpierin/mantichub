@@ -1,20 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { AgmCoreModule } from 'angular2-google-maps/core';
-import { SharedModule } from './../shared/shared.module';
+import { AgmMap, AgmMarker } from '@agm/core';
+import { AgmCoreModule } from '@agm/core';
+import { MapsService } from './../services/maps.service';
+import { EllipsisPipe } from './../pipes/ellipsis.pipe';
 import { MapsComponent } from './maps.component';
 
 @NgModule({
-  declarations: [MapsComponent],
+  declarations: [
+    MapsComponent,
+    EllipsisPipe
+  ],
   imports: [
     CommonModule,
-    SharedModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyA00uWlZW9Pu7Xmfl8S5GJQYtAOi-Io0lg'
     })
   ],
-  exports:[MapsComponent],
-  providers: []
+  providers: [MapsService]
 })
 export class MapsModule { }
