@@ -9,7 +9,7 @@ import com.mantichub.agent.core.builder.EventResourceBuilder;
 import com.mantichub.agent.core.builder.RestaurantResourceBuilder;
 import com.mantichub.commons.constant.MantichubConstants;
 import com.mantichub.commons.resource.Event;
-import com.mantichub.commons.resource.Restaurant;
+import com.mantichub.commons.resource.FoodEstablishment;
 
 public class ResourceCreator {
 	
@@ -31,7 +31,7 @@ public class ResourceCreator {
 				.create();
 	}
 	
-	public static Resource build(final Model model, final Restaurant o) throws Exception {
+	public static Resource build(final Model model, final FoodEstablishment o) throws Exception {
 		return new RestaurantResourceBuilder(model, MantichubConstants.NAMESPACE)
 				.description(o.getDescription())
 				.latitude(o.getLatitude())

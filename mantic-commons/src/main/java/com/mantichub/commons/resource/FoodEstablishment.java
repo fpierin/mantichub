@@ -2,7 +2,7 @@ package com.mantichub.commons.resource;
 
 import java.util.List;
 
-public interface Restaurant {
+public interface FoodEstablishment {
 	
 	String getCuisine();
 

@@ -41,11 +41,7 @@ public class DatastoreServiceImpl implements DatastoreService {
 	@Override
 	public QueryResult query(final ResourceObject resource, final Double radius) {
 		final String queryString = queryService.buildQuery(resource, radius);
-		final String jsonResources = query(queryString, "json");
-		final QueryResult result = new QueryResult();
-		result.setSparqlQuery(queryString);
-		result.setResources(queryService.map(jsonResources));
-		return result;
+		return doQuery(queryString);
 	}
 
 	@Override
@@ -64,5 +60,18 @@ public class DatastoreServiceImpl implements DatastoreService {
 		final String result = datastoreRepository.query(query, output);
 		return result;
 	}
+
+	@Override
+	public QueryResult query(final String query, final Double radius) {
+		return doQuery(query);
+	}
+	
+	private QueryResult doQuery(final String queryString) {
+		final String jsonResources = query(queryString, "json");
+		final QueryResult result = new QueryResult();
+		result.setSparqlQuery(queryString);
+		result.setResources(queryService.map(jsonResources));
+		return result;
+	}	
 
 }

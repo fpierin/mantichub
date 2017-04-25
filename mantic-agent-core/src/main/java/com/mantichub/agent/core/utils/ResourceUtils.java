@@ -28,10 +28,18 @@ public class ResourceUtils {
 	public static Resource resourceFromName(final Resources resource) {
 		if (resource != null) {
 			switch (resource) {
+			case BarOrPub:
+				return SCHEMA.BarOrPub;
+			case DanceEvent:
+				return SCHEMA.DanceEvent;
+			case Event:
+				return SCHEMA.Event;				
 			case ExhibitionEvent:
 				return SCHEMA.ExhibitionEvent;
 			case Festival:
 				return SCHEMA.Festival;
+			case FoodEstablishment:
+				return SCHEMA.FoodEstablishment;				
 			case FoodEvent:
 				return SCHEMA.FoodEvent;
 			case MusicEvent:

@@ -12,9 +12,12 @@ public interface DatastoreService {
 
 	QueryResult query(ResourceObject resource, Double radius);
 
+	QueryResult query(String query, Double radius);
+	
 	String query(String query, String output);
 	
 	void infer();
+
 
 
 }

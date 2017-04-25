@@ -43,7 +43,17 @@ public interface DatastoreResource {
 			@ApiResponse(code = 200, message = "App ok", response = QueryResult.class, responseContainer = "List"),
 			@ApiResponse(code = 500, message = "Erro interno")
 	})
-	Response query(@QueryParam("query") String query);
+	Response query(@QueryParam("query") String query, @QueryParam("output") String output);
+	
+	@GET
+	@Path("/resources")
+	@ApiOperation(value = "Faz uma consulta por recurso", response = Response.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "App ok", response = QueryResult.class, responseContainer = "List"),
+			@ApiResponse(code = 500, message = "Erro interno")
+	})
+	Response resources(@QueryParam("query") String query, @QueryParam("radius") Double radius);
+	
 	
 	@GET
 	@Path("/infer")
@@ -71,6 +81,5 @@ public interface DatastoreResource {
 			@ApiResponse(code = 500, message = "Erro interno")
 	})
 	Response query(ResourceObject resource, @QueryParam("radius") Double radius);
-
 
 }
