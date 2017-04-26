@@ -68,6 +68,7 @@ public class GuiaDaSemanaAgent extends DefaultAgent implements Agent {
 	private void recupera(final Model model, final String cidade) throws Exception {
 		for (int i = 0; i < 12; i++) {
 			final String url = format(GUIA_SEMANA_PAGINACAO, cidade, i);
+			System.out.println("Buscando dados da url " + url);
 			final String html = httpAgent.htmlFromURL(url);
 			final GuiaDaSemanaAdapter guiaDaSemanaAdapter = new GuiaDaSemanaAdapter(url, html);
 			final List<String> resources = guiaDaSemanaAdapter.getResources();
