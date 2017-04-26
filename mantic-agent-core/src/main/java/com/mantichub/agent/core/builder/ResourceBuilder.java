@@ -15,8 +15,6 @@
 package com.mantichub.agent.core.builder;
 
 
-import static com.mantichub.core.util.StringUtils.normalize;
-
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
@@ -48,8 +46,7 @@ public class ResourceBuilder {
 	public ResourceBuilder resource(final String resourceName) {
 		try {
 			model.enterCriticalSection(Lock.WRITE);
-			final String resourceUri = projectNS + normalize(resourceName);
-			setResource(model.createResource(resourceUri));
+			setResource(model.createResource(projectNS + resourceName));
 		} finally {
 			model.leaveCriticalSection();
 

@@ -3,9 +3,10 @@ package org.mantic.datastore.query.service;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -17,8 +18,9 @@ import org.mantic.datastore.service.SparqlResponse;
 import org.mantic.datastore.service.SparqlResult;
 
 import com.mantichub.commons.resource.ResourceObject;
-import com.mantichub.core.serialization.JsonSerializationServiceImpl;
+import com.mantichub.commons.resource.Resources;
 import com.mantichub.core.serialization.SerializationService;
+import com.mantichub.core.util.StringUtils;
 
 @Named("queryService")
 public class QueryServiceImpl implements QueryService {
@@ -31,13 +33,17 @@ public class QueryServiceImpl implements QueryService {
 	}
 
 	@Override
-	public String buildQuery(final ResourceObject resource, final Double radius) {
-		return new QueryBuilder().withFilter(resource).withRadius(radius).build();
+	public String buildQuery(final ResourceObject resource, final Double radius, final Integer limit) {
+		return new QueryBuilder()
+				.withFilter(resource)
+				.withRadius(radius)
+				.withLimit(limit == null? 100 : limit)
+				.build();
 	}
 
 	@Override
-	public List<ResourceObject> map(final String json) {
-		final List<ResourceObject> resources = new ArrayList<>();
+	public Set<ResourceObject> map(final String json) {
+		final Set<ResourceObject> resources = new HashSet<>();
 		final SparqlResponse sparqlResponse = serializationService.toObject(json, SparqlResponse.class);
 		if (sparqlResponse != null) {
 			final SparqlResult results = sparqlResponse.getResults();
@@ -69,12 +75,13 @@ public class QueryServiceImpl implements QueryService {
 		rs.setStreetAddress(valueFromItem(b.getStreetAddress(), String.class));
 		rs.setTelephone(valueFromItem(b.getUrl(), String.class));
 		rs.setTitle(valueFromItem(b.getUrl(), String.class));
-//		 rs.setType(valueFromItem(b.get, String.class));
+		rs.setType(valueFromItem(b.getType(), Resources.class));
+		rs.setImage(valueFromItem(b.getImage(), String.class));
 		rs.setUrl(valueFromItem(b.getUrl(), String.class));
 		return rs;
 	}
 
-	private <T> T valueFromItem(final Item item, Class<T> clazz) {
+	private <T> T valueFromItem(final Item item, final Class<T> clazz) {
 		try {
 			if (item != null) {
 				Object obj = item.getValue();
@@ -87,6 +94,9 @@ public class QueryServiceImpl implements QueryService {
 					} else if (value.contains(":")) {
 						obj = parseDate(value, "HH:mm:ss");
 					}
+				} else if (clazz == Resources.class) {
+					final String value = item.getValue();
+					obj = resourceFromUri(value);
 				}
 				return clazz.cast(obj);
 			}
@@ -101,15 +111,13 @@ public class QueryServiceImpl implements QueryService {
 		return df.parse(value);
 	}
 
-	public static void main(String[] args) {
-		QueryService queryService = new QueryServiceImpl(new JsonSerializationServiceImpl());
-		Binding binding = new Binding();
-		Item item = new Item();
-		item.setValue("09:00:00");
-		binding.setStartDate(item);
-//		"2017-04-18" | "2017-04-18" | "09:00:00" | "18:00:00"
-		ResourceObject resourceFrom = queryService.resourceFrom(binding);
-		System.out.println(resourceFrom.getStartDate());
+	private static Resources resourceFromUri(final String url) {
+		if (StringUtils.isNotBlank(url)) {
+			final String value = url.substring(url.lastIndexOf("/") + 1, url.length());
+			return Resources.from(value);
+		} 
+		return null;
 	}
 
 }
+

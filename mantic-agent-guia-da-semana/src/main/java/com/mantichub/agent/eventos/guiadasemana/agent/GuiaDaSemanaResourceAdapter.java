@@ -19,6 +19,7 @@ public class GuiaDaSemanaResourceAdapter implements ResourceInterface {
 	
 	public static final String DESCRIPTION_PATTERN = "itemprop=\"description\">([^<]+)";
 	public static final String END_DATE_PATTERN = "itemprop=\"endDate\" datetime=\"([^\"]+)\"";
+	public static final String IMAGE_PATTERN = "itemprop=\"image\" content=\"([^\"]+)\"";
 	public static final String LATITUDE_PATTERN = "itemprop=\"latitude\" content=\"([^\"]+)\"";
 	public static final String LONGITITUDE_PATTERN = "itemprop=\"longitude\" content=\"([^\"]+)\"";
 	public static final String START_DATE_PATTERN = "itemprop=\"startDate\" datetime=\"([^\"]+)\"";
@@ -158,6 +159,11 @@ public class GuiaDaSemanaResourceAdapter implements ResourceInterface {
 
 	public void setHtml(final String html) {
 		this.html = html;
+	}
+
+	@Override
+	public String getImage() {
+		return valueByPattern(html, IMAGE_PATTERN);
 	}
 
 

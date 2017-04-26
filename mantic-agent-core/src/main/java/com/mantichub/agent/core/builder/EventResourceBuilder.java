@@ -1,7 +1,6 @@
 package com.mantichub.agent.core.builder;
 
 import static com.mantichub.core.util.DateUtils.getString;
-import static com.mantichub.core.util.StringUtils.isNotBlank;
 import static com.mantichub.core.util.StringUtils.md5;
 import static com.mantichub.core.vocabulary.SCHEMA.dateFormat;
 import static com.mantichub.core.vocabulary.SCHEMA.datetimeFormat;
@@ -31,6 +30,7 @@ public class EventResourceBuilder extends ResourceBuilder {
 	private String streetAddress;
 	private Resource type;
 	private String title;
+	private String image;
 	
 	public EventResourceBuilder(final Model model, final String projectNS) {
 		super(model, projectNS);
@@ -38,18 +38,18 @@ public class EventResourceBuilder extends ResourceBuilder {
 	
 	public Resource create() throws Exception {
 		if (getResource() == null) {
-			final String resourceName = isNotBlank(title) ? title : md5(serviceUrl);
-			resource(resourceName);
+			resource(md5(serviceUrl));
 		}
 		addProperty(RDF.type, type);
 		addProperty(SCHEMA.addressRegion, addressRegion);
 		addProperty(SCHEMA.addressLocality, addressLocality);
+		addProperty(SCHEMA.description, description);
 		addProperty(SCHEMA.endDate, endDate);
 		addProperty(SCHEMA.endTime, endTime);
+		addProperty(SCHEMA.image, image);
 		addProperty(SCHEMA.latitude, latitude);
 		addProperty(SCHEMA.longitude, longitude);
 		addProperty(SCHEMA.overview, overview);
-		addProperty(SCHEMA.description, description);
 		addProperty(SCHEMA.price, price);
 		addProperty(SCHEMA.serviceURL, serviceUrl);
 		addProperty(SCHEMA.startDate, startDate);
@@ -131,6 +131,11 @@ public class EventResourceBuilder extends ResourceBuilder {
 	
 	public EventResourceBuilder title(final String title) {
 		this.title = title;
+		return this;
+	}
+
+	public EventResourceBuilder image(String image) {
+		this.image = image;
 		return this;
 	}
 	

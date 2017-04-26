@@ -6,7 +6,7 @@ import static com.mantichub.core.util.HTMLUtils.trim;
 import static com.mantichub.core.util.HTMLUtils.trimValueByPattern;
 import static com.mantichub.core.util.HTMLUtils.valueByPattern;
 import static com.mantichub.core.util.HTMLUtils.valueListByPattern;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static com.mantichub.core.util.StringUtils.isNotBlank;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +22,7 @@ public class GuiaDaFolhaRestaurantAdapter implements ResourceInterface {
 	
 	private static final String CUISINE_PATTERN = "Restaurantes[^s]*<span>([^<]*)";
 	private static final String DESCRIPTION_PATTERN = "js-content-article event__summary[^<]*<p>([^<]*)";
+	private static final String IMAGE_PATTERN = "featured-image\">[^<]*<img src=\"([^\"]+)";
 	private static final String LATITUDE_PATTERN = "<span class=\"js-map-address\" data-value=\"[^-]*([^\\s\\n]*)";
 	private static final String LONGITITUDE_PATTERN = "<span class=\"js-map-address\" data-value=\"[^-]*-[^-]*([^\\s\\n]*)";
 	private static final String OPENING_HOURS_PATTERN = "([\\w]{3}).: (\\d{1,2})h às (\\d{1,2})h";
@@ -30,7 +31,6 @@ public class GuiaDaFolhaRestaurantAdapter implements ResourceInterface {
 	private static final String TELEPHONE_PATTERN = "Telefone[^td>]*td>[\\s\\n]+<td>[\\s\\n]+([0-9\\-]+)";
 	private static final String TITLE_PATTERN = "content-header__title\">(.+?)</h1>";
 	private static final String TYPE_PATTERN = "<div class=\"content-header__labels\">((?:(?!</div>).)*)</div>";
-	
 	
 	private final String html;
 	private final String url;
@@ -170,6 +170,15 @@ public class GuiaDaFolhaRestaurantAdapter implements ResourceInterface {
 	public Double getPrice() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getImage() {
+		String valueByPattern = valueByPattern(html, IMAGE_PATTERN);
+		if (isNotBlank(valueByPattern) && valueByPattern.startsWith("//")) {
+			valueByPattern = "http:" + valueByPattern;
+		}
+		return valueByPattern;
 	}
 	
 }

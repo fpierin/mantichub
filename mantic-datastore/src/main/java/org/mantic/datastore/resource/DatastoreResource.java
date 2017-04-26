@@ -40,7 +40,7 @@ public interface DatastoreResource {
 	@Path("/")
 	@ApiOperation(value = "Faz uma consulta por recurso", response = Response.class)
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "App ok", response = QueryResult.class, responseContainer = "List"),
+			@ApiResponse(code = 200, message = "App ok", response = QueryResult.class),
 			@ApiResponse(code = 500, message = "Erro interno")
 	})
 	Response query(@QueryParam("query") String query, @QueryParam("output") String output);
@@ -49,7 +49,7 @@ public interface DatastoreResource {
 	@Path("/resources")
 	@ApiOperation(value = "Faz uma consulta por recurso", response = Response.class)
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "App ok", response = QueryResult.class, responseContainer = "List"),
+			@ApiResponse(code = 200, message = "App ok", response = QueryResult.class, responseContainer = "Set"),
 			@ApiResponse(code = 500, message = "Erro interno")
 	})
 	Response resources(@QueryParam("query") String query, @QueryParam("radius") Double radius);
@@ -62,7 +62,7 @@ public interface DatastoreResource {
 			@ApiResponse(code = 200, message = "Inferências realizadas"),
 			@ApiResponse(code = 500, message = "Erro interno")
 	})
-	Response infer();	
+	Response infer(@QueryParam("url") String url);
 	
 	@POST
 	@Path("/")
@@ -77,9 +77,9 @@ public interface DatastoreResource {
 	@Path("/query")
 	@ApiOperation(value = "Faz uma consulta por recurso", response = Response.class)
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "App ok", response = QueryResult.class, responseContainer = "List"),
+			@ApiResponse(code = 200, message = "App ok", response = QueryResult.class, responseContainer = "Set"),
 			@ApiResponse(code = 500, message = "Erro interno")
 	})
-	Response query(ResourceObject resource, @QueryParam("radius") Double radius);
+	Response query(ResourceObject resource, @QueryParam("radius") Double radius, @QueryParam("limit") Integer limit);
 
 }

@@ -8,6 +8,8 @@ public interface FoodEstablishment {
 
 	String getDescription();
 	
+	String getImage();
+	
 	Double getLatitude();
 
 	Double getLongitude();

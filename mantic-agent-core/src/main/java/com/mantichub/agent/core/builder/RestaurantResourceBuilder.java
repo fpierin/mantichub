@@ -1,6 +1,5 @@
 package com.mantichub.agent.core.builder;
 
-import static com.mantichub.core.util.StringUtils.isNotBlank;
 import static com.mantichub.core.util.StringUtils.md5;
 
 import java.util.List;
@@ -16,6 +15,7 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 	private String addressRegion;
 	private String addressLocality;
 	private String description;
+	private String image;
 	private Double latitude;
 	private Double longitude;
 	private List<String> openingHours;
@@ -32,8 +32,7 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 
 	public Resource create() throws Exception {
 		if (getResource() == null) {
-			final String resourceName = isNotBlank(title) ? title : md5(serviceUrl);
-			resource(resourceName);
+			resource(md5(serviceUrl));
 		}
 		addProperty(RDF.type, type);
 		addProperty(SCHEMA.addressRegion, addressRegion);
@@ -46,6 +45,7 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 				addProperty(SCHEMA.openingHours, openingHour);
 			});
 		}
+		addProperty(SCHEMA.image, image);
 		addProperty(SCHEMA.priceRange, priceRange);
 		addProperty(SCHEMA.serviceURL, serviceUrl);
 		addProperty(SCHEMA.streetAddress, streetAddress);
@@ -114,5 +114,9 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 		return this;
 	}
 
+	public RestaurantResourceBuilder image(String image) {
+		this.image = image;
+		return this;
+	}
 
 }

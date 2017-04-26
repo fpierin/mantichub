@@ -7,7 +7,7 @@ public class Configuration {
 			"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n" + 
 			"PREFIX mantichub:<chttp://www.wemantic.com/events#>\n" + 
 			"PREFIX schema:<http://schema.org/>\n" + 
-			"SELECT " + 
+			"SELECT DISTINCT" + 
 				"?title ?latitude ?longitude ?startDate ?endDate ?startTime ?endTime " +
 				"?cuisine ?description ?priceRange ?telephone ?overview ?streetAddress " +
 				"?price ?typeObj ?type ?url \n" +
@@ -15,7 +15,8 @@ public class Configuration {
 			"	?s schema:title ?titleObj ;\n" + 
 			"	schema:latitude ?latitudeObj ;\n" + 
 			"	schema:longitude ?longitudeObj ;\n" +
-			"	rdf:type ?typeObj .\n" +
+			"	rdf:type ?typeObj ;\n" +
+			"	rdf:type {rdfType} .\n" +
 			"	OPTIONAL { ?s schema:cuisine ?cuisineObj }\n" +
 			"	OPTIONAL { ?s schema:description ?descriptionObj }\n" +
 			"	OPTIONAL { ?s schema:endDate ?endDateObj }\n" + 
@@ -45,5 +46,6 @@ public class Configuration {
 			"	BIND ( strafter( str(?endTimeObj), \"T\" ) as ?endTime )\n" + 
 			"	BIND ( strafter( str(?startTimeObj), \"T\" ) as ?startTime )\n" +
 			"{filtering} " +
-			"}";
+			"}\n"
+			+"{limit}";
 }

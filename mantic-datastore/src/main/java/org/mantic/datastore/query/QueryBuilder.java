@@ -17,12 +17,23 @@ public class QueryBuilder {
 	
 	private ResourceObject resource;
 	private Double radius;
+	private Integer limit = 0;
 
 	
 	public QueryBuilder withFilter(final ResourceObject resource) {
 		this.resource = resource;
 		return this;
 	}
+	
+	public QueryBuilder withNoLimit() {
+		this.limit = 0;
+		return this;
+	}
+	
+	public QueryBuilder withLimit(final Integer limit) {
+		this.limit = limit;
+		return this;
+	}		
 	
 	public QueryBuilder withRadius(final Double radius) {
 		this.radius = radius;
@@ -32,7 +43,15 @@ public class QueryBuilder {
 	public String build() {
 		return BASIC_SPARQL_QUERY
 				.replace("{rdfType}", rdfType())
-				.replace("{filtering}", filtering());
+				.replace("{filtering}", filtering())
+				.replace("{limit}", limit());
+	}
+
+	private String limit() {
+		if (limit == null || limit == 0) {
+			return "";
+		}
+		return "LIMIT " + limit;
 	}
 
 	private String rdfType() {
@@ -56,7 +75,6 @@ public class QueryBuilder {
 			filter(sb, "?url", "=", resource.getUrl());
 			addDateFilter(sb);
 			addTimeFilter(sb);
-			addTypeFilter(sb);
 			addLatitudeFilter(sb);
 		}
 		return sb.toString();
@@ -92,15 +110,6 @@ public class QueryBuilder {
 		}
 	}
 
-	private void addTypeFilter(final StringBuilder sb) {
-		String typeName = "Resource";
-		final Resources type = resource.getType();
-		if (type != null) {
-			typeName = type.name(); 
-		}
-		filter(sb, "?type", "=", typeName);	
-	}
-
 	private void addLatitudeFilter(final StringBuilder sb) {
 		if (radius == null) {
 			filter(sb, "?latitude", "=", resource.getLatitude());
@@ -132,16 +141,14 @@ public class QueryBuilder {
 	
 	public static void main(final String[] args) {
 		final ResourceObject resource = new ResourceObject();
-		resource.setStartDate(new Date());
-		resource.setEndDate(new Date());
+		resource.setType(Resources.ExhibitionEvent);
 		System.out.println(new QueryBuilder()
 //				.withRadius(new Double(0.5))
 				.withFilter(resource)
+				.withLimit(100)
 				.build());
+//				-23.569518, -46.69407
 	}
 	
 
 }
-
-
-

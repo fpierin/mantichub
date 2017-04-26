@@ -6,20 +6,22 @@ public class Binding implements Serializable {
 
 	private static final long serialVersionUID = -9097256964833028192L;
 	
-	private Item title;
-	private Item latitude;
-	private Item longitude;
-	private Item startDate;
-	private Item endDate;
-	private Item startTime;
-	private Item endTime;
 	private Item cuisine;
 	private Item description;
-	private Item priceRange;
-	private Item telephone;
+	private Item endDate;
+	private Item endTime;
+	private Item image;
+	private Item latitude;
+	private Item longitude;
 	private Item overview;
-	private Item streetAddress;
 	private Item price;
+	private Item priceRange;
+	private Item startDate;
+	private Item startTime;
+	private Item streetAddress;
+	private Item telephone;
+	private Item title;
+	private Item type;
 	private Item url;
 
 	public Binding() {
@@ -152,6 +154,22 @@ public class Binding implements Serializable {
 				+ ", cuisine=" + cuisine + ", description=" + description + ", priceRange=" + priceRange
 				+ ", telephone=" + telephone + ", overview=" + overview + ", streetAddress=" + streetAddress
 				+ ", price=" + price + ", url=" + url + "]";
+	}
+
+	public Item getImage() {
+		return image;
+	}
+
+	public void setImage(Item image) {
+		this.image = image;
+	}
+
+	public Item getType() {
+		return type;
+	}
+
+	public void setType(Item type) {
+		this.type = type;
 	}
 
 }

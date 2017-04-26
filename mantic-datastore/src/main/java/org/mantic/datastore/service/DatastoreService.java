@@ -10,13 +10,14 @@ public interface DatastoreService {
 	
 	void create(List<DatastoreTriple> triples);
 
-	QueryResult query(ResourceObject resource, Double radius);
+	QueryResult query(ResourceObject resource, Double radius, Integer limit);
 
 	QueryResult query(String query, Double radius);
 	
 	String query(String query, String output);
 	
-	void infer();
+	void infer(String url);
+
 
 
 

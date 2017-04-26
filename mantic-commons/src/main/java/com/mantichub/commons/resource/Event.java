@@ -10,6 +10,8 @@ public interface Event {
 
 	Date getEndTime();
 
+	String getImage();
+	
 	Double getLatitude();
 
 	Double getLongitude();

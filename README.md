@@ -303,3 +303,8 @@ SELECT ?tit ?lat ?lon ?sDate ?eDate ?sTime ?eTime WHERE {
 	FILTER (?lon > '-46.635131478901144' && ?lon < '-46.64494812109885')
 }
 ORDER BY (?lat)
+
+
+
+### inferencias
+http://integraweb.ddns.net/api/infer?url=http%3A%2F%2Ftopbraid.org%2Fschema%2Fschema.rdf

@@ -15,13 +15,14 @@ public class ResourceCreator {
 	
 	public static Resource build(final Model model, final Event o) throws Exception {
 		return new EventResourceBuilder(model, MantichubConstants.NAMESPACE)
-				.price(o.getPrice())
+				.description(o.getDescription())
 				.endDate(o.getEndDate())
 				.endTime(o.getEndTime())
-				.description(o.getDescription())
+				.image(o.getImage())
 				.latitude(o.getLatitude())
 				.longitude(o.getLongitude())
 				.overview(o.getOverview())
+				.price(o.getPrice())
 				.serviceUrl(o.getUrl())
 				.startDate(o.getStartDate())
 				.startTime(o.getStartTime())
@@ -34,6 +35,7 @@ public class ResourceCreator {
 	public static Resource build(final Model model, final FoodEstablishment o) throws Exception {
 		return new RestaurantResourceBuilder(model, MantichubConstants.NAMESPACE)
 				.description(o.getDescription())
+				.image(o.getImage())
 				.latitude(o.getLatitude())
 				.longitude(o.getLongitude())
 				.openingHours(o.getOpeningHours())

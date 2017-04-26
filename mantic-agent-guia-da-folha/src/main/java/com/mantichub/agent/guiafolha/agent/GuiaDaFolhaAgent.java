@@ -1,9 +1,10 @@
 package com.mantichub.agent.guiafolha.agent;
 
+import static com.mantichub.commons.resource.Resources.BarOrPub;
+import static com.mantichub.commons.resource.Resources.Restaurant;
 import static com.mantichub.core.util.HTMLUtils.setByPattern;
 import static java.text.MessageFormat.format;
 
-import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,9 +20,9 @@ import com.mantichub.agent.core.infra.DefaultAgent;
 import com.mantichub.agent.core.infra.ResourceCreator;
 import com.mantichub.agent.guiafolha.config.Configuration;
 import com.mantichub.commons.resource.Event;
+import com.mantichub.commons.resource.FoodEstablishment;
 import com.mantichub.commons.resource.ResourceInterface;
 import com.mantichub.commons.resource.Resources;
-import com.mantichub.commons.resource.FoodEstablishment;
 
 public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 
@@ -64,7 +65,6 @@ public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 		if (galleryHtml.contains(format("class=\"pagination__page\">{0}</a>", index +1))) {
 			return extrair(m, objeto, index + 1);
 		}
-		System.out.println(galleryHtml);
 		return m;
 	}
 
@@ -85,7 +85,7 @@ public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 		try {
 			final ResourceInterface ri = new GuiaDaFolhaRestaurantAdapter(url, html);
 			final Resources type = ri.getType();
-			if (Resources.Restaurant.equals(type)) {
+			if (BarOrPub.equals(type) || Restaurant.equals(type)) {
 				return ResourceCreator.build(model, (FoodEstablishment) ri);
 			}
 			return ResourceCreator.build(model, (Event) ri);
