@@ -73,8 +73,8 @@ public class QueryServiceImpl implements QueryService {
 		rs.setStartDate(valueFromItem(b.getStartDate(), Date.class));
 		rs.setStartTime(valueFromItem(b.getStartTime(), Date.class));
 		rs.setStreetAddress(valueFromItem(b.getStreetAddress(), String.class));
-		rs.setTelephone(valueFromItem(b.getUrl(), String.class));
-		rs.setTitle(valueFromItem(b.getUrl(), String.class));
+		rs.setTelephone(valueFromItem(b.getTelephone(), String.class));
+		rs.setTitle(valueFromItem(b.getTitle(), String.class));
 		rs.setType(valueFromItem(b.getType(), Resources.class));
 		rs.setImage(valueFromItem(b.getImage(), String.class));
 		rs.setUrl(valueFromItem(b.getUrl(), String.class));

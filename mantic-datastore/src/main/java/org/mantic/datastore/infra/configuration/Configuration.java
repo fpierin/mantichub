@@ -7,10 +7,10 @@ public class Configuration {
 			"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n" + 
 			"PREFIX mantichub:<chttp://www.wemantic.com/events#>\n" + 
 			"PREFIX schema:<http://schema.org/>\n" + 
-			"SELECT DISTINCT" + 
+			"SELECT DISTINCT " + 
 				"?title ?latitude ?longitude ?startDate ?endDate ?startTime ?endTime " +
 				"?cuisine ?description ?priceRange ?telephone ?overview ?streetAddress " +
-				"?price ?typeObj ?type ?url \n" +
+				"?price ?typeObj ?type ?url ?image \n" +
 			"WHERE {\n" + 
 			"	?s schema:title ?titleObj ;\n" + 
 			"	schema:latitude ?latitudeObj ;\n" + 
@@ -28,7 +28,8 @@ public class Configuration {
 			"	OPTIONAL { ?s schema:startTime ?startTimeObj }\n" + 
 			"	OPTIONAL { ?s schema:streetAddress ?streetAddressObj }	\n" +
 			"	OPTIONAL { ?s schema:telephone ?telephoneObj }\n" +
-			"	OPTIONAL { ?s schema:url ?urlObj }\n" +
+			"	OPTIONAL { ?s schema:serviceURL ?urlObj }\n" +
+			"	OPTIONAL { ?s schema:image ?imageObj }\n" +
 			"	BIND (str(?titleObj) as ?title)\n" + 
 			"	BIND (str(?latitudeObj) as ?latitude)\n" + 
 			"	BIND (str(?longitudeObj) as ?longitude)\n" + 
@@ -42,6 +43,7 @@ public class Configuration {
 			"	BIND (str(?streetAddressObj) as ?streetAddress)\n" +
 			"	BIND (str(?telephoneObj) as ?telephone)\n" +
 			"	BIND (str(?urlObj) as ?url)\n" +
+			"	BIND (str(?imageObj) as ?image)\n" +
 			"	BIND ( strafter(strafter( str(?typeObj), \"http://\" ),\"/\") as ?type )\n" +
 			"	BIND ( strafter( str(?endTimeObj), \"T\" ) as ?endTime )\n" + 
 			"	BIND ( strafter( str(?startTimeObj), \"T\" ) as ?startTime )\n" +

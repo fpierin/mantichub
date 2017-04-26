@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.mantichub.commons.resource.ResourceObject;
-import com.mantichub.commons.resource.Resources;
 import com.mantichub.core.domain.GeoCoordinates;
 import com.mantichub.core.util.GeoUtils;
 
@@ -141,11 +140,11 @@ public class QueryBuilder {
 	
 	public static void main(final String[] args) {
 		final ResourceObject resource = new ResourceObject();
-		resource.setType(Resources.ExhibitionEvent);
+//		resource.setType(Resources.ExhibitionEvent);
 		System.out.println(new QueryBuilder()
 //				.withRadius(new Double(0.5))
 				.withFilter(resource)
-				.withLimit(100)
+				.withLimit(1000)
 				.build());
 //				-23.569518, -46.69407
 	}

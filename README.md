@@ -232,7 +232,7 @@ SELECT ?tit ?sDate ?eDate ?sTime ?eTime WHERE {
 	BIND (str(?endDate) as ?eDate)
 	bind( strafter( str(?startTime), "T" ) as ?sTime )
 	bind( strafter( str(?endTime), "T" ) as ?eTime )
-	FILTER (?lat = '-21.171446' && ?lon = '-47.860565')
+	FILTER (?lat = '-23.6338591' && ?lon = '-46.7327655')
 }
 ORDER BY DESC (?startDate)
 
@@ -308,3 +308,48 @@ ORDER BY (?lat)
 
 ### inferencias
 http://integraweb.ddns.net/api/infer?url=http%3A%2F%2Ftopbraid.org%2Fschema%2Fschema.rdf
+
+
+PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>
+PREFIX mantichub:<chttp://www.wemantic.com/events#>
+PREFIX schema:<http://schema.org/>
+SELECT DISTINCT ?title ?latitude ?longitude ?startDate ?endDate ?startTime ?endTime ?cuisine ?description ?priceRange ?telephone ?overview ?streetAddress ?price ?typeObj ?type ?url ?image 
+WHERE {
+	?s schema:title ?titleObj ;
+	schema:latitude ?latitudeObj ;
+	schema:longitude ?longitudeObj ;
+	rdf:type ?typeObj ;
+	rdf:type rdfs:Resource .
+	OPTIONAL { ?s schema:cuisine ?cuisineObj }
+	OPTIONAL { ?s schema:description ?descriptionObj }
+	OPTIONAL { ?s schema:endDate ?endDateObj }
+	OPTIONAL { ?s schema:endTime ?endTimeObj }	
+	OPTIONAL { ?s schema:overview ?overviewObj }
+	OPTIONAL { ?s schema:price ?priceObj }	
+	OPTIONAL { ?s schema:priceRange ?priceRangeObj }
+	OPTIONAL { ?s schema:startDate ?startDateObj }
+	OPTIONAL { ?s schema:startTime ?startTimeObj }
+	OPTIONAL { ?s schema:streetAddress ?streetAddressObj }	
+	OPTIONAL { ?s schema:telephone ?telephoneObj }
+	OPTIONAL { ?s schema:url ?urlObj }
+	OPTIONAL { ?s schema:image ?imageObj }
+	BIND (str(?titleObj) as ?title)
+	BIND (str(?latitudeObj) as ?latitude)
+	BIND (str(?longitudeObj) as ?longitude)
+	BIND (str(?cuisineObj) as ?cuisine)
+	BIND (str(?descriptionObj) as ?description)
+	BIND (str(?endDateObj) as ?endDate)
+	BIND (str(?overviewObj) as ?overview)
+	BIND (str(?priceObj) as ?price)
+	BIND (str(?priceRangeObj) as ?priceRange)
+	BIND (str(?startDateObj) as ?startDate)
+	BIND (str(?streetAddressObj) as ?streetAddress)
+	BIND (str(?telephoneObj) as ?telephone)
+	BIND (str(?urlObj) as ?url)
+	BIND (str(?imageObj) as ?image)
+	BIND ( strafter(strafter( str(?typeObj), "http://" ),"/") as ?type )
+	BIND ( strafter( str(?endTimeObj), "T" ) as ?endTime )
+	BIND ( strafter( str(?startTimeObj), "T" ) as ?startTime )
+ }
+LIMIT 1000
