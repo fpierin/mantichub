@@ -85,6 +85,7 @@ li{
     border-right: 1px solid #DDD;
     width: 30%;
     max-width: 450px;
+    height: calc(100% - 56px) !important ;
 
     p{
         font-size: 14px;
@@ -114,6 +115,18 @@ li{
     height: 100%;
     background-size: cover !important;
     border-right: 1px solid #DDD;
+    background-color: #8cbf44;
+
+    .material-icons{
+        position: absolute;
+        margin: auto;
+        color: lighten(#8cbf44, 20%);;
+        top: 50%;
+        margin-top: -15px;
+        font-size: 30px;
+        text-align: center;
+        width: 100%;
+    }
 }
 
 .details{

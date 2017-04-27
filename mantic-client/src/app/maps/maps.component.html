@@ -23,15 +23,19 @@
     </agm-marker>
 </agm-map>
 
-<div class="right_container h-100">
+<div class="right_container">
 
     <div class="col">
         <div id="places" [hidden]="showDetail">
             <div *ngFor="let marker of markers" class="list-group">
                 <a (click)="openDetail(marker)" class="list-group-item list-group-item-action flex-column align-items-start">
-                    <div class="box_image" [ngStyle]="{'background': 'url('+marker.image+') center no-repeat'}"></div>
-                    <h6 [ngStyle]="{'color':'#'+marker.color}" class="mb-1"><i class="material-icons">restaurant</i> {{marker.title}}</h6>
-                    <small> <i class="material-icons">date_range</i> 15/08/2017 - <i class="material-icons">alarm</i> 14h00 - {{marker.priceRange}}</small>
+                    <div *ngIf="marker.image" class="box_image" [ngStyle]="{'background': 'url('+marker.image+') center no-repeat'}"></div>
+                    <div *ngIf="!marker.image" class="box_image"><i class="material-icons">album</i></div>
+                    <h6 [ngStyle]="{'color':'#'+marker.color}" class="mb-1"><i class="material-icons">album</i> {{marker.title}}</h6>
+                    <small>
+                        <i *ngIf="marker.startDate" class="material-icons">date_range</i> {{marker.startDate | date: 'dd/MM/yyyy'}} - <i class="material-icons">alarm</i> {{marker.startDate | date: 'HH'}}h{{marker.startDate | date: 'mm'}}
+                        <ng-container *ngIf="marker.priceRange"> - {{marker.priceRange}}</ng-container>
+                    </small>
                     <p class="mb-0 desc">{{marker.description | ellipsis:80}}</p>
                 </a>
             </div>

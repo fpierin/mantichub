@@ -38,7 +38,7 @@ export class MapsComponent implements OnInit {
   }
 
   getMarkers(){
-    this.mapsService.getMarkers({ "type": "ExhibitionEvent" })
+    this.mapsService.getMarkers({ "type": "MusicEvent" })
       .then( (res:any) => {
         this.markers = res.resources
         console.log(this.markers);
