@@ -9,7 +9,7 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class MapsService {
   
-  private url = 'http://integraweb.ddns.net/api/query'
+  private url = 'http://integraweb.ddns.net/api/query?radius=100&limit=10000'
 
   constructor(
     private http: Http

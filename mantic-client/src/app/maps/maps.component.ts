@@ -38,7 +38,10 @@ export class MapsComponent implements OnInit {
   }
 
   getMarkers(){
-    this.mapsService.getMarkers({ "type": "MusicEvent" })
+    this.mapsService.getMarkers({
+       "latitude": -22.892855,
+       "longitude": -43.195334
+      })
       .then( (res:any) => {
         this.markers = res.resources
         console.log(this.markers);

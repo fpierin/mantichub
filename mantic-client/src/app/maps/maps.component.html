@@ -36,7 +36,7 @@
                         <i *ngIf="marker.startDate" class="material-icons">date_range</i> {{marker.startDate | date: 'dd/MM/yyyy'}} - <i class="material-icons">alarm</i> {{marker.startDate | date: 'HH'}}h{{marker.startDate | date: 'mm'}}
                         <ng-container *ngIf="marker.priceRange"> - {{marker.priceRange}}</ng-container>
                     </small>
-                    <p class="mb-0 desc">{{marker.description | ellipsis:80}}</p>
+                    <p class="mb-0 desc">{{marker.description}}</p>
                 </a>
             </div>
         </div>
@@ -52,6 +52,17 @@
             <a (click)="hiddenDetail(marker)" class="btn btn-primary">voltar</a>
             <h3>{{detail?.title}}</h3>
             <p>{{detail?.description}}</p>
+            <p>{{detail?.telephone}}</p>
+            <p>{{detail?.range}}</p>
+            <p>{{detail?.startDate | date: 'dd/MM'}}</p>
+            <p>{{detail?.endDate | date: 'dd/MM'}}</p>
+            <p>{{detail?.startTime | date: 'HH:mm'}}</p>
+            <p>{{detail?.endTime | date: 'HH:mm'}}</p>
+            <p>{{detail?.streetAddress}}</p>
+            <p>{{detail?.url}}</p>
+            <p>{{detail?.type}}</p>
+            <p>{{detail?.openingHours}}</p>
+            <p>{{detail?.cuisine}}</p>
         </div>
     </div>
 </div>
