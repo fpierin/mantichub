@@ -14,6 +14,7 @@ import org.mantic.datastore.repository.DatastoreRepository;
 import com.mantichub.commons.domain.DatastoreTriple;
 import com.mantichub.commons.domain.QueryResult;
 import com.mantichub.commons.resource.ResourceObject;
+import com.mantichub.core.util.StringUtils;
 
 @Named("datastoreService")
 public class DatastoreServiceImpl implements DatastoreService {
@@ -39,21 +40,19 @@ public class DatastoreServiceImpl implements DatastoreService {
 	}
 
 	@Override
-	public QueryResult query(final ResourceObject resource, final Double radius) {
-		final String queryString = queryService.buildQuery(resource, radius);
-		final String jsonResources = query(queryString, "json");
-		final QueryResult result = new QueryResult();
-		result.setSparqlQuery(queryString);
-		result.setResources(queryService.map(jsonResources));
-		return result;
+	public QueryResult query(final ResourceObject resource, final Double radius, final Integer limit) {
+		final String queryString = queryService.buildQuery(resource, radius, limit);
+		return doQuery(queryString);
 	}
 
 	@Override
-	public void infer() {
+	public void infer(final String url) {
 		try {
-			datastoreRepository.infer("http://topbraid.org/schema/schema.rdf");
-			datastoreRepository.infer();
-			//			datastoreRepository.infer(messageProducer, "http://topbraid.org/schema/schema.rdf");
+			if (StringUtils.isBlank(url)) {
+				datastoreRepository.infer();
+			} else {
+				datastoreRepository.infer(url);
+			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -64,5 +63,18 @@ public class DatastoreServiceImpl implements DatastoreService {
 		final String result = datastoreRepository.query(query, output);
 		return result;
 	}
+
+	@Override
+	public QueryResult query(final String query, final Double radius) {
+		return doQuery(query);
+	}
+	
+	private QueryResult doQuery(final String queryString) {
+		final String jsonResources = query(queryString, "json");
+		final QueryResult result = new QueryResult();
+		result.setSparqlQuery(queryString);
+		result.setResources(queryService.map(jsonResources));
+		return result;
+	}	
 
 }

@@ -1,7 +1,7 @@
-	package com.mantichub.commons.domain;
+package com.mantichub.commons.domain;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import com.mantichub.commons.resource.ResourceObject;
 
@@ -10,7 +10,7 @@ public class QueryResult implements Serializable {
 	private static final long serialVersionUID = 7971740297655348343L;
 
 	private String sparqlQuery;
-	private List<ResourceObject> resources;
+	private Set<ResourceObject> resources;
 	
 	public QueryResult() {
 	}
@@ -19,7 +19,7 @@ public class QueryResult implements Serializable {
 		this.sparqlQuery = sparqlQuery;
 	}
 
-	public void setResources(final List<ResourceObject> resources) {
+	public void setResources(final Set<ResourceObject> resources) {
 		this.resources = resources;
 	}
 
@@ -27,7 +27,7 @@ public class QueryResult implements Serializable {
 		return sparqlQuery;
 	}
 
-	public List<ResourceObject> getResources() {
+	public Set<ResourceObject> getResources() {
 		return resources;
 	}
 

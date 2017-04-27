@@ -11,12 +11,12 @@ import org.junit.Test;
 
 import com.mantichub.agent.guiafolha.agent.GuiaDaFolhaRestaurantAdapter;
 import com.mantichub.commons.resource.Resources;
-import com.mantichub.commons.resource.Restaurant;
+import com.mantichub.commons.resource.FoodEstablishment;
 
 public class BiozoneTest {
 	
 	private final static String arquivo = "src/test/resources/biozone.html";
-	private Restaurant resource;
+	private FoodEstablishment resource;
 	
 	@Before
 	public void prepara() throws Exception {

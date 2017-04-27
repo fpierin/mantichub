@@ -7,7 +7,7 @@ public class GeoCoordinates {
 	private double y2;
 	private double x2;
 
-	public GeoCoordinates(double y1, double x1, double y2, double x2) {
+	public GeoCoordinates(final double y1, final double x1, final double y2, final double x2) {
 		this.y1 = y1;
 		this.x1 = x1;
 		this.y2 = y2;
@@ -18,7 +18,7 @@ public class GeoCoordinates {
 		return y1;
 	}
 
-	public void setY1(double y1) {
+	public void setY1(final double y1) {
 		this.y1 = y1;
 	}
 
@@ -26,7 +26,7 @@ public class GeoCoordinates {
 		return x1;
 	}
 
-	public void setX1(double x1) {
+	public void setX1(final double x1) {
 		this.x1 = x1;
 	}
 
@@ -34,7 +34,7 @@ public class GeoCoordinates {
 		return y2;
 	}
 
-	public void setY2(double y2) {
+	public void setY2(final double y2) {
 		this.y2 = y2;
 	}
 
@@ -42,7 +42,7 @@ public class GeoCoordinates {
 		return x2;
 	}
 
-	public void setX2(double x2) {
+	public void setX2(final double x2) {
 		this.x2 = x2;
 	}
 

@@ -29,26 +29,32 @@ public class DatastoreResourceImpl implements DatastoreResource {
 	}
 
 	@Override
-	public Response query(final ResourceObject resource, final Double radius) {
-		final QueryResult result = datastoreService.query(resource, radius);
+	public Response query(final ResourceObject resource, final Double radius, final Integer limit) {
+		final QueryResult result = datastoreService.query(resource, radius, limit);
 		return Response.ok(result).build();
 	}
 	
 	@Override
-	public Response infer() {
-		datastoreService.infer();
+	public Response infer(final String url) {
+		datastoreService.infer(url);
 		return Response.ok().build();
 	}
 
 	@Override
-	public Response query(final String query/*, final String output*/) {
-		final String result = datastoreService.query(query, null);
+	public Response query(final String query, final String output) {
+		final String result = datastoreService.query(query, output);
 		return Response.ok(result).build();
 	}
 
 	@Override
 	public Response probe() {
 		return Response.ok().build();
+	}
+
+	@Override
+	public Response resources(final String query, final Double radius) {
+		final QueryResult result = datastoreService.query(query, radius);
+		return Response.ok(result).build();
 	}
 
 }

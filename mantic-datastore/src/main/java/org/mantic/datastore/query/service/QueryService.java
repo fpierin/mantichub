@@ -1,6 +1,6 @@
 package org.mantic.datastore.query.service;
 
-import java.util.List;
+import java.util.Set;
 
 import org.mantic.datastore.query.domain.Binding;
 
@@ -8,10 +8,11 @@ import com.mantichub.commons.resource.ResourceObject;
 
 public interface QueryService {
 
-	String buildQuery(ResourceObject resource, Double radius);
+	String buildQuery(ResourceObject resource, Double radius, Integer limit);
 
-	List<ResourceObject> map(String jsonResources);
+	Set<ResourceObject> map(String jsonResources);
 
 	ResourceObject resourceFrom(Binding b);
+
 
 }

@@ -19,6 +19,9 @@ public class Galeria4Test {
 	public void verificaQtdeDeRecursos() throws Exception {
 		String fromFile = TestUtils.fromFile(arquivo);
 		final Set<String> urls = setByPattern(fromFile, GuiaDaFolhaAgent.OBJETO_URL);
+		for (String string : urls) {
+			System.out.println(string);
+		}
 		assertThat(urls.size(), is(14));
 	}
 

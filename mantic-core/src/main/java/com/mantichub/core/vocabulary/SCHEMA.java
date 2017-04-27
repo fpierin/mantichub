@@ -8,6 +8,7 @@ import org.apache.jena.rdf.model.Resource;
 public class SCHEMA {
 	
 	private static Model m_model = ModelFactory.createDefaultModel();
+
 	
 	public static final String NS = "http://schema.org/";
 	public static final String NSX = "http://topbraid.org/schemax/";
@@ -16,9 +17,12 @@ public class SCHEMA {
 	public static final String datetimeFormat = "yyyy-MM-dd'T'HH:mm:ss";
 	
 	public static final Resource NAMESPACE = m_model.createResource(NS);
+	public static final Resource BarOrPub = retrieveResource("BarOrPub");
 	public static final Resource Event = retrieveResource("Event");
+	public static final Resource DanceEvent = retrieveResource("DanceEvent");
 	public static final Resource ExhibitionEvent = retrieveResource("ExhibitionEvent");
 	public static final Resource Festival = retrieveResource("Festival");
+	public static final Resource FoodEstablishment = retrieveResource("FoodEstablishment");
 	public static final Resource FoodEvent = retrieveResource("FoodEvent");
 	public static final Resource MusicEvent = retrieveResource("MusicEvent");
 	public static final Resource Restaurant = retrieveResource("Restaurant");
@@ -31,6 +35,7 @@ public class SCHEMA {
 	public static final Property description = retrieveProperty("description");
 	public static final Property endDate = retrieveProperty("endDate");
 	public static final Property endTime = retrieveProperty("endTime");
+	public static final Property image = retrieveProperty("image");;
 	public static final Property latitude = retrieveProperty("latitude");
 	public static final Property longitude = retrieveProperty("longitude");
 	public static final Property openingHours = retrieveProperty("openingHours");

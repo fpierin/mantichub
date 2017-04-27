@@ -19,6 +19,7 @@ public class GuiaDaSemanaResourceAdapter implements ResourceInterface {
 	
 	public static final String DESCRIPTION_PATTERN = "itemprop=\"description\">([^<]+)";
 	public static final String END_DATE_PATTERN = "itemprop=\"endDate\" datetime=\"([^\"]+)\"";
+	public static final String IMAGE_PATTERN = "itemprop=\"image\" content=\"([^\"]+)\"";
 	public static final String LATITUDE_PATTERN = "itemprop=\"latitude\" content=\"([^\"]+)\"";
 	public static final String LONGITITUDE_PATTERN = "itemprop=\"longitude\" content=\"([^\"]+)\"";
 	public static final String START_DATE_PATTERN = "itemprop=\"startDate\" datetime=\"([^\"]+)\"";
@@ -81,26 +82,29 @@ public class GuiaDaSemanaResourceAdapter implements ResourceInterface {
 	@Override
 	public Resources getType() {
 		try {
-			final String v = valueByPattern(html, TYPE_PATTERN);
-			if ("Cinema".equalsIgnoreCase(v)) {
-				return Resources.ScreeningEvent;	
+			final String v = trimValueByPattern(html, TYPE_PATTERN).toLowerCase();
+			if ("bares".equalsIgnoreCase(v)) {
+				return Resources.BarOrPub;	
 			}			
-			if ("Exposição".equalsIgnoreCase(v)) {
+			if ("cinema".equalsIgnoreCase(v)) {
+				return Resources.ScreeningEvent;	
+			}
+			if ("exposição".equalsIgnoreCase(v)) {
 				return Resources.ExhibitionEvent;	
 			}		
-			if ("Gastronomia".equalsIgnoreCase(v)) {
+			if ("gastronomia".equalsIgnoreCase(v)) {
 				return Resources.FoodEvent;	
 			}
-			if ("Música".equalsIgnoreCase(v) || "Shows".equalsIgnoreCase(v)) {
+			if ("música".equalsIgnoreCase(v) || "Shows".equalsIgnoreCase(v)) {
 				return Resources.MusicEvent;	
 			}
-			if ("Na Cidade".equalsIgnoreCase(v)) {
+			if ("na cidade".equalsIgnoreCase(v)) {
 				return Resources.SocialEvent;
 			}
-			if ("Teatro".equalsIgnoreCase(v)) {
+			if ("teatro".equalsIgnoreCase(v)) {
 				return Resources.TheaterEvent;	
 			}
-			if ("Restaurantes".equalsIgnoreCase(v)) {
+			if ("restaurantes".equalsIgnoreCase(v)) {
 				if (getDescription().toLowerCase().contains("festival")) {
 					return Resources.Festival;
 				}
@@ -158,6 +162,11 @@ public class GuiaDaSemanaResourceAdapter implements ResourceInterface {
 
 	public void setHtml(final String html) {
 		this.html = html;
+	}
+
+	@Override
+	public String getImage() {
+		return valueByPattern(html, IMAGE_PATTERN);
 	}
 
 

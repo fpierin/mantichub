@@ -116,5 +116,11 @@ public class EventoUspEventAdapter implements Event {
 	public String getDescription() {
 		return getOverview();
 	}
+
+	@Override
+	public String getImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

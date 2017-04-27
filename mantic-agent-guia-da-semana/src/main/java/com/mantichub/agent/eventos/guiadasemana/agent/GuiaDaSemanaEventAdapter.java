@@ -170,6 +170,12 @@ public class GuiaDaSemanaEventAdapter implements Event {
 		return getOverview();
 	}
 
+	@Override
+	public String getImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
 
 

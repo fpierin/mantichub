@@ -12,7 +12,7 @@ public class SparqlResponse implements Serializable {
 		return results;
 	}
 
-	public void setResults(SparqlResult results) {
+	public void setResults(final SparqlResult results) {
 		this.results = results;
 	}
 

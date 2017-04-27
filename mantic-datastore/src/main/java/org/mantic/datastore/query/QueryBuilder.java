@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.mantichub.commons.resource.ResourceObject;
-import com.mantichub.commons.resource.Resources;
 import com.mantichub.core.domain.GeoCoordinates;
 import com.mantichub.core.util.GeoUtils;
 
@@ -17,12 +16,23 @@ public class QueryBuilder {
 	
 	private ResourceObject resource;
 	private Double radius;
+	private Integer limit = 0;
 
 	
 	public QueryBuilder withFilter(final ResourceObject resource) {
 		this.resource = resource;
 		return this;
 	}
+	
+	public QueryBuilder withNoLimit() {
+		this.limit = 0;
+		return this;
+	}
+	
+	public QueryBuilder withLimit(final Integer limit) {
+		this.limit = limit;
+		return this;
+	}		
 	
 	public QueryBuilder withRadius(final Double radius) {
 		this.radius = radius;
@@ -32,7 +42,15 @@ public class QueryBuilder {
 	public String build() {
 		return BASIC_SPARQL_QUERY
 				.replace("{rdfType}", rdfType())
-				.replace("{filtering}", filtering());
+				.replace("{filtering}", filtering())
+				.replace("{limit}", limit());
+	}
+
+	private String limit() {
+		if (limit == null || limit == 0) {
+			return "";
+		}
+		return "LIMIT " + limit;
 	}
 
 	private String rdfType() {
@@ -56,7 +74,6 @@ public class QueryBuilder {
 			filter(sb, "?url", "=", resource.getUrl());
 			addDateFilter(sb);
 			addTimeFilter(sb);
-			addTypeFilter(sb);
 			addLatitudeFilter(sb);
 		}
 		return sb.toString();
@@ -92,24 +109,20 @@ public class QueryBuilder {
 		}
 	}
 
-	private void addTypeFilter(final StringBuilder sb) {
-		String typeName = "Resource";
-		final Resources type = resource.getType();
-		if (type != null) {
-			typeName = type.name(); 
-		}
-		filter(sb, "?type", "=", typeName);	
-	}
-
 	private void addLatitudeFilter(final StringBuilder sb) {
 		if (radius == null) {
 			filter(sb, "?latitude", "=", resource.getLatitude());
 			filter(sb, "?longitude", "=", resource.getLongitude());
 		} else {
 			if (resource.getLatitude() != null && resource.getLongitude() != null)  {
+//			    FILTER (?latitude > '-23.625810983940813' && ?latitude < '-23.64379741605919')
+//				FILTER (?longitude > '-46.63022315780229' && ?longitude < '-46.6498564421977')
+
+
+
 				final GeoCoordinates coordinates = GeoUtils.radius(radius, resource.getLatitude(), resource.getLongitude());
-				filter(sb, filterStatement("?latitude", ">", coordinates.getY1()) + " && " + filterStatement("?latitude", "<", coordinates.getY2()));
-				filter(sb, filterStatement("?longitude ", ">", coordinates.getX1()) + " && " + filterStatement("?longitude ", "<", coordinates.getX2()));
+				filter(sb, filterStatement("?latitude", ">", coordinates.getY2()) + " && " + filterStatement("?latitude", "<", coordinates.getY1()));
+				filter(sb, filterStatement("?longitude", ">", coordinates.getX2()) + " && " + filterStatement("?longitude", "<", coordinates.getX1()));
 			}
 		}
 	}
@@ -131,17 +144,24 @@ public class QueryBuilder {
 	}
 	
 	public static void main(final String[] args) {
+//		FILTER (?lat > '-23.625810983940813' && ?lat < '-23.64379741605919')
+//		FILTER (?lon > '-46.63022315780229' && ?lon < '-46.6498564421977')
 		final ResourceObject resource = new ResourceObject();
-		resource.setStartDate(new Date());
-		resource.setEndDate(new Date());
+//		resource.setType(Resources.ExhibitionEvent);
+//	    FILTER (?latitude > '-23.625810983940813' && ?latitude < '-23.64379741605919')
+//		FILTER (?longitude > '-46.63022315780229' && ?longitude < '-46.6498564421977')
+		resource.setLatitude(-23.6339945);
+		resource.setLongitude(-46.6405563);
 		System.out.println(new QueryBuilder()
-//				.withRadius(new Double(0.5))
+				.withRadius(new Double(1))
 				.withFilter(resource)
+				.withLimit(1000)
 				.build());
+//				-23.569518, -46.69407
+//		latitude: -23.560437,
+//		longitude: -46.723105,
 	}
+	
 	
 
 }
-
-
-

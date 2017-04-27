@@ -9,8 +9,8 @@ public class GeoUtils {
 		double radius = distanceInKm; // km
 		double x1 = longitude - Math.toDegrees(radius/R/Math.cos(Math.toRadians(latitude)));
 		double x2 = longitude + Math.toDegrees(radius/R/Math.cos(Math.toRadians(latitude)));
-		double y1 = latitude + Math.toDegrees(radius/R);
-		double y2 = latitude - Math.toDegrees(radius/R);
+		double y1 = latitude - Math.toDegrees(radius/R);
+		double y2 = latitude + Math.toDegrees(radius/R);
 		return new GeoCoordinates(y1, x1, y2, x2);
 	}
 	
