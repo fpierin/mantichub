@@ -1,4 +1,4 @@
-	package com.mantichub.commons.domain;
+package com.mantichub.commons.domain;
 
 import java.io.Serializable;
 import java.util.Set;

@@ -115,9 +115,14 @@ public class QueryBuilder {
 			filter(sb, "?longitude", "=", resource.getLongitude());
 		} else {
 			if (resource.getLatitude() != null && resource.getLongitude() != null)  {
+//			    FILTER (?latitude > '-23.625810983940813' && ?latitude < '-23.64379741605919')
+//				FILTER (?longitude > '-46.63022315780229' && ?longitude < '-46.6498564421977')
+
+
+
 				final GeoCoordinates coordinates = GeoUtils.radius(radius, resource.getLatitude(), resource.getLongitude());
-				filter(sb, filterStatement("?latitude", ">", coordinates.getY1()) + " && " + filterStatement("?latitude", "<", coordinates.getY2()));
-				filter(sb, filterStatement("?longitude ", ">", coordinates.getX1()) + " && " + filterStatement("?longitude ", "<", coordinates.getX2()));
+				filter(sb, filterStatement("?latitude", ">", coordinates.getY2()) + " && " + filterStatement("?latitude", "<", coordinates.getY1()));
+				filter(sb, filterStatement("?longitude", ">", coordinates.getX2()) + " && " + filterStatement("?longitude", "<", coordinates.getX1()));
 			}
 		}
 	}
@@ -139,15 +144,24 @@ public class QueryBuilder {
 	}
 	
 	public static void main(final String[] args) {
+//		FILTER (?lat > '-23.625810983940813' && ?lat < '-23.64379741605919')
+//		FILTER (?lon > '-46.63022315780229' && ?lon < '-46.6498564421977')
 		final ResourceObject resource = new ResourceObject();
 //		resource.setType(Resources.ExhibitionEvent);
+//	    FILTER (?latitude > '-23.625810983940813' && ?latitude < '-23.64379741605919')
+//		FILTER (?longitude > '-46.63022315780229' && ?longitude < '-46.6498564421977')
+		resource.setLatitude(-23.6339945);
+		resource.setLongitude(-46.6405563);
 		System.out.println(new QueryBuilder()
-//				.withRadius(new Double(0.5))
+				.withRadius(new Double(1))
 				.withFilter(resource)
 				.withLimit(1000)
 				.build());
 //				-23.569518, -46.69407
+//		latitude: -23.560437,
+//		longitude: -46.723105,
 	}
+	
 	
 
 }

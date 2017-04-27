@@ -18,7 +18,7 @@ public class SparqlResult implements Serializable {
 		return bindings;
 	}
 
-	public void setBindings(List<Binding> bindings) {
+	public void setBindings(final List<Binding> bindings) {
 		this.bindings = bindings;
 	}
 
