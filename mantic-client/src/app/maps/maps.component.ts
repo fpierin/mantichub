@@ -39,8 +39,8 @@ export class MapsComponent implements OnInit {
 
   getMarkers(){
     this.mapsService.getMarkers({
-       "latitude": -22.892855,
-       "longitude": -43.195334
+       "latitude": this.initPos.lat,
+       "longitude": this.initPos.lng
       })
       .then( (res:any) => {
         this.markers = res.resources

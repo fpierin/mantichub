@@ -115,11 +115,6 @@ public class QueryBuilder {
 			filter(sb, "?longitude", "=", resource.getLongitude());
 		} else {
 			if (resource.getLatitude() != null && resource.getLongitude() != null)  {
-//			    FILTER (?latitude > '-23.625810983940813' && ?latitude < '-23.64379741605919')
-//				FILTER (?longitude > '-46.63022315780229' && ?longitude < '-46.6498564421977')
-
-
-
 				final GeoCoordinates coordinates = GeoUtils.radius(radius, resource.getLatitude(), resource.getLongitude());
 				filter(sb, filterStatement("?latitude", ">", coordinates.getY2()) + " && " + filterStatement("?latitude", "<", coordinates.getY1()));
 				filter(sb, filterStatement("?longitude", ">", coordinates.getX2()) + " && " + filterStatement("?longitude", "<", coordinates.getX1()));
@@ -150,8 +145,8 @@ public class QueryBuilder {
 //		resource.setType(Resources.ExhibitionEvent);
 //	    FILTER (?latitude > '-23.625810983940813' && ?latitude < '-23.64379741605919')
 //		FILTER (?longitude > '-46.63022315780229' && ?longitude < '-46.6498564421977')
-		resource.setLatitude(-23.6339945);
-		resource.setLongitude(-46.6405563);
+//		resource.setLatitude(-23.6339945);
+//		resource.setLongitude(-46.6405563);
 		System.out.println(new QueryBuilder()
 				.withRadius(new Double(1))
 				.withFilter(resource)
