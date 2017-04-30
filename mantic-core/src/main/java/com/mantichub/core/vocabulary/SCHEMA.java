@@ -19,16 +19,20 @@ public class SCHEMA {
 	public static final Resource NAMESPACE = m_model.createResource(NS);
 	public static final Resource BarOrPub = retrieveResource("BarOrPub");
 	public static final Resource Event = retrieveResource("Event");
+	public static final Resource CivicStructure = retrieveResource("CivicStructure");
 	public static final Resource DanceEvent = retrieveResource("DanceEvent");
 	public static final Resource ExhibitionEvent = retrieveResource("ExhibitionEvent");
 	public static final Resource Festival = retrieveResource("Festival");
 	public static final Resource FoodEstablishment = retrieveResource("FoodEstablishment");
 	public static final Resource FoodEvent = retrieveResource("FoodEvent");
 	public static final Resource MusicEvent = retrieveResource("MusicEvent");
+	public static final Resource Place = retrieveResource("Place");
 	public static final Resource Restaurant = retrieveResource("Restaurant");
 	public static final Resource ScreeningEvent = retrieveResource("ScreeningEvent");
 	public static final Resource SocialEvent = retrieveResource("SocialEvent");
 	public static final Resource TheaterEvent = retrieveResource("TheaterEvent");
+	public static final Resource Thing = retrieveResource("Thing");
+	public static final Resource TrainStation = retrieveResource("TrainStation");	
 	
 	public static final Property addressRegion = retrieveProperty("addressRegion");
 	public static final Property addressLocality = retrieveProperty("addressLocality");

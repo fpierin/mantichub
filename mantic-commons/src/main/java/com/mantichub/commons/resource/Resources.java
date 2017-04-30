@@ -3,6 +3,7 @@ package com.mantichub.commons.resource;
 public enum Resources {
 
 	BarOrPub,
+	CivicStructure,
 	DanceEvent,
 	Event,
 	ExhibitionEvent,
@@ -10,11 +11,12 @@ public enum Resources {
 	FoodEstablishment,
 	FoodEvent,
 	MusicEvent,
+	Restaurant,
 	Resource,
-	Restaurant, 
 	ScreeningEvent,
 	SocialEvent,
-	TheaterEvent,;
+	TheaterEvent, 
+	TrainStation,;
 
 	public static Resources from(final String value) {
 		if (value != null && value.length() > 0) {

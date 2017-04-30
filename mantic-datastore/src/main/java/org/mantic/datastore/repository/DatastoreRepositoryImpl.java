@@ -27,6 +27,10 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.rdf.model.impl.StmtIteratorImpl;
+import org.apache.jena.reasoner.Reasoner;
+import org.apache.jena.reasoner.rulesys.BuiltinRegistry;
+import org.apache.jena.reasoner.rulesys.GenericRuleReasoner;
+import org.apache.jena.reasoner.rulesys.Rule;
 import org.apache.jena.sparql.resultset.CSVOutput;
 import org.apache.jena.sparql.resultset.JSONOutput;
 import org.apache.jena.sparql.resultset.OutputBase;
@@ -39,6 +43,7 @@ import org.apache.jena.tdb.setup.StoreParams;
 import org.apache.jena.tdb.setup.StoreParamsBuilder;
 import org.apache.jena.util.FileManager;
 import org.mantic.datastore.jms.MessageProducer;
+import org.mantic.datastore.rules.Near;
 import org.mantic.datastore.transaction.TdbTransaction;
 
 import com.mantichub.commons.domain.DatastoreTriple;
@@ -232,9 +237,19 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 			@Override
 			public Void routine() {
 				final Model namedModel = dataset.getNamedModel(modelName);
-				final InfModel inferences = ModelFactory.createRDFSModel(model);
+				InfModel inferences = null;
+				inferences = ModelFactory.createRDFSModel(model);
 				namedModel.add(inferences);
+				
+				BuiltinRegistry.theRegistry.register(new Near());
+				model.createProperty("http://integraweb.ddns.net/", "near");
+				final List<Rule> rules = Rule.rulesFromURL("rules.txt");
+				final Reasoner reasoner = new GenericRuleReasoner(rules);
+				inferences = ModelFactory.createInfModel(reasoner, model);
+				namedModel.add(inferences);
+				
 				return null;
+				
 			}
 		}.execute();
 	}

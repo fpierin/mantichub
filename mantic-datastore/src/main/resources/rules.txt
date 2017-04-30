@@ -1,0 +1,5 @@
+@prefix schema: <http://schema.org/> .
+@prefix iweb: <http://integraweb.ddns.net/> .
+
+[rule1: (?a schema:latitude ?y1), (?a schema:longitude ?x1), (?b schema:latitude ?y2), (?b schema:longitude ?x2), near(?x1, ?y1, ?x2, ?y2) -> (?a iweb:near ?b)]
+[rule2: (?a iweb:near ?b)-> (?b iweb:near ?a)]

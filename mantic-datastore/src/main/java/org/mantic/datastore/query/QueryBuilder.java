@@ -1,5 +1,6 @@
 package org.mantic.datastore.query;
 
+import static com.mantichub.commons.resource.Resources.Resource;
 import static java.lang.String.valueOf;
 import static java.text.MessageFormat.format;
 import static org.mantic.datastore.infra.configuration.Configuration.BASIC_SPARQL_QUERY;
@@ -55,7 +56,9 @@ public class QueryBuilder {
 
 	private String rdfType() {
 		if (resource != null && resource.getType() != null) {
-			return "schema:" + resource.getType().name(); 
+			if (!Resource.equals(resource.getType())) {
+				return "schema:" + resource.getType().name(); 
+			}
 		}
 		return "rdfs:Resource";
 	}
@@ -142,7 +145,7 @@ public class QueryBuilder {
 //		FILTER (?lat > '-23.625810983940813' && ?lat < '-23.64379741605919')
 //		FILTER (?lon > '-46.63022315780229' && ?lon < '-46.6498564421977')
 		final ResourceObject resource = new ResourceObject();
-//		resource.setType(Resources.ExhibitionEvent);
+//		resource.setType(Resources.TrainStation);
 //	    FILTER (?latitude > '-23.625810983940813' && ?latitude < '-23.64379741605919')
 //		FILTER (?longitude > '-46.63022315780229' && ?longitude < '-46.6498564421977')
 //		resource.setLatitude(-23.6339945);
