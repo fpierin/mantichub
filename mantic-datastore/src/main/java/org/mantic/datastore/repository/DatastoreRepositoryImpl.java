@@ -227,6 +227,23 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 	public void infer(final String url) {
 		infer(modelFrom(url));
 	}
+	
+	@Override
+	public void inferRules() {
+		new TdbTransaction<Void>(dataset, WRITE) {
+			@Override
+			public Void routine() {
+				final Model namedModel = dataset.getNamedModel(modelName);
+				BuiltinRegistry.theRegistry.register(new Near());
+				namedModel.createProperty("http://integraweb.ddns.net/", "near");
+				final List<Rule> rules = Rule.rulesFromURL("rules.txt");
+				final Reasoner reasoner = new GenericRuleReasoner(rules);
+				final InfModel inferences = ModelFactory.createInfModel(reasoner, namedModel);
+				namedModel.add(inferences);
+				return null;
+			}
+		}.execute();
+	}	
 
 	private Model modelFrom(final String url) {
 		return FileManager.get().loadModel(url);
@@ -240,16 +257,7 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 				InfModel inferences = null;
 				inferences = ModelFactory.createRDFSModel(model);
 				namedModel.add(inferences);
-				
-				BuiltinRegistry.theRegistry.register(new Near());
-				model.createProperty("http://integraweb.ddns.net/", "near");
-				final List<Rule> rules = Rule.rulesFromURL("rules.txt");
-				final Reasoner reasoner = new GenericRuleReasoner(rules);
-				inferences = ModelFactory.createInfModel(reasoner, model);
-				namedModel.add(inferences);
-				
 				return null;
-				
 			}
 		}.execute();
 	}

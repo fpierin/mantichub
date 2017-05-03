@@ -50,6 +50,8 @@ public class DatastoreServiceImpl implements DatastoreService {
 		try {
 			if (isBlank(url)) {
 				datastoreRepository.infer();
+			} else if ("local".equals(url)) {
+				datastoreRepository.inferRules();
 			} else {
 				datastoreRepository.infer(url);
 			}
