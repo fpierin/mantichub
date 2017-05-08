@@ -9,17 +9,14 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class MapsService {
   
-  private url = 'http://integraweb.ddns.net/api/query'
+  private url = 'http://integraweb.ddns.net/api/query?radius=50&limit=100'
 
   constructor(
     private http: Http
   ) {}
 
-  getMarkers (name: any): Promise<any> {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
-    return this.http.post(this.url, name , options)
+  getMarkers (dataSend: any): Promise<any> {
+    return this.http.post(this.url, dataSend)
               .toPromise()
               .then(this.extractData)
               .catch(this.handleError);

@@ -1,20 +1,8 @@
-<nav id="mantic_menu" class="navbar navbar-toggleable-md navbar-light bg-faded">
-  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <a class="navbar-brand" href="">
-    <i class="material-icons">person_pin</i> Mantic<strong>Hub</strong>
-  </a>
+<div [hidden]="!hasLoad" class="maskBg">
+	<div class="loader"></div>
+</div>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="O que deseja procurar">
-    </form>
-    <a (click)="getMarkers()" class="btn btn-primary" >Eventos</a>
-  </div>
-</nav>
-
-<agm-map [latitude]="initPos.lat" [longitude]="initPos.lng" [zoom]="zoom">
+<agm-map [latitude]="position.lat" [longitude]="position.lng" [zoom]="zoom" (centerChange)="centerChange($event)" (idle)="idle()">
     <agm-marker 
         *ngFor="let marker of markers" 
         [latitude]="marker.latitude" 
@@ -23,35 +11,82 @@
     </agm-marker>
 </agm-map>
 
-<div class="right_container">
+<div class="right_container col">
 
-    <div class="col">
+    <div class="row">
+        <div class="col navbar-brand" (click)="backTo('filter')">
+            <i class="material-icons">person_pin</i> Mantic<strong>Hub</strong>
+        </div>
+    </div>
+
+    <div *ngIf="activedContent == 'filter'" class="filter">
+        <form #f="ngForm" (ngSubmit)="onFilterSubmit(f)">
+            <div class="form-group first_form">
+                <label>O que deseja procurar?</label><br>
+                <input type="text" name="query" class="form-control" placeholder="" ngModel>
+            </div>
+            <div class="form-group">
+                <label>Tipo de evento</label><br>
+                <select class="form-control" name="eventType" ngModel>
+                    <option value="" selected></option>
+                    <option value="BarOrPub">BarOrPub</option>
+                    <option value="CivicStructure">CivicStructure</option>
+                    <option value="DanceEvent">DanceEvent</option>
+                    <option value="Event">Event</option>
+                    <option value="ExhibitionEvent">ExhibitionEvent</option>
+                    <option value="Festival">Festival</option>
+                    <option value="FoodEstablishment">FoodEstablishment</option>
+                    <option value="FoodEvent">FoodEvent</option>
+                    <option value="MusicEvent">MusicEvent</option>
+                    <option value="Restaurant">Restaurant</option>
+                    <option value="Resource">Resource</option>
+                    <option value="ScreeningEvent">ScreeningEvent</option>
+                    <option value="SocialEvent">SocialEvent</option>
+                    <option value="TheaterEvent">TheaterEvnt</option>
+                    <option value="TrainStation">TrainStation</option>
+                </select> 
+            </div>
+            <div class="form-group">
+                <label>Data e hora</label>
+                <input class="form-control" type="date" name="date"  ngModel>
+                <input class="form-control" type="text" name="time"  ngModel>
+            </div>
+            <hr>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Procurar</button>
+            </div>
+        </form>
+    </div>
+
+    <div *ngIf="activedContent == 'result'"  class="result">
         <div id="places" [hidden]="showDetail">
             <div *ngFor="let marker of markers" class="list-group">
-                <a (click)="openDetail(marker)" class="list-group-item list-group-item-action flex-column align-items-start">
+                <a (click)="openDetail(marker)" class="list-group-item list-group-item-action">
                     <div *ngIf="marker.image" class="box_image" [ngStyle]="{'background': 'url('+marker.image+') center no-repeat'}"></div>
                     <div *ngIf="!marker.image" class="box_image"><i class="material-icons">album</i></div>
                     <h6 [ngStyle]="{'color':'#'+marker.color}" class="mb-1"><i class="material-icons">album</i> {{marker.title}}</h6>
                     <small>
-                        <i *ngIf="marker.startDate" class="material-icons">date_range</i> {{marker.startDate | date: 'dd/MM/yyyy'}} - <i class="material-icons">alarm</i> {{marker.startDate | date: 'HH'}}h{{marker.startDate | date: 'mm'}}
+                        <ng-container *ngIf="marker.startDate">
+                            <i class="material-icons">date_range</i> {{marker.startDate | date: 'dd/MM/yyyy'}}
+                            <i class="material-icons">alarm</i> {{marker.startDate | date: 'HH:mm'}}
+                        </ng-container>
                         <ng-container *ngIf="marker.priceRange"> - {{marker.priceRange}}</ng-container>
                     </small>
-                    <p class="mb-0 desc">{{marker.description | ellipsis:80}}</p>
+                    <p class="mb-0 desc">{{marker.description}}</p>
                 </a>
             </div>
         </div>
     </div>
 
-    <div class="details" [hidden]="!showDetail">
-        
-        <figure>
-            <img src="{{detail?.image}}" class="img-fluid" alt="Responsive image">
-        </figure>
-
-        <div class="col">
-            <a (click)="hiddenDetail(marker)" class="btn btn-primary">voltar</a>
-            <h3>{{detail?.title}}</h3>
-            <p>{{detail?.description}}</p>
+    <div class="row">
+        <div class="details" [hidden]="!showDetail">
+            <div *ngIf="detail?.image" class="img_details" [ngStyle]="{'background': 'url('+detail?.image+') center no-repeat'}"></div>
+            <div class="col">
+                <a (click)="hiddenDetail(marker)" class="btn btn-primary">voltar</a>
+                <h3>{{detail?.title}}</h3>
+                <p>{{detail?.description}}</p>
+            </div>
         </div>
     </div>
+
 </div>

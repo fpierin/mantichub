@@ -16,8 +16,11 @@
 
 .navbar-brand{
     color: #FFF;
-    border-right: 1px solid $dark_primary_color;
-    box-shadow: 1px 0px 0px $light_primary_color;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    background: $dark_primary_color;
+    border-bottom: 2px solid $secondary_color;
     padding-right: 20px;
     transition: 0.2s ease;
 
@@ -80,12 +83,14 @@ li{
 .right_container{
     position: fixed;
     margin-top: -1px;
-    background: rgba(255,255,255,1);
+    background: rgba(255,255,255,0.8);
     overflow: auto;
-    border-right: 1px solid #DDD;
+    border: 1px solid #DDD;
     width: 30%;
+    margin: 10px;
     max-width: 450px;
-    height: calc(100% - 56px) !important ;
+    height: calc(100% - 20px) !important;
+    border-radius: 5px;
 
     p{
         font-size: 14px;
@@ -100,11 +105,23 @@ li{
     }
 }
 
+.first_form{
+    margin-top: 15px;
+}
+
 .list-group-item{
-    margin-top: 10px;
-    overflow: hidden;
-    padding-left: 115px;
     cursor: pointer;
+    padding-left: 115px;
+
+    &:first-child{
+        margin-top: 15px;
+    }
+}
+
+.list-group{
+    margin-bottom: 10px;
+    max-height: 150px;
+    overflow: hidden;
 }
 
 .box_image{
@@ -133,11 +150,84 @@ li{
     overflow: auto;
 }
 
-figure{
+.img_details{
     height: 150px;
-    overflow: hidden;
+    background-size: cover !important;
+    width: 100%;
+}
 
-    img{
-        width: 100%;
-    }
+
+
+
+
+
+
+.maskBg{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url("https://simg.uol.com.br/nocache/uolhost-hospedagem/img/bg/bg-opacity-h37.png");
+	background: rgba(255,255,255,0.5);
+	z-index: 999999;
+}
+
+.loader {
+	margin: 60px auto;
+	font-size: 6px;
+	position: fixed;
+	z-index: 99999;
+	top: 50%;
+	left: 50%;
+	margin-left: -35px;
+	margin-top: -35px;
+	text-indent: -9999em;
+	border-top: 2px solid rgba(140, 191, 68, 0.3);
+	border-right: 2px solid rgba(140, 191, 68, 0.3);
+	border-bottom: 2px solid rgba(140, 191, 68, 0.3);
+	border-left: 3px solid  darken($secondary_color, 5%);
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	transform: translateZ(0);
+	-moz-animation: load8 1.1s infinite linear;
+	-webkit-animation: load8 1.1s infinite linear;
+	animation: load8 1.1s infinite linear;
+}
+.loader,
+.loader:after {
+	border-radius: 50%;
+	width: 10em;
+	height: 10em;
+}
+@-moz-keyframes load8 {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+@-webkit-keyframes load8 {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+@keyframes load8 {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
 }
