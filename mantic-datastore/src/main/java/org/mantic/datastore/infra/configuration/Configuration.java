@@ -1,22 +1,23 @@
 package org.mantic.datastore.infra.configuration;
 
 public class Configuration {
-	
+		
 	public static final String BASIC_SPARQL_QUERY = 
 			"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + 
 			"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n" + 
-			"PREFIX mantichub:<chttp://www.wemantic.com/events#>\n" + 
+			"PREFIX iweb:<http://integraweb.ddns.net/>\n" + 
 			"PREFIX schema:<http://schema.org/>\n" + 
 			"SELECT DISTINCT " + 
 				"?title ?latitude ?longitude ?startDate ?endDate ?startTime ?endTime " +
 				"?cuisine ?description ?priceRange ?telephone ?overview ?streetAddress " +
-				"?price ?typeObj ?type ?url ?image \n" +
+				"?price ?type ?url ?image \n" +
 			"WHERE {\n" + 
 			"	?s schema:title ?titleObj ;\n" + 
 			"	schema:latitude ?latitudeObj ;\n" + 
 			"	schema:longitude ?longitudeObj ;\n" +
-			"	rdf:type ?typeObj ;\n" +
-			"	rdf:type {rdfType} .\n" +
+			"	rdf:type {rdfType} ;\n" +
+			"	rdf:type ?typeObj .\n" +
+			"	?typeObj rdfs:subClassOf ?subClassObj .\n" +
 			"	OPTIONAL { ?s schema:cuisine ?cuisineObj }\n" +
 			"	OPTIONAL { ?s schema:description ?descriptionObj }\n" +
 			"	OPTIONAL { ?s schema:endDate ?endDateObj }\n" + 
@@ -30,6 +31,7 @@ public class Configuration {
 			"	OPTIONAL { ?s schema:telephone ?telephoneObj }\n" +
 			"	OPTIONAL { ?s schema:serviceURL ?urlObj }\n" +
 			"	OPTIONAL { ?s schema:image ?imageObj }\n" +
+			"	values ?subClassObj { schema:Event schema:FoodEstablishment schema:CivicStructure } \n" +
 			"	BIND (str(?titleObj) as ?title)\n" + 
 			"	BIND (str(?latitudeObj) as ?latitude)\n" + 
 			"	BIND (str(?longitudeObj) as ?longitude)\n" + 
@@ -47,7 +49,12 @@ public class Configuration {
 			"	BIND ( strafter(strafter( str(?typeObj), \"http://\" ),\"/\") as ?type )\n" +
 			"	BIND ( strafter( str(?endTimeObj), \"T\" ) as ?endTime )\n" + 
 			"	BIND ( strafter( str(?startTimeObj), \"T\" ) as ?startTime )\n" +
+			"	FILTER NOT EXISTS {\n" + 
+			"		?s rdf:type ?subtype .\n" + 
+			"		?subtype rdfs:subClassOf* ?typeObj .\n" + 
+			"		filter ( ?subtype != ?typeObj )\n" + 
+			"	}\n" +
 			"{filtering} " +
-			"}\n"
-			+"{limit}";
+			"}\n" +
+			"{limit}";
 }

@@ -35,7 +35,6 @@ public interface DatastoreRepository {
 
 	String query(String query, String output);
 
-	
-	
+	void inferRules();
 	
 }

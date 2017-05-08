@@ -1,6 +1,7 @@
 package org.mantic.datastore.service;
 
 import static com.mantichub.core.util.ListUtils.isEmpty;
+import static com.mantichub.core.util.StringUtils.isBlank;
 
 import java.util.List;
 
@@ -14,7 +15,6 @@ import org.mantic.datastore.repository.DatastoreRepository;
 import com.mantichub.commons.domain.DatastoreTriple;
 import com.mantichub.commons.domain.QueryResult;
 import com.mantichub.commons.resource.ResourceObject;
-import com.mantichub.core.util.StringUtils;
 
 @Named("datastoreService")
 public class DatastoreServiceImpl implements DatastoreService {
@@ -48,8 +48,10 @@ public class DatastoreServiceImpl implements DatastoreService {
 	@Override
 	public void infer(final String url) {
 		try {
-			if (StringUtils.isBlank(url)) {
+			if (isBlank(url)) {
 				datastoreRepository.infer();
+			} else if ("local".equals(url)) {
+				datastoreRepository.inferRules();
 			} else {
 				datastoreRepository.infer(url);
 			}

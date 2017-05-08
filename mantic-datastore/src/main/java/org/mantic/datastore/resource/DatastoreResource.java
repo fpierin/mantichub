@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -11,6 +12,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.mantichub.commons.domain.DatastoreQuery;
 import com.mantichub.commons.domain.DatastoreTriple;
 import com.mantichub.commons.domain.QueryResult;
 import com.mantichub.commons.resource.ResourceObject;
@@ -46,6 +48,7 @@ public interface DatastoreResource {
 	Response query(@QueryParam("query") String query, @QueryParam("output") String output);
 	
 	@GET
+	@POST
 	@Path("/resources")
 	@ApiOperation(value = "Faz uma consulta por recurso", response = Response.class)
 	@ApiResponses(value = {
@@ -53,7 +56,6 @@ public interface DatastoreResource {
 			@ApiResponse(code = 500, message = "Erro interno")
 	})
 	Response resources(@QueryParam("query") String query, @QueryParam("radius") Double radius);
-	
 	
 	@GET
 	@Path("/infer")
@@ -81,5 +83,18 @@ public interface DatastoreResource {
 			@ApiResponse(code = 500, message = "Erro interno")
 	})
 	Response query(ResourceObject resource, @QueryParam("radius") Double radius, @QueryParam("limit") Integer limit);
+	
+	@POST
+	@Path("/dquery")
+	@ApiOperation(value = "Faz uma consulta por recurso", response = Response.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "App ok", response = QueryResult.class, responseContainer = "Set"),
+			@ApiResponse(code = 500, message = "Erro interno")
+	})
+	Response datastoreQuery(DatastoreQuery query);	
+	
+	@OPTIONS
+	@Path("{path : .*}")
+	Response options();
 
 }

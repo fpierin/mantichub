@@ -48,6 +48,7 @@
 		<mantichub.agent.eventosusp.port>9090</mantichub.agent.eventosusp.port>
 		<mantichub.agent.guiadasemana.port>9091</mantichub.agent.guiadasemana.port>
 		<mantichub.agent.guiafolha.port>9092</mantichub.agent.guiafolha.port>
+		<mantichub.agent.generaltypes.port>9093</mantichub.agent.generaltypes.port>
 	</properties>
 
 	<modules>
@@ -57,6 +58,7 @@
 		<module>mantic-datastore-api</module>
 		<module>mantic-agent-core</module>
 		<module>mantic-agent-eventos-usp</module>
+		<module>mantic-agent-general-types</module>
 		<module>mantic-agent-guia-da-folha</module>
 		<module>mantic-agent-guia-da-semana</module>
 	</modules>

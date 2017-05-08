@@ -1,0 +1,4 @@
+@prefix myns: <http://mantic.hub/> .
+
+[rule1: (?a myns:subType ?b), (?b myns:subType ?c) -> (?a myns:subType ?c)]
+[rule2: (?a myns:latitude ?y1), (?a myns:longitude ?x1), (?b myns:latitude ?y2), (?b myns:longitude ?x2), near(?x1, ?y1, ?x2, ?y2) -> (?a myns:near ?b)]

@@ -52,6 +52,8 @@ public class ResourceUtils {
 				return SCHEMA.SocialEvent;
 			case TheaterEvent:
 				return SCHEMA.TheaterEvent;
+			case TrainStation:
+				return SCHEMA.TrainStation;
 			default:
 				break;
 			}

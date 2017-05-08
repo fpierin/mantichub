@@ -15,9 +15,11 @@ public class GeoUtils {
 	}
 	
 	public static void main(String[] args) {
-		radius(0.5, -23.6348042, -46.6400398);
+		GeoCoordinates radius = radius(0.5, -23.6348042, -46.6400398);
+		System.out.println(radius);
 //		radius(1, -21.171446, -47.860565);
 	}
 	
 
 }
+
