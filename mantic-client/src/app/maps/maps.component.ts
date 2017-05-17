@@ -102,9 +102,13 @@ export class MapsComponent implements OnInit, OnDestroy {
   }
 
   onQuerySubmit(form){
+      this.hasLoad = true;
       this.mapsService.getQuery({"query": form.value.query})
       .then( (res:any) => {
-        console.log(res);
+        this.activedContent = 'result';
+        this.markers = res.resources;
+        this.query = res.sparqlQuery;
+        this.hasLoad = false;
       })
       .catch( (err:any) =>  console.log(err))
   }
