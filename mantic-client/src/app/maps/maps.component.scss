@@ -231,3 +231,16 @@ li{
 		transform: rotate(360deg);
 	}
 }
+
+#queryButton{
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: $secondary_color;
+    border: 1px solid darken($secondary_color, 5%);;
+    cursor: pointer;
+
+    &:hover{
+        background: darken($secondary_color, 5%);
+    }
+}

@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { MapsService } from './maps.service';
+import { MapsService } from './mantic.service';
 
 describe('MapsService', () => {
   beforeEach(() => {
