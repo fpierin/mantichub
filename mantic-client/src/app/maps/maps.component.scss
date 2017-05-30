@@ -132,12 +132,11 @@ li{
     height: 100%;
     background-size: cover !important;
     border-right: 1px solid #DDD;
-    background-color: #8cbf44;
 
     .material-icons{
         position: absolute;
         margin: auto;
-        color: lighten(#8cbf44, 20%);;
+        color: rgba(255,255,255,0.5);
         top: 50%;
         margin-top: -15px;
         font-size: 30px;

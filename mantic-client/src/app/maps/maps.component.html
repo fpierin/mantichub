@@ -5,9 +5,13 @@
 <agm-map [latitude]="position.lat" [longitude]="position.lng" [zoom]="zoom" (centerChange)="centerChange($event)" (idle)="idle()">
     <agm-marker 
         *ngFor="let marker of markers" 
-        [latitude]="marker.latitude" 
+        [latitude]="marker.latitude"
         [longitude]="marker.longitude"
-         > <!--[iconUrl]="marker.iconUrl"-->
+        [iconUrl]=" 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + marker.color"
+        (markerClick)= "markerClick(marker)">
+         <agm-info-window>
+             {{marker.title}}
+         </agm-info-window>
     </agm-marker>
 </agm-map>
 
@@ -79,8 +83,8 @@
             <div *ngFor="let marker of markers" class="list-group">
                 <a (click)="openDetail(marker)" class="list-group-item list-group-item-action">
                     <div *ngIf="marker.image" class="box_image" [ngStyle]="{'background': 'url('+marker.image+') center no-repeat'}"></div>
-                    <div *ngIf="!marker.image" class="box_image"><i class="material-icons">album</i></div>
-                    <h6 [ngStyle]="{'color':'#'+marker.color}" class="mb-1"><i class="material-icons">album</i> {{marker.title}}</h6>
+                    <div *ngIf="!marker.image" class="box_image" [ngStyle]="{'background': '#'+marker.color}"><i class="material-icons">{{marker.icon}}</i></div>
+                    <h6 [ngStyle]="{'color':'#'+marker.color}" class="mb-1"><i class="material-icons">{{marker.icon}}</i> {{marker.title}}</h6>
                     <small>
                         <ng-container *ngIf="marker.startDate">
                             <i class="material-icons">date_range</i> {{marker.startDate | date: 'dd/MM/yyyy'}}
@@ -99,7 +103,7 @@
             <div *ngIf="detail?.image" class="img_details" [ngStyle]="{'background': 'url('+detail?.image+') center no-repeat'}"></div>
             <div class="col">
                 <a (click)="hiddenDetail(marker)" class="btn btn-primary">voltar</a>
-                <h3>{{detail?.title}}</h3>
+                <h3 [ngStyle]="{'color':'#'+detail?.color}"> <i class="material-icons">{{detail?.icon}}</i> {{detail?.title}}</h3>
                 <p>{{detail?.description}}</p>
             </div>
         </div>

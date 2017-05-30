@@ -47,7 +47,12 @@ export class MapsComponent implements OnInit, OnDestroy {
     this.location.unsubscribe();
   }
 
+
+
+
+  /***************/
   /* FILTER FORM */
+  /***************/
 
   onFilterSubmit(form){
 
@@ -61,44 +66,31 @@ export class MapsComponent implements OnInit, OnDestroy {
      this.hasIdle = true;
   }
 
+
+
+  /************/
+  /* SERVICES */
+  /************/
+
   getMarkers(dataSend){
     this.hasLoad = true;
     this.mapsService.getMarkers(dataSend)
       .then( (res:any) => {
+        let markers = [];
+        let id = 1;
+
+        for ( let marker of res.resources ) {
+          marker.id = id;
+          markers.push(this.getMarkerDetails(marker));
+          id++;
+        }
+
         this.activedContent = 'result';
-        this.markers = res.resources;
+        this.markers = markers;
         this.query = res.sparqlQuery;
         this.hasLoad = false;
       })
       .catch( (err:any) =>  console.log(err))
-  }
-
-  openDetail(marker){
-    this.detail = marker;
-    this.showDetail = true;
-  }
-
-  hiddenDetail(){
-    this.showDetail = false;
-  }
-
-  centerChange(e){
-    this.position = e;
-  }
-
-  idle(){
-    if(typeof this.position !== 'undefined' && this.hasIdle ){
-      this.dataSend.latitude = this.position.lat;
-      this.dataSend.longitude = this.position.lng;
-      this.getMarkers(this.dataSend);
-    }
-  }
-
-  backTo(content:string){
-    if(content){
-      this.activedContent = content;
-      return;
-    }
   }
 
   onQuerySubmit(form){
@@ -113,6 +105,119 @@ export class MapsComponent implements OnInit, OnDestroy {
       .catch( (err:any) =>  console.log(err))
   }
 
-}
 
-//PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#> PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#> PREFIX iweb:<http://integraweb.ddns.net/> PREFIX schema:<http://schema.org/> SELECT DISTINCT ?title ?latitude ?longitude ?startDate ?endDate ?startTime ?endTime ?cuisine ?description ?priceRange ?telephone ?overview ?streetAddress ?price ?type ?url ?image  WHERE { 	?s schema:title ?titleObj ; 	schema:latitude ?latitudeObj ; 	schema:longitude ?longitudeObj ; 	iweb:near ?nearObj;  	rdf:type rdfs:Resource ; 	rdf:type ?typeObj . 	?typeObj rdfs:subClassOf ?subClassObj . 	?nearObj rdf:type schema:TrainStation . 	OPTIONAL { ?s schema:cuisine ?cuisineObj } 	OPTIONAL { ?s schema:description ?descriptionObj } 	OPTIONAL { ?s schema:endDate ?endDateObj } 	OPTIONAL { ?s schema:endTime ?endTimeObj }	 	OPTIONAL { ?s schema:overview ?overviewObj } 	OPTIONAL { ?s schema:price ?priceObj }	 	OPTIONAL { ?s schema:priceRange ?priceRangeObj } 	OPTIONAL { ?s schema:startDate ?startDateObj } 	OPTIONAL { ?s schema:startTime ?startTimeObj } 	OPTIONAL { ?s schema:streetAddress ?streetAddressObj }	 	OPTIONAL { ?s schema:telephone ?telephoneObj } 	OPTIONAL { ?s schema:serviceURL ?urlObj } 	OPTIONAL { ?s schema:image ?imageObj } 	values ?subClassObj { schema:Event schema:FoodEstablishment schema:CivicStructure }  	BIND (str(?titleObj) as ?title) 	BIND (str(?latitudeObj) as ?latitude) 	BIND (str(?longitudeObj) as ?longitude) 	BIND (str(?cuisineObj) as ?cuisine) 	BIND (str(?descriptionObj) as ?description) 	BIND (str(?endDateObj) as ?endDate) 	BIND (str(?overviewObj) as ?overview) 	BIND (str(?priceObj) as ?price) 	BIND (str(?priceRangeObj) as ?priceRange) 	BIND (str(?startDateObj) as ?startDate) 	BIND (str(?streetAddressObj) as ?streetAddress) 	BIND (str(?telephoneObj) as ?telephone) 	BIND (str(?urlObj) as ?url) 	BIND (str(?imageObj) as ?image) 	BIND ( strafter(strafter( str(?typeObj), "http://" ),"/") as ?type ) 	BIND ( strafter( str(?endTimeObj), "T" ) as ?endTime ) 	BIND ( strafter( str(?startTimeObj), "T" ) as ?startTime ) 	FILTER NOT EXISTS { 		?s rdf:type ?subtype . 		?subtype rdfs:subClassOf* ?typeObj . 		filter ( ?subtype != ?typeObj ) 	}  } LIMIT 10000
+
+
+  /***************/
+  /* MAP ACTIONS */
+  /***************/
+
+  idle(){
+    if(typeof this.position !== 'undefined' && this.hasIdle ){
+      this.dataSend.latitude = this.position.lat;
+      this.dataSend.longitude = this.position.lng;
+      this.getMarkers(this.dataSend);
+    }
+  }
+
+  markerClick(marker){
+    this.detail = marker;
+    this.showDetail = true;
+  }
+
+  /**********/
+  /* OTHERS */
+  /**********/
+
+  openDetail(marker){
+    this.detail = marker;
+    this.showDetail = true;
+  }
+
+  hiddenDetail(){
+    this.showDetail = false;
+  }
+
+  centerChange(e){
+    this.position = e;
+  }
+
+  backTo(content:string){
+    if(content){
+      this.activedContent = content;
+      return;
+    }
+  }
+
+  getMarkerDetails(marker){
+
+    switch (marker.type) {
+      case 'BarOrPub':
+        marker.color = '741c8e';
+        marker.icon = 'local_bar';
+        break;
+      case 'CivicStructure':
+        marker.color = '999999';
+        marker.icon = 'train';
+        break;
+      case 'DanceEvent':
+        marker.color = '991690';
+        marker.icon = 'local_bar';
+        break;
+      case 'Event':
+        marker.color = '167bba';
+        marker.icon = 'local_bar';
+        break;
+      case 'ExhibitionEvent':
+        marker.color = 'CCC';
+        marker.icon = 'local_bar';
+        break;
+      case 'Festival':
+        marker.color = '400ba5';
+        marker.icon = 'local_bar';
+        break;
+      case 'FoodEstablishment':
+        marker.color = '910000';
+        marker.icon = 'restaurant';
+        break;
+      case 'FoodEvent':
+        marker.color = '910000';
+        marker.icon = 'restaurant_menu';
+        break;
+      case 'MusicEvent':
+        marker.color = '400ba5';
+        marker.icon = 'local_bar';
+        break;
+      case 'Restaurant':
+        marker.color = '910000';
+        marker.icon = 'restaurant';
+        break;
+      case 'Resource':
+        marker.color = 'CCC';
+        marker.icon = 'local_bar';
+        break;
+      case 'ScreeningEvent':
+        marker.color = 'CCC';
+        marker.icon = 'live_tv';
+        break;
+      case 'SocialEvent':
+        marker.color = 'CCC';
+        marker.icon = 'people';
+        break;
+      case 'TheaterEvent':
+        marker.color = '0b9fa5';
+        marker.icon = 'local_bar';
+        break;
+      case 'TrainStation':
+        marker.color = '999999';
+        marker.icon = 'train';
+        break;
+      default:
+        marker.color = '8cbf44';
+        marker.icon = 'local_bar';
+    }
+
+    return marker;
+  }
+
+}
