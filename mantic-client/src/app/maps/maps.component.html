@@ -101,6 +101,7 @@
                         </ng-container>
                         <ng-container *ngIf="marker.priceRange"> - {{marker.priceRange}}</ng-container>
                     </small>
+                    <span [ngStyle]="{'background':'#'+marker.color}" class="badge badge-default">{{marker.labelSite}}</span>
                     <p class="mb-0 desc">{{marker.description | ellipsis:70}}</p>
                 </a>
             </div>

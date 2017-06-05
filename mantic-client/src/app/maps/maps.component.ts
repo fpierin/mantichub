@@ -150,7 +150,17 @@ export class MapsComponent implements OnInit, OnDestroy {
     }
   }
 
+  getDomain(url){
+    let regex: RegExp = /https?:\/\/(?:www\.|)(.+?)(\/|\?)(.+?$)/;
+    let match = url.match(regex);
+    console.log(match);
+    return match[1];
+  }
+
   getMarkerDetails(marker){
+    if(marker.url){
+      marker.labelSite = this.getDomain(marker.url);
+    }
 
     switch (marker.type) {
       case 'BarOrPub':
