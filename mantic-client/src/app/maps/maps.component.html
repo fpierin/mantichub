@@ -9,6 +9,7 @@
         [longitude]="marker.longitude"
         [iconUrl]=" 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + marker.color"
         (markerClick)= "markerClick(marker)">
+        class="teste"
          <agm-info-window>
              {{marker.title}}
          </agm-info-window>
@@ -26,41 +27,48 @@
     <div *ngIf="activedContent == 'filter'" class="filter">
         <form #f="ngForm" (ngSubmit)="onFilterSubmit(f)">
             
-            <!--
-            <div class="form-group first_form">
-                <label>O que deseja procurar?</label><br>
-                <input type="text" name="query" class="form-control" placeholder="" ngModel>
-            </div>
-            -->
-
             <div class="form-group first_form">
                 <label>Tipo de evento</label><br>
                 <select class="form-control" name="eventType" ngModel>
-                    <option value="" selected></option>
-                    <option value="BarOrPub">BarOrPub</option>
-                    <option value="CivicStructure">CivicStructure</option>
-                    <option value="DanceEvent">DanceEvent</option>
-                    <option value="Event">Event</option>
-                    <option value="ExhibitionEvent">ExhibitionEvent</option>
-                    <option value="Festival">Festival</option>
-                    <option value="FoodEstablishment">FoodEstablishment</option>
-                    <option value="FoodEvent">FoodEvent</option>
-                    <option value="MusicEvent">MusicEvent</option>
-                    <option value="Restaurant">Restaurant</option>
-                    <option value="Resource">Resource</option>
-                    <option value="ScreeningEvent">ScreeningEvent</option>
-                    <option value="SocialEvent">SocialEvent</option>
-                    <option value="TheaterEvent">TheaterEvnt</option>
-                    <option value="TrainStation">TrainStation</option>
+                    <option value="" selected>Todos</option>
+                    <optgroup label="Eventos">
+                        <option value="Event">Todos os eventos</option>
+                        <option value="DanceEvent">Dança</option>
+                        <option value="MusicEvent">Música</option>
+                        <option value="FoodEvent">Comida</option>
+                        <option value="ScreeningEvent">Vídeo</option>
+                        <option value="TheaterEvent">Teatral</option>
+                        <option value="SocialEvent">Social</option>
+                        <option value="ExhibitionEvent">Exibição</option>
+                    </optgroup>
+                    <optgroup label="Outros">              
+                        <option value="BarOrPub">Bares</option>
+                        <option value="CivicStructure">Estrutura cívica</option>
+                        <option value="FoodEstablishment">Estabelecimentos de comida</option>
+                        <option value="Festival">Festival</option>
+                        <option value="Restaurant">Restaurantes</option>
+                    </optgroup>
+
                 </select> 
             </div>
-            <!--            
-            <div class="form-group">
-                <label>Data e hora</label>
-                <input class="form-control" type="date" name="date"  ngModel>
-                <input class="form-control" type="text" name="time"  ngModel>
+
+            <div class="row">
+                <div class="col-6">                
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input class="form-control" type="date" name="date"  ngModel>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Hora</label><br>
+                        <input class="form-control inline-input" type="text" id="date" name="date"  ngModel> :
+                        <input class="form-control inline-input" type="text" id="time" name="time"  ngModel>
+                    </div>
+
+                </div>
             </div>
-            -->
+
             <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-block">Procurar</button>
             </div>
@@ -80,6 +88,7 @@
 
     <div *ngIf="activedContent == 'result'"  class="result">
         <div id="places" [hidden]="showDetail">
+            <a (click)="backTo('filter')" class="voltar btn btn-primary">voltar</a>
             <div *ngFor="let marker of markers" class="list-group">
                 <a (click)="openDetail(marker)" class="list-group-item list-group-item-action">
                     <div *ngIf="marker.image" class="box_image" [ngStyle]="{'background': 'url('+marker.image+') center no-repeat'}"></div>
@@ -92,8 +101,13 @@
                         </ng-container>
                         <ng-container *ngIf="marker.priceRange"> - {{marker.priceRange}}</ng-container>
                     </small>
-                    <p class="mb-0 desc">{{marker.description}}</p>
+                    <p class="mb-0 desc">{{marker.description | ellipsis:70}}</p>
                 </a>
+            </div>
+            <div *ngIf="markers.length == 0" >
+                <div class="alert alert-info" role="alert">
+                    <p><strong>Nenhum resultado encontrado</strong><br>Continue a procurar no mapa por mais resultados</p>
+                </div>
             </div>
         </div>
     </div>
@@ -101,10 +115,21 @@
     <div class="row">
         <div class="details" [hidden]="!showDetail">
             <div *ngIf="detail?.image" class="img_details" [ngStyle]="{'background': 'url('+detail?.image+') center no-repeat'}"></div>
-            <div class="col">
-                <a (click)="hiddenDetail(marker)" class="btn btn-primary">voltar</a>
+            <div class="col col-12">
+                <a (click)="hiddenDetail(marker)" class="voltar btn btn-primary">voltar</a>
                 <h3 [ngStyle]="{'color':'#'+detail?.color}"> <i class="material-icons">{{detail?.icon}}</i> {{detail?.title}}</h3>
-                <p>{{detail?.description}}</p>
+                <p><strong *ngIf="detail?.priceRange">preço: </strong>{{detail?.priceRange}}</p>
+                <p><strong *ngIf="detail?.openingHours">Horário de abertuda: </strong>{{detail?.openingHours | date: 'dd/MM/yyyy'}}</p>
+                <p><strong *ngIf="detail?.startDate">Data de início: </strong>{{detail?.startDate | date: 'dd/MM/yyyy'}}</p>
+                <p><strong *ngIf="detail?.endTime">Data de encerramento: </strong>{{detail?.endTime | date: 'dd/MM/yyyy'}}</p>
+                <p><strong *ngIf="detail?.streetAddress">Endereço: </strong>{{detail?.streetAddress}}</p>
+                <p><strong *ngIf="detail?.telephone">Telefone: </strong>{{detail?.telephone}}</p>
+
+                <ng-container *ngIf="detail?.description">
+                    <hr>
+                    <h5>Descrição</h5>
+                    <p>{{detail?.description}}</p>
+                </ng-container>
             </div>
         </div>
     </div>

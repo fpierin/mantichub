@@ -112,6 +112,10 @@ li{
 .list-group-item{
     cursor: pointer;
     padding-left: 115px;
+    
+    h6{
+        width: 100%;
+    }
 
     &:first-child{
         margin-top: 15px;
@@ -120,7 +124,6 @@ li{
 
 .list-group{
     margin-bottom: 10px;
-    max-height: 150px;
     overflow: hidden;
 }
 
@@ -242,4 +245,18 @@ li{
     &:hover{
         background: darken($secondary_color, 5%);
     }
+}
+
+.inline-input{
+    display: inline-block;
+    width: 50px;
+}
+
+.voltar{
+    margin: 10px 0;
+    color: #FFF !important;
+}
+
+.alert p{
+    margin: 0;
 }

@@ -121,6 +121,7 @@ export class MapsComponent implements OnInit, OnDestroy {
   }
 
   markerClick(marker){
+    this.backTo('result');
     this.detail = marker;
     this.showDetail = true;
   }
@@ -157,59 +158,59 @@ export class MapsComponent implements OnInit, OnDestroy {
         marker.icon = 'local_bar';
         break;
       case 'CivicStructure':
-        marker.color = '999999';
-        marker.icon = 'train';
+        marker.color = '49858f';
+        marker.icon = 'add_location';
         break;
       case 'DanceEvent':
         marker.color = '991690';
-        marker.icon = 'local_bar';
+        marker.icon = 'directions_walk';
         break;
       case 'Event':
         marker.color = '167bba';
-        marker.icon = 'local_bar';
+        marker.icon = 'date_range';
         break;
       case 'ExhibitionEvent':
-        marker.color = 'CCC';
-        marker.icon = 'local_bar';
+        marker.color = '49858f';
+        marker.icon = 'visibility';
         break;
       case 'Festival':
         marker.color = '400ba5';
-        marker.icon = 'local_bar';
+        marker.icon = 'album';
         break;
       case 'FoodEstablishment':
         marker.color = '910000';
         marker.icon = 'restaurant';
         break;
       case 'FoodEvent':
-        marker.color = '910000';
+        marker.color = '35a7db';
         marker.icon = 'restaurant_menu';
         break;
       case 'MusicEvent':
-        marker.color = '400ba5';
-        marker.icon = 'local_bar';
+        marker.color = 'e65b5e';
+        marker.icon = 'album';
         break;
       case 'Restaurant':
         marker.color = '910000';
         marker.icon = 'restaurant';
         break;
       case 'Resource':
-        marker.color = 'CCC';
+        marker.color = '678b99';
         marker.icon = 'local_bar';
         break;
       case 'ScreeningEvent':
-        marker.color = 'CCC';
-        marker.icon = 'live_tv';
+        marker.color = '745fa5';
+        marker.icon = 'local_movies';
         break;
       case 'SocialEvent':
-        marker.color = 'CCC';
+        marker.color = 'b6d0c5';
         marker.icon = 'people';
         break;
       case 'TheaterEvent':
         marker.color = '0b9fa5';
-        marker.icon = 'local_bar';
+        marker.icon = 'event_seat';
         break;
       case 'TrainStation':
-        marker.color = '999999';
+        marker.color = '9e7b91';
         marker.icon = 'train';
         break;
       default:
