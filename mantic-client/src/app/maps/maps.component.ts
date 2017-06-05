@@ -77,12 +77,9 @@ export class MapsComponent implements OnInit, OnDestroy {
     this.mapsService.getMarkers(dataSend)
       .then( (res:any) => {
         let markers = [];
-        let id = 1;
 
         for ( let marker of res.resources ) {
-          marker.id = id;
           markers.push(this.getMarkerDetails(marker));
-          id++;
         }
 
         this.activedContent = 'result';
@@ -97,8 +94,14 @@ export class MapsComponent implements OnInit, OnDestroy {
       this.hasLoad = true;
       this.mapsService.getQuery({"query": form.value.query})
       .then( (res:any) => {
+        let markers = [];
+
+        for ( let marker of res.resources ) {
+          markers.push(this.getMarkerDetails(marker));
+        }
+
+        this.markers = markers;
         this.activedContent = 'result';
-        this.markers = res.resources;
         this.query = res.sparqlQuery;
         this.hasLoad = false;
       })
@@ -153,7 +156,6 @@ export class MapsComponent implements OnInit, OnDestroy {
   getDomain(url){
     let regex: RegExp = /https?:\/\/(?:www\.|)(.+?)(\/|\?)(.+?$)/;
     let match = url.match(regex);
-    console.log(match);
     return match[1];
   }
 
