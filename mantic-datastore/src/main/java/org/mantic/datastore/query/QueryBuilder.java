@@ -66,7 +66,7 @@ public class QueryBuilder {
 	private String filtering() {
 		final StringBuilder sb = new StringBuilder();
 		if (resource != null) {
-			filter(sb, "?cuisine", "=", resource.getCuisine());
+			filter(sb, "?cuisine", "=", resource.getServesCuisine());
 			filter(sb, "?description", "=", resource.getDescription());
 			filter(sb, "?overview", "=", resource.getOverview());
 			filter(sb, "?price", "=", resource.getPrice());
@@ -148,8 +148,8 @@ public class QueryBuilder {
 //		resource.setType(Resources.TrainStation);
 //	    FILTER (?latitude > '-23.625810983940813' && ?latitude < '-23.64379741605919')
 //		FILTER (?longitude > '-46.63022315780229' && ?longitude < '-46.6498564421977')
-//		resource.setLatitude(-23.6339945);
-//		resource.setLongitude(-46.6405563);
+		resource.setLatitude(-23.5486);
+		resource.setLongitude(-46.6392);
 		System.out.println(new QueryBuilder()
 				.withRadius(new Double(1))
 				.withFilter(resource)

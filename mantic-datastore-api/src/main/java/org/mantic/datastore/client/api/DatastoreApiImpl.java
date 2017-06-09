@@ -26,7 +26,8 @@ import com.mantichub.core.serialization.SerializationService;
 
 public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
 	
-	private static final String DATASTORE_URL = "http://integraweb.ddns.net/api";
+//	private static final String DATASTORE_URL = "http://integraweb.ddns.net/api";
+	private static final String DATASTORE_URL = "http://localhost:8080/api";
 	
 	@Inject
 	public DatastoreApiImpl(final HttpClient httpClient, final SerializationService serializationService) {
@@ -35,6 +36,9 @@ public class DatastoreApiImpl extends RestfulSupport implements DatastoreApi {
 
 	@Override
 	public void create(final Resource resource) {
+		if (resource == null) {
+			return;
+		}
 		final StmtIterator listProperties = resource.listProperties();
 		final List<DatastoreTriple> triples = new ArrayList<>();
 		while (listProperties.hasNext()) {

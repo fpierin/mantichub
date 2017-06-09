@@ -30,7 +30,7 @@ public abstract class DefaultAgent implements Agent {
 	protected final ListeningExecutorService service;
 
 	
-	public DefaultAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi, ListeningExecutorService service) {
+	public DefaultAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi, final ListeningExecutorService service) {
 		this.httpAgent = httpAgent;
 		this.datastoreApi = datastoreApi;
 		this.service = service;
@@ -40,6 +40,11 @@ public abstract class DefaultAgent implements Agent {
 	public Model retrieve() throws Exception {
 		return retrieve(0);
 	}
+	
+	public void retrieveUrl(final String url) {
+		final Resource resource = resourceFromURI(url, getModel());
+		datastoreApi.create(resource);
+	}	
 	
 	@Override
 	public Resource resourceFromHtml(final String url, final Model model, final String html) {

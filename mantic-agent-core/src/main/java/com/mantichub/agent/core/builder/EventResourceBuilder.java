@@ -37,8 +37,12 @@ public class EventResourceBuilder extends ResourceBuilder {
 	}
 	
 	public Resource create() throws Exception {
+		if (title == null || title.replaceAll(" ", "").isEmpty()) {
+			return null;
+		}
 		if (getResource() == null) {
-			resource(md5(serviceUrl));
+			final String resourceName = title.replaceAll(" ", "").toLowerCase();
+			resource(md5(resourceName));
 		}
 		addProperty(RDF.type, type);
 		addProperty(SCHEMA.addressRegion, addressRegion);

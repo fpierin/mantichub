@@ -27,7 +27,7 @@ public class ResourceObject implements ResourceInterface {
 	private String image;
 
 	@Override
-	public String getCuisine() {
+	public String getServesCuisine() {
 		return cuisine;
 	}
 

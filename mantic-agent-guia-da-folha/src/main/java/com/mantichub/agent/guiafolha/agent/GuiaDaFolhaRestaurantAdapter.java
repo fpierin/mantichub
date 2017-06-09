@@ -44,7 +44,7 @@ public class GuiaDaFolhaRestaurantAdapter implements ResourceInterface {
 	}
 	
 	@Override
-	public String getCuisine() {
+	public String getServesCuisine() {
 		return trimValueByPattern(html, CUISINE_PATTERN, "\n| ", "  | ");
 	}
 

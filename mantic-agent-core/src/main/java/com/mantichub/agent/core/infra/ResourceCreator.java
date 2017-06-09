@@ -36,6 +36,7 @@ public class ResourceCreator {
 	
 	public static Resource build(final Model model, final FoodEstablishment o) throws Exception {
 		return new RestaurantResourceBuilder(model, MantichubConstants.NAMESPACE)
+				.servesCuisine(o.getServesCuisine())
 				.description(o.getDescription())
 				.image(o.getImage())
 				.latitude(o.getLatitude())

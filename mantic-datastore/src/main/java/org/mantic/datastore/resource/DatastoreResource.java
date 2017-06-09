@@ -64,7 +64,7 @@ public interface DatastoreResource {
 			@ApiResponse(code = 200, message = "Inferências realizadas"),
 			@ApiResponse(code = 500, message = "Erro interno")
 	})
-	Response infer(@QueryParam("url") String url);
+	Response infer(@QueryParam("source") String source);
 	
 	@POST
 	@Path("/")

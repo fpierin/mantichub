@@ -119,13 +119,21 @@
             <div class="col col-12">
                 <a (click)="hiddenDetail(marker)" class="voltar btn btn-primary">voltar</a>
                 <h3 [ngStyle]="{'color':'#'+detail?.color}"> <i class="material-icons">{{detail?.icon}}</i> {{detail?.title}}</h3>
+                <p><strong *ngIf="detail?.servesCuisine">Cozinha: </strong>{{detail?.servesCuisine}}</p>
                 <p><strong *ngIf="detail?.priceRange">preço: </strong>{{detail?.priceRange}}</p>
+                <p><strong *ngIf="detail?.price">preço: </strong>{{detail?.price}}</p>
                 <p><strong *ngIf="detail?.openingHours">Horário de abertuda: </strong>{{detail?.openingHours | date: 'dd/MM/yyyy'}}</p>
                 <p><strong *ngIf="detail?.startDate">Data de início: </strong>{{detail?.startDate | date: 'dd/MM/yyyy'}}</p>
-                <p><strong *ngIf="detail?.endTime">Data de encerramento: </strong>{{detail?.endTime | date: 'dd/MM/yyyy'}}</p>
+                <p><strong *ngIf="detail?.endDate">Data de encerramento: </strong>{{detail?.endDate | date: 'dd/MM/yyyy'}}</p>
+<!--                <p><strong *ngIf="detail?.startTime">Hora início: </strong>{{detail?.startTime | date: 'HH:mm'}}</p>
+                <p><strong *ngIf="detail?.endTime">Hora fim: </strong>{{detail?.endTime | date: 'HH:mm'}}</p> -->
                 <p><strong *ngIf="detail?.streetAddress">Endereço: </strong>{{detail?.streetAddress}}</p>
                 <p><strong *ngIf="detail?.telephone">Telefone: </strong>{{detail?.telephone}}</p>
-
+                <ng-container *ngIf="detail?.overview">
+                    <hr>
+                    <h5>Overview</h5>
+                    <p>{{detail?.overview}}</p>
+                </ng-container>
                 <ng-container *ngIf="detail?.description">
                     <hr>
                     <h5>Descrição</h5>

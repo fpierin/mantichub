@@ -108,7 +108,9 @@ public class DatastoreTriple implements Cloneable, Serializable {
 	}
 
 	public boolean isValid() {
-		return this.object != null && this.predicate != null && this.subject != null;
+		return this.object != null && this.object.isValid() && 
+			   this.predicate != null && this.predicate.isValid() &&
+			   this.subject != null && this.subject.isValid();
 	}
 
 }
