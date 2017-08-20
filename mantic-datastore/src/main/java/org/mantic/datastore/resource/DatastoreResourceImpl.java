@@ -36,8 +36,8 @@ public class DatastoreResourceImpl implements DatastoreResource {
 	}
 	
 	@Override
-	public Response infer(final String url) {
-		datastoreService.infer(url);
+	public Response infer(final String source) {
+		datastoreService.infer(source);
 		return response("");
 	}
 

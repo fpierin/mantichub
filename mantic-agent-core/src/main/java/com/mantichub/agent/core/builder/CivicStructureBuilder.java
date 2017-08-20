@@ -28,7 +28,10 @@ public class CivicStructureBuilder extends ResourceBuilder  {
 
 	public Resource create() throws Exception {
 		if (getResource() == null) {
-			resource(md5(title));
+			if (title == null || title.length() == 0) {
+				return null;
+			}
+			resource(md5(title.replaceAll(" ", "").toLowerCase()));
 		}
 		addProperty(RDF.type, type);
 		addProperty(SCHEMA.description, description);

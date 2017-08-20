@@ -26,7 +26,7 @@ public class CantinhoPortuguesTest {
 	@Test
 	public void verificaCozinha() throws Exception {
 		final String valorEsperado = "Portuguesa";
-		final String valorEncontrado = resource.getCuisine();
+		final String valorEncontrado = resource.getServesCuisine();
 		assertThat(valorEncontrado, is(valorEsperado));
 	}
 	

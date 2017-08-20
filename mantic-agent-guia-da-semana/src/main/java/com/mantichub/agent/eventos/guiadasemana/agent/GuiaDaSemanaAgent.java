@@ -1,22 +1,28 @@
 package com.mantichub.agent.eventos.guiadasemana.agent;
 
 import static com.mantichub.agent.eventos.guiadasemana.config.Configuration.USE_PARALLELL_CALLS;
+import static com.mantichub.core.util.ModelUtils.getRDFXMLFastWriter;
 import static com.mantichub.core.util.StringUtils.isNotBlank;
 import static java.text.MessageFormat.format;
 
 import java.util.List;
 
+import org.apache.http.client.HttpClient;
 import org.apache.jena.ext.com.google.common.util.concurrent.ListeningExecutorService;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.mantic.datastore.client.api.DatastoreApi;
+import org.mantic.datastore.client.api.DatastoreApiImpl;
 
 import com.google.inject.Inject;
 import com.mantichub.agent.core.http.HttpAgent;
+import com.mantichub.agent.core.http.HttpAgentImpl;
 import com.mantichub.agent.core.infra.Agent;
 import com.mantichub.agent.core.infra.DefaultAgent;
 import com.mantichub.agent.core.infra.ResourceCreator;
 import com.mantichub.commons.resource.Event;
+import com.mantichub.core.http.HttpClientFactory;
+import com.mantichub.core.serialization.JsonSerializationServiceImpl;
 
 public class GuiaDaSemanaAgent extends DefaultAgent implements Agent {
 
@@ -29,6 +35,26 @@ public class GuiaDaSemanaAgent extends DefaultAgent implements Agent {
 			final ListeningExecutorService service) {
 		super(httpAgent, datastoreApi, service);
 	}
+	
+	public static void main(final String[] args) throws Exception {
+		final Model model = getRDFXMLFastWriter();
+		final JsonSerializationServiceImpl serializationService = new JsonSerializationServiceImpl();
+		final HttpClient httpClient = HttpClientFactory.get(10, 10, 1);
+		final DatastoreApiImpl datastoreApi = new DatastoreApiImpl(httpClient, serializationService);
+		final HttpAgent httpAgent = new HttpAgentImpl(httpClient, serializationService);
+		final String url = "https://www.guiadasemana.com.br/sao-paulo/agenda?canal=teatro";
+		System.out.println("Buscando dados da url " + url);
+		final String html = httpAgent.htmlFromURL(url);
+		final GuiaDaSemanaAdapter guiaDaSemanaAdapter = new GuiaDaSemanaAdapter(url, html);
+		final List<String> resources = guiaDaSemanaAdapter.getResources();
+		for (final String string : resources) {
+			final Event event = new GuiaDaSemanaResourceAdapter(string);
+			if (isNotBlank(event.getTitle())) {
+				datastoreApi.create(ResourceCreator.build(model, event));
+			}
+		}
+		
+	}	
 
 	@Override
 	public Model retrieve(final int ammount) throws Exception {

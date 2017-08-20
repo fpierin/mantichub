@@ -15,6 +15,7 @@ import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ReadWrite;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.InfModel;
 import org.apache.jena.rdf.model.Model;
@@ -56,6 +57,7 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 	private final String modelName;
 
 	public DatastoreRepositoryImpl(final String path, final String modelName) {
+		BuiltinRegistry.theRegistry.register(new Near());
 		this.modelName = modelName;
 		final Location location = Location.create(path);
 		final StoreParams params = StoreParamsBuilder.create().build();
@@ -220,7 +222,8 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 
 	@Override
 	public void infer() {
-		infer(dataset.getNamedModel(modelName));
+		final Model namedModel = dataset.getNamedModel(modelName);
+		infer(namedModel);
 	}
 
 	@Override
@@ -234,10 +237,10 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 			@Override
 			public Void routine() {
 				final Model namedModel = dataset.getNamedModel(modelName);
-				BuiltinRegistry.theRegistry.register(new Near());
 				namedModel.createProperty("http://integraweb.ddns.net/", "near");
 				final List<Rule> rules = Rule.rulesFromURL("rules.txt");
 				final Reasoner reasoner = new GenericRuleReasoner(rules);
+				reasoner.setDerivationLogging(true);
 				final InfModel inferences = ModelFactory.createInfModel(reasoner, namedModel);
 				namedModel.add(inferences);
 				return null;
@@ -364,5 +367,54 @@ public class DatastoreRepositoryImpl implements DatastoreRepository {
 			
 		}.execute();
 	}
+	
+	public static void main(String[] args) {
+//		<constructor-arg type="java.lang.String" value="" />
+//		<constructor-arg type="java.lang.String" value="teste" />
+		final String path = "/opt/apps/mantichub/datastore";
+		final String modelName= "teste";
+		DatastoreRepositoryImpl datastoreRepositoryImpl = new DatastoreRepositoryImpl(path, modelName);
+		System.out.println("Iniciando");
+		datastoreRepositoryImpl.xablau();
+		System.out.println("Finalizando");
+		System.out.println("");
+		System.out.println("Query");
+		System.out.println("");
+		System.out.println(datastoreRepositoryImpl.query("PREFIX iweb:<http://integraweb.ddns.net/>\n" + 
+				"select ?s ?o\n" + 
+				"WHERE {\n" + 
+				"	?s iweb:near ?o ;\n" + 
+				"}", null));
+		
+		
+	}
+
+	private void xablau() {
+		dataset.begin(ReadWrite.WRITE);
+		final Model namedModel = dataset.getNamedModel(modelName);
+		namedModel.createProperty("http://integraweb.ddns.net/", "near");
+		final List<Rule> rules = Rule.rulesFromURL("rules.txt");
+		final Reasoner reasoner = new GenericRuleReasoner(rules);
+		reasoner.setDerivationLogging(true);
+		final InfModel inferences = ModelFactory.createInfModel(reasoner, namedModel);
+		final StmtIterator statements = inferences.listStatements();
+//		while (statements.hasNext()) {
+//			Statement next = statements.next();
+//			System.out.println(next.asTriple().getPredicate().toString());
+//			System.out.println(next);
+//		}	
+		namedModel.add(statements);		
+		dataset.commit();
+		dataset.end();;
+		
+		while (statements.hasNext()) {
+			Statement next = statements.next();
+			System.out.println(next.asTriple().getPredicate().toString());
+			System.out.println(next);
+		}		
+
+	}
 
 }
+
+

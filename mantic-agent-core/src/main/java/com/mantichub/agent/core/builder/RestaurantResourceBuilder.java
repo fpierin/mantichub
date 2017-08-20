@@ -25,6 +25,7 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 	private String telephone;
 	private String title;
 	private Resource type;
+	private String servesCuisine;
 
 	public RestaurantResourceBuilder(final Model model, final String projectNS) {
 		super(model, projectNS);
@@ -32,11 +33,16 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 
 	public Resource create() throws Exception {
 		if (getResource() == null) {
-			resource(md5(serviceUrl));
+			if (title == null || title.length() == 0) {
+				return null;
+			}
+			final String resourceName = title.replaceAll(" ", "").toLowerCase();
+			resource(md5(resourceName + latitude + longitude));
 		}
 		addProperty(RDF.type, type);
 		addProperty(SCHEMA.addressRegion, addressRegion);
 		addProperty(SCHEMA.addressLocality, addressLocality);
+		addProperty(SCHEMA.servesCuisine, servesCuisine);
 		addProperty(SCHEMA.description, description);
 		addProperty(SCHEMA.latitude, latitude);
 		addProperty(SCHEMA.longitude, longitude);
@@ -109,13 +115,18 @@ public class RestaurantResourceBuilder extends ResourceBuilder {
 		return this;
 	}
 
-	public RestaurantResourceBuilder type(Resource type) {
+	public RestaurantResourceBuilder type(final Resource type) {
 		this.type = type;
 		return this;
 	}
 
-	public RestaurantResourceBuilder image(String image) {
+	public RestaurantResourceBuilder image(final String image) {
 		this.image = image;
+		return this;
+	}
+
+	public RestaurantResourceBuilder servesCuisine(final String servesCuisine) {
+		this.servesCuisine = servesCuisine;
 		return this;
 	}
 

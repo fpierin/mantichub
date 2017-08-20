@@ -132,7 +132,7 @@ public class GuiaDaSemanaResourceAdapter implements ResourceInterface {
 	}
 
 	@Override
-	public String getCuisine() {
+	public String getServesCuisine() {
 		return null;
 	}
 
@@ -168,7 +168,6 @@ public class GuiaDaSemanaResourceAdapter implements ResourceInterface {
 	public String getImage() {
 		return valueByPattern(html, IMAGE_PATTERN);
 	}
-
 
 }
 

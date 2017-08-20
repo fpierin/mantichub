@@ -73,4 +73,9 @@ public class TripleNode implements Serializable {
 		return namespace == null || namespace.length() == 0;
 	}
 
+	public boolean isValid() {
+		final String name = this.toString();
+		return name != null && !name.isEmpty() && !name.equalsIgnoreCase("null");
+	}
+
 }

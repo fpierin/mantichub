@@ -8,13 +8,16 @@ import static java.text.MessageFormat.format;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.http.client.HttpClient;
 import org.apache.jena.ext.com.google.common.util.concurrent.ListeningExecutorService;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.mantic.datastore.client.api.DatastoreApi;
+import org.mantic.datastore.client.api.DatastoreApiImpl;
 
 import com.google.inject.Inject;
 import com.mantichub.agent.core.http.HttpAgent;
+import com.mantichub.agent.core.http.HttpAgentImpl;
 import com.mantichub.agent.core.infra.Agent;
 import com.mantichub.agent.core.infra.DefaultAgent;
 import com.mantichub.agent.core.infra.ResourceCreator;
@@ -23,6 +26,8 @@ import com.mantichub.commons.resource.Event;
 import com.mantichub.commons.resource.FoodEstablishment;
 import com.mantichub.commons.resource.ResourceInterface;
 import com.mantichub.commons.resource.Resources;
+import com.mantichub.core.http.HttpClientFactory;
+import com.mantichub.core.serialization.JsonSerializationServiceImpl;
 
 public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 
@@ -36,6 +41,15 @@ public class GuiaDaFolhaAgent extends DefaultAgent implements Agent {
 	public GuiaDaFolhaAgent(final HttpAgent httpAgent, final DatastoreApi datastoreApi,
 			final ListeningExecutorService service) {
 		super(httpAgent, datastoreApi, service);
+	}
+	
+	public static void main(final String[] args) {
+		final JsonSerializationServiceImpl serializationService = new JsonSerializationServiceImpl();
+		HttpClient httpClient = HttpClientFactory.get(10, 10, 1);
+		final HttpAgent httpAgent = new HttpAgentImpl(httpClient, serializationService);
+		final DatastoreApiImpl datastoreApi = new DatastoreApiImpl(httpClient, serializationService);
+		final GuiaDaFolhaAgent guiaDaFolhaAgent = new GuiaDaFolhaAgent(httpAgent, datastoreApi, null);
+		guiaDaFolhaAgent.retrieveUrl("http://guia.folha.uol.com.br/teatro/musical/a-era-do-rock-teatro-porto-seguro-campos-eliseos-3322121414.shtml");
 	}
 
 	@Override

@@ -17,13 +17,14 @@ public class RuleTest3 {
 
 	public static void main(final String[] args) {
 		// Create an empty model.
-		final String NS = "http://mantic.hub/";
+		final String NS = "http://integraweb.ddns.net/";
+		final String NS2 = "http://schema.org/";
 		// Build a trivial example data set
 		final Model model = ModelFactory.createDefaultModel();
 		final Resource t1 = model.createResource(NS + "Type1");
 		final Resource t2 = model.createResource(NS + "Type2");
-		final Property st1 = model.createProperty(NS, "latitude");
-		final Property st2 = model.createProperty(NS, "longitude");
+		final Property st1 = model.createProperty(NS2, "latitude");
+		final Property st2 = model.createProperty(NS2, "longitude");
 		model.createProperty(NS, "near");
 //		GeoCoordinates [y1=-23.639300808029596, x1=-46.64494812109885, y2=-23.630307591970407, x2=-46.635131478901144]
 

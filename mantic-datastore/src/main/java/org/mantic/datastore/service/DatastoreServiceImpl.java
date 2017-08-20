@@ -34,7 +34,9 @@ public class DatastoreServiceImpl implements DatastoreService {
 	public void create(final List<DatastoreTriple> triples) {
 		if (!isEmpty(triples)) {
 			for (final DatastoreTriple triple : triples) {
-				messageProducer.send(triple);
+				if (triple.isValid()) {
+					messageProducer.send(triple);
+				}
 			}
 		}
 	}
@@ -46,14 +48,14 @@ public class DatastoreServiceImpl implements DatastoreService {
 	}
 
 	@Override
-	public void infer(final String url) {
+	public void infer(final String sources) {
 		try {
-			if (isBlank(url)) {
+			if (isBlank(sources)) {
 				datastoreRepository.infer();
-			} else if ("local".equals(url)) {
+			} else if ("rules".equals(sources)) {
 				datastoreRepository.inferRules();
 			} else {
-				datastoreRepository.infer(url);
+				datastoreRepository.infer(sources);
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
