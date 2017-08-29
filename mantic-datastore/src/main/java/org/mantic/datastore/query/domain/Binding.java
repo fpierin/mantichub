@@ -6,7 +6,7 @@ public class Binding implements Serializable {
 
 	private static final long serialVersionUID = -9097256964833028192L;
 	
-	private Item cuisine;
+	private Item servesCuisine;
 	private Item description;
 	private Item endDate;
 	private Item endTime;
@@ -83,12 +83,12 @@ public class Binding implements Serializable {
 		this.endTime = endTime;
 	}
 
-	public Item getCuisine() {
-		return cuisine;
+	public Item getServesCuisine() {
+		return servesCuisine;
 	}
 
-	public void setCuisine(final Item cuisine) {
-		this.cuisine = cuisine;
+	public void setServesCuisine(final Item servesCuisine) {
+		this.servesCuisine = servesCuisine;
 	}
 
 	public Item getDescription() {
@@ -151,7 +151,7 @@ public class Binding implements Serializable {
 	public String toString() {
 		return "Binding [title=" + title + ", latitude=" + latitude + ", longitude=" + longitude + ", startDate="
 				+ startDate + ", endDate=" + endDate + ", startTime=" + startTime + ", endTime=" + endTime
-				+ ", cuisine=" + cuisine + ", description=" + description + ", priceRange=" + priceRange
+				+ ", servesCuisine=" + servesCuisine + ", description=" + description + ", priceRange=" + priceRange
 				+ ", telephone=" + telephone + ", overview=" + overview + ", streetAddress=" + streetAddress
 				+ ", price=" + price + ", url=" + url + "]";
 	}

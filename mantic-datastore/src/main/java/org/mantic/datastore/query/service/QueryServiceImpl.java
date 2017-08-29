@@ -60,7 +60,7 @@ public class QueryServiceImpl implements QueryService {
 	@Override
 	public ResourceObject resourceFrom(final Binding b) {
 		final ResourceObject rs = new ResourceObject();
-		rs.setCuisine(valueFromItem(b.getCuisine(), String.class));
+		rs.setServesCuisine(valueFromItem(b.getServesCuisine(), String.class));
 		rs.setDescription(valueFromItem(b.getDescription(), String.class));
 		rs.setEndDate(valueFromItem(b.getEndDate(), Date.class));
 		rs.setEndTime(valueFromItem(b.getEndTime(), Date.class));

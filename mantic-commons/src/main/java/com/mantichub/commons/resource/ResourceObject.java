@@ -7,7 +7,7 @@ public class ResourceObject implements ResourceInterface {
 	
 	private static final long serialVersionUID = 5658255987517125203L;
 	
-	private String cuisine;
+	private String servesCuisine;
 	private String description;
 	private List<String> openingHours;
 	private String priceRange;
@@ -28,7 +28,7 @@ public class ResourceObject implements ResourceInterface {
 
 	@Override
 	public String getServesCuisine() {
-		return cuisine;
+		return servesCuisine;
 	}
 
 	@Override
@@ -111,8 +111,8 @@ public class ResourceObject implements ResourceInterface {
 		return url;
 	}
 
-	public void setCuisine(final String cuisine) {
-		this.cuisine = cuisine;
+	public void setServesCuisine(final String servesCuisine) {
+		this.servesCuisine = servesCuisine;
 	}
 
 	public void setDescription(final String description) {
@@ -190,7 +190,7 @@ public class ResourceObject implements ResourceInterface {
 
 	@Override
 	public String toString() {
-		return "ResourceObject [cuisine=" + cuisine + ", description=" + description + ", openingHours=" + openingHours
+		return "ResourceObject [servesCuisine=" + servesCuisine + ", description=" + description + ", openingHours=" + openingHours
 				+ ", priceRange=" + priceRange + ", telephone=" + telephone + ", endDate=" + endDate + ", endTime="
 				+ endTime + ", latitude=" + latitude + ", longitude=" + longitude + ", overview=" + overview
 				+ ", startDate=" + startDate + ", startTime=" + startTime + ", streetAddress=" + streetAddress
@@ -202,7 +202,7 @@ public class ResourceObject implements ResourceInterface {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cuisine == null) ? 0 : cuisine.hashCode());
+		result = prime * result + ((servesCuisine == null) ? 0 : servesCuisine.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
 		result = prime * result + ((endTime == null) ? 0 : endTime.hashCode());
@@ -232,10 +232,10 @@ public class ResourceObject implements ResourceInterface {
 		if (getClass() != obj.getClass())
 			return false;
 		ResourceObject other = (ResourceObject) obj;
-		if (cuisine == null) {
-			if (other.cuisine != null)
+		if (servesCuisine == null) {
+			if (other.servesCuisine != null)
 				return false;
-		} else if (!cuisine.equals(other.cuisine))
+		} else if (!servesCuisine.equals(other.servesCuisine))
 			return false;
 		if (description == null) {
 			if (other.description != null)
