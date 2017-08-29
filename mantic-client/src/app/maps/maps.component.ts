@@ -31,13 +31,7 @@ export class MapsComponent implements OnInit, OnDestroy {
     private mapsService:MapsService,
     private route: ActivatedRoute
   ) {
-
-    this.geolocation = this.route.data.subscribe(
-      (info) => {
-        this.position = info.geolocation;
-      }
-    );
-
+    this.position = {lat: -23.5505734, lng: -46.6328059};
   }
 
   ngOnInit() {

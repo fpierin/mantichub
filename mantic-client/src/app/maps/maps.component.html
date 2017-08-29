@@ -4,13 +4,12 @@
 
 <agm-map [latitude]="position.lat" [longitude]="position.lng" [zoom]="zoom" (centerChange)="centerChange($event)" (idle)="idle()">
     <agm-marker 
-        *ngFor="let marker of markers" 
+        *ngFor="let marker of markers; let i = index" 
         [latitude]="marker.latitude"
         [longitude]="marker.longitude"
         [iconUrl]=" 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|' + marker.color"
         (markerClick)= "markerClick(marker)">
-        class="teste"
-         <agm-info-window>
+         <agm-info-window [isOpen]="marker.focus">
              {{marker.title}}
          </agm-info-window>
     </agm-marker>

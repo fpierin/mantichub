@@ -6,7 +6,7 @@ import { GeolocationResolver } from './shared/guards/geolocation/geolocation.res
 
 const APP_ROUTES: Routes = [
     { path: '', redirectTo: '/maps', pathMatch: 'full'},
-    { path: 'maps', component: MapsComponent,resolve: {geolocation: GeolocationResolver}}
+    { path: 'maps', component: MapsComponent}
 ];
 
 export const routing: ModuleWithProviders = RouterModule.forRoot(APP_ROUTES);
